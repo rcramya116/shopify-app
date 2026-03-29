@@ -720,17 +720,7 @@ async function calculate() {
 
 Write a 3–4 sentence personalised analysis of their financial situation. Be direct, specific, and encouraging. Reference their actual numbers. Do not use bullet points. Speak like a trusted accountant, not a robot.`;
 
-  let aiText = '';
-  const GEMINI_API_KEY = 'PASTE_YOUR_KEY_HERE';
-  try {
-    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { maxOutputTokens: 300, temperature: 0.7 }
-      })
-    });
+  
     const data = await resp.json();
     aiText = data?.candidates?.[0]?.content?.parts?.[0]?.text || generateFallback(d);
   } catch(e) {
