@@ -658,21 +658,19 @@ function renderResults(d, aiText) {
     <div class="b-row"><span>Refund losses (${(d.refundRate*100).toFixed(1)}%)</span><span class="b-neg">− ${fmt(d.refundLoss)}</span></div>
     <div class="b-row"><span>Real profit</span><span style="color:${d.realProfit>=0?'#4ade80':'#ff5f5f'};font-weight:500">${d.realProfit>=0?'+':''}${fmt(d.realProfit)}</span></div>`;
 
-  // AI text
-// AI text
-el('ai-text').textContent = "Analyzing your store...";
+  // AI text — call API and update when ready
+  el('ai-text').textContent = generateFallback(d);
+  const aiPrompt = `You are an expert ecommerce accountant. A Shopify store owner shared their monthly data:
+- Revenue: ₹${d.rev.toLocaleString('en-IN')}
+- Real profit: ₹${d.realProfit.toLocaleString('en-IN')} (${d.profitMargin.toFixed(1)}% margin)
+- Ad spend: ₹${d.ads.toLocaleString('en-IN')} (${(d.adRatio*100).toFixed(1)}% of revenue)
+- Refund rate: ${(d.refundRate*100).toFixed(1)}%
+- Health score: ${Math.round(d.score)}/100
+Write 3 to 4 sentences of personalised financial analysis. Be direct, specific, encouraging. Use their actual numbers. No bullet points. Speak like a trusted accountant.`;
+  getAI(aiPrompt).then(function(text) {
+    if (text) el('ai-text').textContent = text;
+  }).catch(function() {});
 
-getAI(`Analyze this Shopify store:
-
-Revenue: ${d.rev}
-COGS: ${d.cogs}
-Ad Spend: ${d.ads}
-Profit: ${d.realProfit}
-
-Give 3 actionable suggestions.`)
-.then((ai) => {
-  el('ai-text').textContent = ai;
-});
   // Actions — generated from data
   const actions = [];
   if (d.adRatio > 0.25) actions.push({ title: 'Audit your ad ROAS immediately', body: `You are spending ${(d.adRatio*100).toFixed(0)}% of revenue on ads. A healthy benchmark is 15–20%. Kill campaigns with ROAS below 2x. Pause and test new creatives before scaling.` });
