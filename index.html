@@ -594,8 +594,12 @@ function getGrade(score) {
   if (score >= 35) return { label: 'Needs work', color: '#fb923c', bg: '#fb923c18' };
   return { label: 'Critical', color: '#ff5f5f', bg: '#ff5f5f18' };
 }
+  
+function el(id) {
+  return document.getElementById(id);
+}
 
-function renderResults(d, aiText) {
+  function renderResults(d, aiText) {
   const grade = getGrade(d.score);
 
   // Score ring
@@ -607,7 +611,6 @@ function renderResults(d, aiText) {
     animateNumber('score-display', 0, Math.round(d.score), '/100');
   }, 100);
 
-  const el = document.getElementById;
   el('result-grade').textContent = grade.label;
   el('result-grade').style.background = grade.bg;
   el('result-grade').style.color = grade.color;
