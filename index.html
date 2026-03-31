@@ -445,12 +445,16 @@ async function getAI(prompt) {
     });
 
     const data = await res.json();
+
+    console.log("AI response:", data);
+
     return data.text || "No AI response";
+
   } catch (e) {
+    console.log("AI error:", e);
     return "AI failed";
   }
 }
-
 function shareApp() {
   const url = window.location.href;
   const text = 'I just found my real Shopify profit using this free tool — it found costs I never knew about. Try it:';
