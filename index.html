@@ -445,9 +445,9 @@ async function getAI(prompt) {
     });
 
     const data = await res.json();
-    return data.text;
+    return data.text || "No AI response";
   } catch (e) {
-    return null;
+    return "AI failed";
   }
 }
 
