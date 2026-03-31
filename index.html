@@ -448,7 +448,7 @@ async function getAI(prompt) {
 
     console.log("AI response:", data);
 
-    return data.text || "No AI response";
+    return data?.text || JSON.stringify(data) || "No AI response";
 
   } catch (e) {
     console.log("AI error:", e);
