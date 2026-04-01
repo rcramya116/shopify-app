@@ -3,13 +3,16 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
+    if (!process.env.GEMINI_API_KEY) {
+  return res.status(500).json({ error: "API key missing" });
+}
   }
 
  try {
   const { prompt } = req.body;
 
   const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -23,17 +26,14 @@ export default async function handler(req, res) {
       })
     }
   );
+const data = await response.json();
 
-  const raw = await response.text();
-  console.log("RAW GEMINI RESPONSE:", raw);
-
-  let data;
-  try {
-    data = JSON.parse(raw);
-  } catch (e) {
-    return res.status(500).json({ error: raw });
-  }
-
+if (!response.ok) {
+  console.error("Gemini API error:", data);
+  return res.status(500).json({
+    error: data.error?.message || "Gemini failed"
+  });
+}
   const text =
     data?.candidates?.[0]?.content?.parts?.[0]?.text ||
     "No AI response";
