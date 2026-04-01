@@ -40,10 +40,6 @@ if (!response.ok) {
 
   res.status(200).json({ text });
 
-} catch (error) {
-  res.status(500).json({ error: error.message });
-}
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
