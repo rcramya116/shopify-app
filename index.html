@@ -444,11 +444,12 @@ async function getAI(prompt) {
       body: JSON.stringify({ prompt })
     });
 
-    const data = await res.json();
-
-    console.log("AI response:", data);
-
-    return data?.text || JSON.stringify(data) || "No AI response";
+   let data;
+try {
+  data = await res.json();
+} catch {
+  throw new Error("Invalid JSON from server");
+}
 
   } catch (e) {
     console.log("AI error:", e);
