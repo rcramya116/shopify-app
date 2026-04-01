@@ -1,46 +1,70 @@
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // CORS
+  res.setHeader("Access-Control-Allow-Origin", "*");
 
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return res.status(200).end();
-    if (!process.env.GEMINI_API_KEY) {
-  return res.status(500).json({ error: "API key missing" });
-}
   }
 
- try {
-  const { prompt } = req.body;
-
-  const response = await fetch(
-    https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: prompt }]
-          }
-        ]
-      })
+  try {
+    // ✅ Check API key
+    if (!process.env.GEMINI_API_KEY) {
+      return res.status(500).json({ error: "API key missing" });
     }
-  );
-const data = await response.json();
 
-if (!response.ok) {
-  console.error("Gemini API error:", data);
-  return res.status(500).json({
-    error: data.error?.message || "Gemini failed"
-  });
-}
-  const text =
-    data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-    "No AI response";
+    const { prompt } = req.body;
 
-  res.status(200).json({ text });
+    if (!prompt) {
+      return res.status(400).json({ error: "Prompt is required" });
+    }
+
+    // ✅ Call Gemini
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: prompt }],
+            },
+          ],
+        }),
+      }
+    );
+
+    // ✅ SAFELY parse response
+    let data;
+    try {
+      data = await response.json();
+    } catch (e) {
+      return res.status(500).json({
+        error: "Invalid JSON from Gemini",
+      });
+    }
+
+    // ✅ Handle Gemini errors
+    if (!response.ok) {
+      return res.status(500).json({
+        error: data?.error?.message || "Gemini API failed",
+      });
+    }
+
+    // ✅ Extract text safely
+    const text =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      "No AI response";
+
+    return res.status(200).json({ text });
 
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    // ✅ ALWAYS return JSON (this fixes your main bug)
+    return res.status(500).json({
+      error: error.message || "Internal server error",
+    });
   }
 }
