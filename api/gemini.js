@@ -13,6 +13,10 @@ export default async function handler(req, res) {
     }
 
     const { prompt } = req.body;
+    console.log("User used AI:", {
+  time: new Date(),
+  promptLength: prompt?.length
+});
 
     if (!prompt) {
       return res.status(400).json({ error: "Prompt is required" });
