@@ -8,12 +8,11 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-XXXXXXX');
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><h1>Find out why your Shopify store is losing money in 60 seconds</h1></title>
-<p>Enter your store numbers and get real profit + AI insights instantly</p>
+<title>Find out why your Shopify store is losing money in 60 seconds</title>
+<meta name="description" content="Free Shopify profit calculator. Find real profit, hidden costs, and AI insights in 60 seconds.">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600&family=Epilogue:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -230,7 +229,7 @@ input[type=range]::-webkit-slider-thumb {
       </div>
     </div>
     <div class="nav-btns">
-     <button class="btn-next" onclick="next(1)">Start Analysis →</button>
+     <button class="btn-next" onclick="trackEvent('start'); next(1)">Start Analysis →</button>
     </div>
   </div>
 
@@ -455,16 +454,17 @@ async function getAI(prompt) {
       body: JSON.stringify({ prompt })
     });
 
-   let data;
-try {
-  data = await res.json();
-} catch {
-  throw new Error("Invalid JSON from server");
-}
+    const data = await res.json();
 
+    if (!res.ok) {
+      console.log("API error:", data);
+      return null;
+    }
+
+    return data.text; // IMPORTANT
   } catch (e) {
     console.log("AI error:", e);
-    return "AI failed";
+    return null;
   }
 }
 function shareApp() {
@@ -719,8 +719,20 @@ function animateNumber(elId, from, to, suffix) {
   }
   requestAnimationFrame(update);
 }
+  
+function trackEvent(eventName) {
+  try {
+    let data = JSON.parse(localStorage.getItem("tracking")) || {};
+    data[eventName] = (data[eventName] || 0) + 1;
+    localStorage.setItem("tracking", JSON.stringify(data));
+    console.log("Tracking:", data);
+  } catch (e) {
+    console.log("Tracking error:", e);
+  }
+}
 
 async function calculate() {
+  trackEvent('completed');
   hideError();
   if (!validate(10)) { showError(); return; }
   answers.q10 = document.getElementById('q10').value;
