@@ -1,7 +1,6 @@
 export default async function handler(req, res) {
-  // CORS
+  // ✅ CORS
   res.setHeader("Access-Control-Allow-Origin", "*");
-
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
@@ -14,15 +13,7 @@ export default async function handler(req, res) {
 
     const { prompt } = req.body;
 
-    console.log("GLOBAL TRACK:", {
-  time: new Date(),
-  event: "AI_USED"
-});
-    console.log("User used AI:", {
-  time: new Date(),
-  promptLength: prompt?.length
-});
-
+    // ✅ Validate input
     if (!prompt) {
       return res.status(400).json({ error: "Prompt is required" });
     }
@@ -33,33 +24,35 @@ export default async function handler(req, res) {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           contents: [
             {
               role: "user",
-              parts: [{ text: prompt }],
-            },
-          ],
-        }),
+              parts: [{ text: prompt }]
+            }
+          ]
+        })
       }
     );
 
-    // ✅ SAFELY parse response
+    // ✅ SAFE JSON parsing (fixes your 500 error)
+    const raw = await response.text();
     let data;
+
     try {
-      data = await response.json();
-    } catch (e) {
-      return res.status(500).json({
-        error: "Invalid JSON from Gemini",
-      });
+      data = JSON.parse(raw);
+    } catch {
+      console.log("RAW ERROR FROM GEMINI:", raw);
+      return res.status(500).json({ error: "Invalid JSON from Gemini" });
     }
 
-    // ✅ Handle Gemini errors
+    // ✅ Handle API errors
     if (!response.ok) {
+      console.log("Gemini API error:", data);
       return res.status(500).json({
-        error: data?.error?.message || "Gemini API failed",
+        error: data?.error?.message || "Gemini API failed"
       });
     }
 
@@ -68,12 +61,17 @@ export default async function handler(req, res) {
       data?.candidates?.[0]?.content?.parts?.[0]?.text ||
       "No AI response";
 
+    // ✅ TRACK ONLY SUCCESSFUL USERS
+    console.log("GLOBAL TRACK:", {
+      time: new Date(),
+      event: "AI_SUCCESS"
+    });
+
+    // ✅ Send response
     return res.status(200).json({ text });
 
   } catch (error) {
-    // ✅ ALWAYS return JSON (this fixes your main bug)
-    return res.status(500).json({
-      error: error.message || "Internal server error",
-    });
+    console.log("SERVER ERROR:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 }
