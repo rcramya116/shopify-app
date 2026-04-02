@@ -13,6 +13,11 @@ export default async function handler(req, res) {
     }
 
     const { prompt } = req.body;
+
+    console.log("GLOBAL TRACK:", {
+  time: new Date(),
+  event: "AI_USED"
+});
     console.log("User used AI:", {
   time: new Date(),
   promptLength: prompt?.length
