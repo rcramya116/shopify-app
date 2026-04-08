@@ -1,807 +1,1274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Find out why your Shopify store is losing money in 60 seconds</title>
-<meta name="description" content="Free Shopify profit calculator. Find real profit, hidden costs, and AI insights in 60 seconds.">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600&family=Epilogue:wght@300;400;500&display=swap" rel="stylesheet">
+<title>ShopifyOS — Your Complete Financial Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0a0a;
-  --surface: #111111;
-  --surface2: #181818;
-  --border: #222222;
-  --border2: #2e2e2e;
-  --text: #f0ede8;
-  --muted: #777770;
-  --muted2: #555550;
-  --accent: #c8f55a;
-  --accent-dim: #c8f55a18;
-  --accent-mid: #c8f55a44;
-  --red: #ff5f5f;
-  --red-dim: #ff5f5f18;
-  --green: #4ade80;
-  --green-dim: #4ade8018;
-  --amber: #fbbf24;
-  --amber-dim: #fbbf2418;
+  --bg: #080808;
+  --s1: #101010;
+  --s2: #161616;
+  --s3: #1e1e1e;
+  --b1: #242424;
+  --b2: #303030;
+  --t1: #f4f1ec;
+  --t2: #888880;
+  --t3: #555550;
+  --acc: #d4f53c;
+  --acc2: #d4f53c22;
+  --acc3: #d4f53c55;
+  --grn: #4ade80;
+  --grn2: #4ade8020;
+  --red: #f87171;
+  --red2: #f8717120;
+  --amb: #fbbf24;
+  --amb2: #fbbf2420;
+  --blu: #60a5fa;
+  --blu2: #60a5fa20;
   --serif: 'Syne', sans-serif;
   --body: 'Epilogue', sans-serif;
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: var(--body); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
-
-/* LAYOUT */
-.app { max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
-
-/* HEADER */
-.header { text-align: center; margin-bottom: 48px; animation: fadeUp .5s ease both; }
-.logo { font-family: var(--serif); font-size: 14px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; }
-.header h1 { font-family: var(--serif); font-size: clamp(28px, 5vw, 42px); font-weight: 500; line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 12px; }
-.header h1 em { font-style: italic; color: var(--muted); }
-.header p { font-size: 14px; color: var(--muted); font-weight: 300; }
-
-/* PROGRESS */
-.progress-wrap { margin-bottom: 32px; animation: fadeUp .5s .1s ease both; }
-.progress-bar-bg { height: 2px; background: var(--border2); border-radius: 2px; overflow: hidden; margin-bottom: 10px; }
-.progress-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .4s ease; }
-.progress-label { font-size: 11px; color: var(--muted2); letter-spacing: 1px; text-transform: uppercase; }
-
-/* SCREENS */
-.screen { display: none; animation: fadeUp .35s ease both; }
-.screen.active { display: block; }
-
-/* QUESTION CARD */
-.q-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 32px; margin-bottom: 16px; }
-.q-num { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
-.q-text { font-family: var(--serif); font-size: 20px; font-weight: 500; line-height: 1.3; margin-bottom: 8px; }
-.q-hint { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
-
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden}
+ 
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 24px;height:56px;gap:0}
+.nav-logo{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--acc);letter-spacing:1px;margin-right:32px;white-space:nowrap}
+.nav-tabs{display:flex;gap:2px;flex:1;overflow-x:auto;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.ntab{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:400;color:var(--t2);cursor:pointer;white-space:nowrap;border:none;background:transparent;transition:all .18s;display:flex;align-items:center;gap:6px}
+.ntab:hover{color:var(--t1);background:var(--s2)}
+.ntab.on{color:var(--acc);background:var(--acc2)}
+.ntab-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+.nav-curr{margin-left:auto;display:flex;align-items:center;gap:8px}
+.curr-sel{background:var(--s2);border:1px solid var(--b1);color:var(--t1);font-size:12px;padding:6px 10px;border-radius:6px;outline:none;font-family:var(--body);cursor:pointer}
+ 
+/* PAGES */
+.page{display:none;padding:80px 24px 60px;max-width:900px;margin:0 auto;animation:fadeUp .35s ease both}
+.page.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+ 
+/* SECTION HEADERS */
+.page-title{font-family:var(--serif);font-size:28px;font-weight:600;margin-bottom:4px;letter-spacing:-.5px}
+.page-sub{font-size:14px;color:var(--t2);margin-bottom:28px}
+ 
+/* CARDS */
+.card{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:22px}
+.card+.card{margin-top:12px}
+.card-title{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--t2);margin-bottom:14px}
+ 
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:600px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
+ 
+/* METRIC CARDS */
+.mcard{background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:18px}
+.mcard.good{border-color:#4ade8033}
+.mcard.bad{border-color:#f8717133}
+.mcard.warn{border-color:#fbbf2433}
+.mcard.info{border-color:#60a5fa33}
+.mlabel{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.mval{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1}
+.msub{font-size:11px;color:var(--t2);margin-top:4px}
+ 
 /* INPUTS */
-.input-wrap { position: relative; }
-.input-prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 16px; color: var(--muted); pointer-events: none; font-family: var(--serif); }
-.inp {
-  width: 100%; padding: 14px 16px; background: var(--surface2);
-  border: 1.5px solid var(--border2); border-radius: 10px;
-  font-family: var(--body); font-size: 16px; color: var(--text);
-  outline: none; transition: border-color .2s;
-  -webkit-appearance: none;
-}
-.inp:focus { border-color: var(--accent); }
-.inp.has-prefix { padding-left: 36px; }
-.inp::placeholder { color: var(--muted2); }
-
-/* SELECT OPTIONS */
-.options { display: flex; flex-direction: column; gap: 8px; }
-.opt {
-  display: flex; align-items: center; gap: 12px;
-  padding: 14px 16px; background: var(--surface2);
-  border: 1.5px solid var(--border2); border-radius: 10px;
-  cursor: pointer; transition: border-color .2s, background .2s;
-  font-size: 14px; color: var(--text);
-}
-.opt:hover { border-color: var(--border); background: var(--surface); }
-.opt.selected { border-color: var(--accent); background: var(--accent-dim); }
-.opt-dot { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border2); flex-shrink: 0; transition: all .2s; }
-.opt.selected .opt-dot { background: var(--accent); border-color: var(--accent); }
-
-/* RANGE SLIDER */
-.range-wrap { padding: 8px 0; }
-.range-val { font-family: var(--serif); font-size: 32px; font-weight: 500; color: var(--accent); margin-bottom: 12px; }
-input[type=range] {
-  width: 100%; height: 4px; -webkit-appearance: none;
-  background: var(--border2); border-radius: 2px; outline: none; cursor: pointer;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 20px; height: 20px;
-  border-radius: 50%; background: var(--accent); cursor: pointer;
-  border: 3px solid var(--bg);
-}
-.range-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted2); margin-top: 6px; }
-
-/* NAV BUTTONS */
-.nav-btns { display: flex; gap: 10px; margin-top: 16px; }
-.btn-next {
-  flex: 1; padding: 16px; background: var(--accent); color: var(--bg);
-  font-family: var(--serif); font-size: 15px; font-weight: 600;
-  border: none; border-radius: 10px; cursor: pointer;
-  transition: opacity .2s, transform .15s; letter-spacing: 0.3px;
-}
-.btn-next:hover { opacity: .88; transform: translateY(-1px); }
-.btn-next:disabled { opacity: .35; cursor: default; transform: none; }
-.btn-back {
-  padding: 16px 20px; background: transparent; color: var(--muted);
-  font-family: var(--body); font-size: 14px; border: 1.5px solid var(--border2);
-  border-radius: 10px; cursor: pointer; transition: all .2s;
-}
-.btn-back:hover { border-color: var(--border); color: var(--text); }
-
+.field{margin-bottom:16px}
+.flabel{font-size:12px;color:var(--t2);margin-bottom:6px;display:block;letter-spacing:.5px}
+.inp{width:100%;padding:11px 14px;background:var(--s2);border:1.5px solid var(--b1);border-radius:9px;font-size:14px;color:var(--t1);outline:none;font-family:var(--body);transition:border-color .18s}
+.inp:focus{border-color:var(--acc)}
+.inp::placeholder{color:var(--t3)}
+.inp-row{display:flex;gap:10px;align-items:flex-start}
+.inp-pre{display:flex;align-items:center;gap:0}
+.pre-sym{padding:11px 12px;background:var(--s3);border:1.5px solid var(--b1);border-right:none;border-radius:9px 0 0 9px;font-size:13px;color:var(--t2)}
+.inp-pre .inp{border-radius:0 9px 9px 0}
+ 
+/* BUTTONS */
+.btn{padding:11px 22px;border-radius:9px;font-size:14px;font-weight:500;border:none;cursor:pointer;font-family:var(--body);transition:all .18s;display:inline-flex;align-items:center;gap:7px}
+.btn-acc{background:var(--acc);color:#080808}
+.btn-acc:hover{opacity:.88;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--t2);border:1.5px solid var(--b1)}
+.btn-ghost:hover{border-color:var(--b2);color:var(--t1)}
+.btn-sm{padding:7px 14px;font-size:12px}
+.btn-full{width:100%;justify-content:center}
+ 
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;padding:8px 12px;text-align:left;border-bottom:1px solid var(--b1)}
+.tbl td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--s2);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--s2)}
+.pos{color:var(--grn)}
+.neg{color:var(--red)}
+.amb{color:var(--amb)}
+ 
+/* TAGS */
+.tag{display:inline-block;font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;letter-spacing:.5px}
+.tag-g{background:var(--grn2);color:var(--grn)}
+.tag-r{background:var(--red2);color:var(--red)}
+.tag-a{background:var(--amb2);color:var(--amb)}
+.tag-b{background:var(--blu2);color:var(--blu)}
+ 
+/* CHAT */
+.chat-wrap{height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--s2);border-radius:10px;margin-bottom:12px;scrollbar-width:thin;scrollbar-color:var(--b2) transparent}
+.msg{max-width:82%;padding:11px 14px;border-radius:12px;font-size:13px;line-height:1.6}
+.msg.user{background:var(--acc);color:#080808;align-self:flex-end;border-radius:12px 12px 3px 12px}
+.msg.ai{background:var(--s1);color:var(--t1);align-self:flex-start;border:1px solid var(--b1);border-radius:12px 12px 12px 3px}
+.msg.typing{color:var(--t2);font-style:italic}
+.chat-input-row{display:flex;gap:8px}
+.chat-inp{flex:1;padding:11px 14px;background:var(--s2);border:1.5px solid var(--b1);border-radius:9px;font-size:14px;color:var(--t1);outline:none;font-family:var(--body)}
+.chat-inp:focus{border-color:var(--acc)}
+.chat-inp::placeholder{color:var(--t3)}
+ 
+/* PROGRESS BAR */
+.pbar-bg{height:6px;background:var(--b1);border-radius:3px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:3px;transition:width .4s ease}
+ 
+/* SCORE RING */
+.ring-wrap{position:relative;display:inline-block}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--serif);font-size:28px;font-weight:600;line-height:1}
+.ring-num small{font-size:11px;color:var(--t2);font-family:var(--body);font-weight:400;margin-top:2px}
+ 
+/* HEALTH CHECKER SCREENS */
+.hscreen{display:none}
+.hscreen.on{display:block}
+.qcard{background:var(--s1);border:1px solid var(--b1);border-radius:14px;padding:28px;margin-bottom:14px}
+.qnum{font-size:11px;color:var(--acc);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.qtxt{font-family:var(--serif);font-size:20px;font-weight:500;margin-bottom:6px;line-height:1.3}
+.qhint{font-size:13px;color:var(--t2);margin-bottom:20px;line-height:1.5}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{display:flex;align-items:center;gap:11px;padding:13px 15px;background:var(--s2);border:1.5px solid var(--b1);border-radius:9px;cursor:pointer;font-size:13px;color:var(--t2);transition:all .15s}
+.opt:hover{border-color:var(--b2);color:var(--t1)}
+.opt.picked{border-color:var(--acc);background:var(--acc2);color:var(--t1)}
+.odot{width:15px;height:15px;border-radius:50%;border:1.5px solid var(--b2);flex-shrink:0;transition:all .15s}
+.opt.picked .odot{background:var(--acc);border-color:var(--acc)}
+.range-val{font-family:var(--serif);font-size:32px;font-weight:600;color:var(--acc);margin-bottom:10px}
+input[type=range]{width:100%;height:4px;background:var(--b1);border-radius:2px;outline:none;cursor:pointer;-webkit-appearance:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--acc);border:3px solid var(--bg);cursor:pointer}
+.range-lbls{display:flex;justify-content:space-between;font-size:11px;color:var(--t3);margin-top:5px}
+.prog-bg{height:2px;background:var(--b1);border-radius:2px;margin-bottom:10px;overflow:hidden}
+.prog-fill{height:100%;background:var(--acc);border-radius:2px;transition:width .4s}
+.prog-lbl{font-size:11px;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:24px}
+.err-box{background:var(--red2);border:1px solid var(--red);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:12px;display:none}
+.btns{display:flex;gap:9px;margin-top:14px}
+.hback{padding:12px 18px;background:transparent;color:var(--t2);font-size:14px;border:1.5px solid var(--b1);border-radius:9px;cursor:pointer;font-family:var(--body);transition:all .18s}
+.hback:hover{border-color:var(--b2);color:var(--t1)}
+.hnext{flex:1;padding:13px;background:var(--acc);color:#080808;font-size:15px;font-weight:600;border:none;border-radius:9px;cursor:pointer;font-family:var(--serif);transition:all .18s}
+.hnext:hover{opacity:.88}
+ 
 /* LOADING */
-#screen-loading { text-align: center; padding: 60px 20px; }
-.loader-ring { width: 56px; height: 56px; border-radius: 50%; border: 2px solid var(--border2); border-top-color: var(--accent); animation: spin 1s linear infinite; margin: 0 auto 24px; }
-.loader-title { font-family: var(--serif); font-size: 20px; margin-bottom: 8px; }
-.loader-sub { font-size: 13px; color: var(--muted); }
-.loader-steps { margin-top: 28px; display: flex; flex-direction: column; gap: 6px; text-align: left; max-width: 280px; margin-left: auto; margin-right: auto; }
-.lstep { font-size: 12px; color: var(--muted2); display: flex; align-items: center; gap: 8px; transition: color .3s; }
-.lstep.done { color: var(--accent); }
-.lstep-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
-
-/* RESULTS */
-#screen-result { }
-.result-header { text-align: center; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border2); }
-.score-ring { position: relative; width: 120px; height: 120px; margin: 0 auto 16px; }
-.score-ring svg { transform: rotate(-90deg); }
-.score-num { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: var(--serif); font-size: 34px; font-weight: 500; line-height: 1; }
-.score-num small { font-size: 12px; color: var(--muted); font-family: var(--body); font-weight: 300; margin-top: 2px; }
-.result-grade { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 10px; }
-.result-title { font-family: var(--serif); font-size: 22px; font-weight: 500; margin-bottom: 6px; }
-.result-sub { font-size: 13px; color: var(--muted); }
-
-.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-.metric { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 18px; }
-.metric-label { font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-.metric-val { font-family: var(--serif); font-size: 24px; font-weight: 500; }
-.metric-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
-.metric.good { border-color: #4ade8033; }
-.metric.bad { border-color: #ff5f5f33; }
-.metric.warn { border-color: #fbbf2433; }
-
-.section-title { font-family: var(--serif); font-size: 16px; font-weight: 500; margin-bottom: 12px; color: var(--text); }
-
-.breakdown { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-.b-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-.b-row:last-child { border-bottom: none; font-weight: 500; font-size: 15px; }
-.b-row span:first-child { color: var(--muted); }
-.b-neg { color: var(--red); }
-.b-pos { color: var(--green); }
-.b-bold { color: var(--text); font-weight: 500; }
-
-.actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-.action { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start; }
-.action-num { width: 28px; height: 28px; border-radius: 8px; background: var(--accent-dim); border: 1px solid var(--accent-mid); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--accent); flex-shrink: 0; font-family: var(--serif); }
-.action-body strong { font-size: 14px; font-weight: 500; color: var(--text); display: block; margin-bottom: 3px; }
-.action-body span { font-size: 13px; color: var(--muted); line-height: 1.55; }
-
-.ai-analysis { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-.ai-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
-.ai-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s ease infinite; }
-.ai-text { font-size: 14px; color: var(--muted); line-height: 1.75; }
-
-.restart-btn { width: 100%; padding: 16px; background: transparent; color: var(--muted); font-family: var(--body); font-size: 14px; border: 1.5px solid var(--border2); border-radius: 10px; cursor: pointer; transition: all .2s; margin-top: 8px; }
-.restart-btn:hover { border-color: var(--border); color: var(--text); }
-
-.upsell { background: linear-gradient(135deg, #0f1a06, #0a0a0a); border: 1px solid var(--accent-mid); border-radius: 12px; padding: 22px; margin-bottom: 20px; text-align: center; }
-.upsell-title { font-family: var(--serif); font-size: 17px; font-weight: 500; margin-bottom: 6px; }
-.upsell-sub { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
-.upsell-btn { display: inline-block; padding: 12px 28px; background: var(--accent); color: var(--bg); font-family: var(--serif); font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; border: none; transition: opacity .2s; }
-.upsell-btn:hover { opacity: .88; }
-
-/* ERROR */
-.error-box { background: var(--red-dim); border: 1px solid var(--red); border-radius: 10px; padding: 14px 16px; font-size: 13px; color: var(--red); margin-bottom: 16px; display: none; line-height: 1.5; }
-
-/* ANIMATIONS */
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-@keyframes countUp { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: scale(1); } }
-
-.metric-val { animation: countUp .4s ease both; }
+.loader{text-align:center;padding:60px 20px}
+.spinner{width:48px;height:48px;border:2px solid var(--b1);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lstep{font-size:12px;color:var(--t3);padding:4px 0;display:flex;align-items:center;gap:7px;max-width:240px;margin:0 auto;transition:color .3s}
+.lstep.done{color:var(--acc)}
+.ldot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+ 
+/* BREAKDOWN ROWS */
+.brow{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--s2);font-size:13px}
+.brow:last-child{border-bottom:none;font-size:15px;font-weight:600}
+.brow span:first-child{color:var(--t2)}
+ 
+/* LEDGER */
+.ledger-entry{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--s2);border-radius:8px;margin-bottom:6px;font-size:13px}
+.le-left{display:flex;flex-direction:column;gap:2px}
+.le-name{color:var(--t1);font-weight:500}
+.le-date{color:var(--t3);font-size:11px}
+.le-amt{font-family:var(--serif);font-size:15px;font-weight:600}
+.delete-btn{background:none;border:none;color:var(--t3);cursor:pointer;font-size:16px;padding:4px 8px;border-radius:4px;transition:color .15s}
+.delete-btn:hover{color:var(--red)}
+ 
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--b1);border-radius:16px;padding:28px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
+.modal h3{font-family:var(--serif);font-size:20px;margin-bottom:18px}
+ 
+/* NOTIF */
+.notif{position:fixed;bottom:24px;right:24px;background:var(--s1);border:1px solid var(--acc3);border-radius:10px;padding:13px 18px;font-size:13px;color:var(--t1);z-index:300;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none}
+.notif.show{transform:translateY(0);opacity:1}
+ 
+/* UPSELL BANNER */
+.upsell-card{background:linear-gradient(135deg,#0d1a06,#080808);border:1px solid var(--acc3);border-radius:14px;padding:22px;text-align:center;margin-top:20px}
+.upsell-card h3{font-family:var(--serif);font-size:18px;margin-bottom:6px}
+.upsell-card p{font-size:13px;color:var(--t2);margin-bottom:16px;line-height:1.5}
 </style>
 </head>
 <body>
-<div class="app">
-
-  <!-- HEADER -->
-  <div class="header" id="main-header">
-    <div class="logo">ShopifyCheck</div>
-    <h1>Find your store's<br><em>real profit</em> in 5 minutes</h1>
-    <p>Answer 10 simple questions. Get your financial health score, real profit, tax estimate, and action plan — free.</p>
+ 
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">ShopifyOS</div>
+  <div class="nav-tabs">
+    <button class="ntab on" onclick="goPage('dashboard')"><span class="ntab-dot"></span>Dashboard</button>
+    <button class="ntab" onclick="goPage('checker')"><span class="ntab-dot"></span>Health Check</button>
+    <button class="ntab" onclick="goPage('ledger')"><span class="ntab-dot"></span>Ledger</button>
+    <button class="ntab" onclick="goPage('tracker')"><span class="ntab-dot"></span>Monthly Tracker</button>
+    <button class="ntab" onclick="goPage('chat')"><span class="ntab-dot"></span>AI Co-Pilot</button>
+    <button class="ntab" onclick="goPage('bookkeeping')"><span class="ntab-dot"></span>Bookkeeping</button>
   </div>
-
-  <!-- PROGRESS -->
-  <div class="progress-wrap" id="progress-wrap">
-    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
-    <div class="progress-label" id="progress-label">Question 1 of 10</div>
+  <div class="nav-curr">
+    <select class="curr-sel" id="curr-sel" onchange="setCurr(this.value)">
+      <option value="$">$ USD</option>
+      <option value="£">£ GBP</option>
+      <option value="€">€ EUR</option>
+      <option value="A$">A$ AUD</option>
+      <option value="₹">₹ INR</option>
+      <option value="C$">C$ CAD</option>
+      <option value="S$">S$ SGD</option>
+      <option value="AED">AED</option>
+    </select>
   </div>
-
-  <!-- ERROR BOX -->
-  <div class="error-box" id="error-box">Please complete this question before continuing.</div>
-
-  <!-- SCREENS: Q1–Q10 -->
-
-  <div class="screen active" id="screen-1">
-    <div class="q-card">
-      <div class="q-num">Question 01</div>
-      <div class="q-text">What is your average monthly revenue?</div>
-      <div class="q-hint">The total amount customers paid you — before any deductions. Check your Shopify Analytics dashboard.</div>
-      <div class="input-wrap">
-        <span class="input-prefix">₹</span>
-        <input class="inp has-prefix" type="number" id="q1" placeholder="e.g. 500000" min="0">
+</nav>
+ 
+<!-- NOTIFICATION -->
+<div class="notif" id="notif"></div>
+ 
+<!-- ADD ENTRY MODAL -->
+<div class="modal-bg" id="add-modal">
+  <div class="modal">
+    <h3>Add Entry</h3>
+    <div class="field">
+      <label class="flabel">Type</label>
+      <select class="inp" id="entry-type">
+        <option value="income">Income / Revenue</option>
+        <option value="expense">Expense / Cost</option>
+        <option value="refund">Refund</option>
+        <option value="ads">Ad Spend</option>
+        <option value="shipping">Shipping</option>
+        <option value="tax">Tax Payment</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="flabel">Description</label>
+      <input class="inp" id="entry-desc" placeholder="e.g. Shopify sales — Week 1">
+    </div>
+    <div class="field">
+      <label class="flabel">Amount (<span id="modal-sym">$</span>)</label>
+      <input class="inp" id="entry-amt" type="number" min="0" placeholder="0.00">
+    </div>
+    <div class="field">
+      <label class="flabel">Date</label>
+      <input class="inp" id="entry-date" type="date">
+    </div>
+    <div class="field">
+      <label class="flabel">Month (for tracking)</label>
+      <input class="inp" id="entry-month" type="month">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost btn-full" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-acc btn-full" onclick="saveEntry()">Save entry</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════ -->
+<!-- PAGE 1: DASHBOARD -->
+<!-- ═══════════════════════════════════════ -->
+<div class="page on" id="page-dashboard">
+  <div class="page-title">Dashboard</div>
+  <div class="page-sub" id="dash-sub">Your store's financial overview — updated as you log entries</div>
+ 
+  <div class="grid4" style="margin-bottom:14px" id="dash-metrics">
+    <div class="mcard good">
+      <div class="mlabel">Total Revenue</div>
+      <div class="mval pos" id="d-rev">$0</div>
+      <div class="msub">all time logged</div>
+    </div>
+    <div class="mcard">
+      <div class="mlabel">Total Expenses</div>
+      <div class="mval neg" id="d-exp">$0</div>
+      <div class="msub">all costs logged</div>
+    </div>
+    <div class="mcard" id="d-profit-card">
+      <div class="mlabel">Net Profit</div>
+      <div class="mval" id="d-profit">$0</div>
+      <div class="msub" id="d-margin">0% margin</div>
+    </div>
+    <div class="mcard warn">
+      <div class="mlabel">Tax to set aside</div>
+      <div class="mval amb" id="d-tax">$0</div>
+      <div class="msub">~25% of profit</div>
+    </div>
+  </div>
+ 
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">This month</div>
+      <div id="this-month-rows" style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:13px;color:var(--t3);text-align:center;padding:20px 0">No entries this month yet.<br>Add your first entry below.</div>
       </div>
     </div>
-    <div class="nav-btns">
-     <button class="btn-next" onclick="trackEvent('start'); next(1)">Start Analysis →</button>
-    </div>
-  </div>
-
-  <div class="screen" id="screen-2">
-    <div class="q-card">
-      <div class="q-num">Question 02</div>
-      <div class="q-text">How much do you spend on ads per month?</div>
-      <div class="q-hint">Total across all platforms — Meta (Facebook/Instagram), Google, YouTube, influencers. Put 0 if you run no paid ads.</div>
-      <div class="input-wrap">
-        <span class="input-prefix">₹</span>
-        <input class="inp has-prefix" type="number" id="q2" placeholder="e.g. 120000" min="0">
+    <div class="card">
+      <div class="card-title">Expense breakdown</div>
+      <div id="exp-breakdown" style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:13px;color:var(--t3);text-align:center;padding:20px 0">Log expenses to see breakdown</div>
       </div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="back(2)">←</button>
-      <button class="btn-next" onclick="next(2)">Continue →</button>
+  </div>
+ 
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">Monthly profit trend</div>
+    <div id="trend-chart" style="display:flex;align-items:flex-end;gap:8px;height:100px;padding-top:8px">
+      <div style="font-size:13px;color:var(--t3);width:100%;text-align:center;padding-top:30px">Log entries across multiple months to see your trend</div>
     </div>
   </div>
-
-  <div class="screen" id="screen-3">
-    <div class="q-card">
-      <div class="q-num">Question 03</div>
-      <div class="q-text">What does it cost you to make or buy your products?</div>
-      <div class="q-hint">This is your Cost of Goods Sold (COGS) — what you paid your supplier or manufacturer for the products you sold this month.</div>
-      <div class="input-wrap">
-        <span class="input-prefix">₹</span>
-        <input class="inp has-prefix" type="number" id="q3" placeholder="e.g. 200000" min="0">
-      </div>
-    </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="back(3)">←</button>
-      <button class="btn-next" onclick="next(3)">Continue →</button>
-      
-    </div>
+ 
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-acc" onclick="openModal()">+ Add entry</button>
+    <button class="btn btn-ghost" onclick="goPage('checker')">Run health check</button>
+    <button class="btn btn-ghost" onclick="goPage('chat')">Ask AI Co-Pilot</button>
   </div>
-
-  <div class="screen" id="screen-4">
-    <div class="q-card">
-      <div class="q-num">Question 04</div>
-      <div class="q-text">Which Shopify plan are you on?</div>
-      <div class="q-hint">This affects your monthly fee and the transaction fee charged per order.</div>
-      <div class="options" id="q4-opts">
-        <div class="opt" onclick="selectOpt('q4','basic',this)"><div class="opt-dot"></div>Basic — ₹1,994/month (2% transaction fee)</div>
-        <div class="opt" onclick="selectOpt('q4','shopify',this)"><div class="opt-dot"></div>Shopify — ₹7,447/month (1% transaction fee)</div>
-        <div class="opt" onclick="selectOpt('q4','advanced',this)"><div class="opt-dot"></div>Advanced — ₹29,788/month (0.5% transaction fee)</div>
-        <div class="opt" onclick="selectOpt('q4','plus',this)"><div class="opt-dot"></div>Shopify Plus — Custom pricing (0.15% fee)</div>
+</div>
+ 
+<!-- ═══════════════════════════════════════ -->
+<!-- PAGE 2: HEALTH CHECKER -->
+<!-- ═══════════════════════════════════════ -->
+<div class="page" id="page-checker">
+  <div class="page-title">Financial Health Check</div>
+  <div class="page-sub">Answer 10 questions — get your real profit, health score, and action plan</div>
+ 
+  <div id="hprog-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="hprog" style="width:0%"></div></div>
+    <div class="prog-lbl" id="hprog-lbl">Question 1 of 10</div>
+  </div>
+  <div class="err-box" id="herr">Please answer this question to continue.</div>
+ 
+  <!-- Q1 -->
+  <div class="hscreen on" id="hs1">
+    <div class="qcard">
+      <div class="qnum">Question 01</div>
+      <div class="qtxt">What is your average monthly revenue?</div>
+      <div class="qhint">Total customers paid you before any deductions. Check your Shopify dashboard.</div>
+      <div class="inp-pre"><span class="pre-sym" id="q1-sym">$</span><input class="inp" type="number" id="q1" placeholder="e.g. 10000" min="0"></div>
+    </div>
+    <div class="btns"><button class="hnext" onclick="hnext(1)">Continue →</button></div>
+  </div>
+ 
+  <!-- Q2 -->
+  <div class="hscreen" id="hs2">
+    <div class="qcard">
+      <div class="qnum">Question 02</div>
+      <div class="qtxt">How much do you spend on ads per month?</div>
+      <div class="qhint">Total across Facebook, Instagram, Google, TikTok. Put 0 if no paid ads.</div>
+      <div class="inp-pre"><span class="pre-sym" id="q2-sym">$</span><input class="inp" type="number" id="q2" placeholder="e.g. 2000" min="0"></div>
+    </div>
+    <div class="btns"><button class="hback" onclick="hback(2)">←</button><button class="hnext" onclick="hnext(2)">Continue →</button></div>
+  </div>
+ 
+  <!-- Q3 -->
+  <div class="hscreen" id="hs3">
+    <div class="qcard">
+      <div class="qnum">Question 03</div>
+      <div class="qtxt">What does it cost to buy or make your products?</div>
+      <div class="qhint">Cost of Goods Sold — what you paid your supplier for products sold this month.</div>
+      <div class="inp-pre"><span class="pre-sym" id="q3-sym">$</span><input class="inp" type="number" id="q3" placeholder="e.g. 4000" min="0"></div>
+    </div>
+    <div class="btns"><button class="hback" onclick="hback(3)">←</button><button class="hnext" onclick="hnext(3)">Continue →</button></div>
+  </div>
+ 
+  <!-- Q4 -->
+  <div class="hscreen" id="hs4">
+    <div class="qcard">
+      <div class="qnum">Question 04</div>
+      <div class="qtxt">Which Shopify plan are you on?</div>
+      <div class="qhint">This affects your monthly fee and transaction fee per order.</div>
+      <div class="opts">
+        <div class="opt" onclick="hpick('q4','basic',this)"><div class="odot"></div>Basic — $29/month (2% transaction fee)</div>
+        <div class="opt" onclick="hpick('q4','shopify',this)"><div class="odot"></div>Shopify — $79/month (1% transaction fee)</div>
+        <div class="opt" onclick="hpick('q4','advanced',this)"><div class="odot"></div>Advanced — $299/month (0.5% fee)</div>
+        <div class="opt" onclick="hpick('q4','plus',this)"><div class="odot"></div>Shopify Plus — $2,300/month (0.15% fee)</div>
       </div>
       <input type="hidden" id="q4">
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="back(4)">←</button>
-      <button class="btn-next" onclick="next(4)">Continue →</button>
-    </div>
+    <div class="btns"><button class="hback" onclick="hback(4)">←</button><button class="hnext" onclick="hnext(4)">Continue →</button></div>
   </div>
-
-  <div class="screen" id="screen-5">
-    <div class="q-card">
-      <div class="q-num">Question 05</div>
-      <div class="q-text">What is your monthly refund/return rate?</div>
-      <div class="q-hint">Out of every 100 orders, how many get returned or refunded? Drag the slider.</div>
-      <div class="range-wrap">
-        <div class="range-val" id="q5-val">3%</div>
-        <input type="range" id="q5" min="0" max="30" value="3" step="0.5" oninput="updateRange('q5','q5-val','%')">
-        <div class="range-labels"><span>0% (none)</span><span>15%</span><span>30%+ (high)</span></div>
-      </div>
+ 
+  <!-- Q5 -->
+  <div class="hscreen" id="hs5">
+    <div class="qcard">
+      <div class="qnum">Question 05</div>
+      <div class="qtxt">What is your monthly refund or return rate?</div>
+      <div class="qhint">Out of every 100 orders, how many get returned? Slide to select.</div>
+      <div class="range-val" id="q5-show">3%</div>
+      <input type="range" id="q5" min="0" max="30" value="3" step="0.5" oninput="document.getElementById('q5-show').textContent=this.value+'%'">
+      <div class="range-lbls"><span>0%</span><span>15%</span><span>30%+</span></div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="back(5)">←</button>
-      <button class="btn-next" onclick="next(5)">Continue →</button>
-    </div>
+    <div class="btns"><button class="hback" onclick="hback(5)">←</button><button class="hnext" onclick="hnext(5)">Continue →</button></div>
   </div>
-
-  <div class="screen" id="screen-6">
-    <div class="q-card">
-      <div class="q-num">Question 06</div>
-      <div class="q-text">How much do you spend on Shopify apps per month?</div>
-      <div class="q-hint">Add up all your app subscriptions — review apps, upsell tools, email marketing, analytics, etc. Check your Shopify billing section.</div>
-      <div class="input-wrap">
-        <span class="input-prefix">₹</span>
-        <input class="inp has-prefix" type="number" id="q6" placeholder="e.g. 8000" min="0">
-      </div>
+ 
+  <!-- Q6 -->
+  <div class="hscreen" id="hs6">
+    <div class="qcard">
+      <div class="qnum">Question 06</div>
+      <div class="qtxt">How much do you spend on Shopify apps per month?</div>
+      <div class="qhint">All app subscriptions combined — email, reviews, upsells, analytics, etc.</div>
+      <div class="inp-pre"><span class="pre-sym" id="q6-sym">$</span><input class="inp" type="number" id="q6" placeholder="e.g. 150" min="0"></div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="back(6)">←</button>
-      <button class="btn-next" onclick="next(6)">Continue →</button>
-    </div>
+    <div class="btns"><button class="hback" onclick="hback(6)">←</button><button class="hnext" onclick="hnext(6)">Continue →</button></div>
   </div>
-
-  <div class="screen" id="screen-7">
-    <div class="q-card">
-      <div class="q-num">Question 07</div>
-      <div class="q-text">What are your monthly shipping costs?</div>
-      <div class="q-hint">Total amount you paid couriers (Shiprocket, Delhivery, Bluedart, etc.) this month — including COD charges if applicable.</div>
-      <div class="input-wrap">
-        <span class="input-prefix">₹</span>
-        <input class="inp has-prefix" type="number" id="q7" placeholder="e.g. 25000" min="0">
-      </div>
+ 
+  <!-- Q7 -->
+  <div class="hscreen" id="hs7">
+    <div class="qcard">
+      <div class="qnum">Question 07</div>
+      <div class="qtxt">What are your monthly shipping costs?</div>
+      <div class="qhint">Total paid to courier/logistics companies this month.</div>
+      <div class="inp-pre"><span class="pre-sym" id="q7-sym">$</span><input class="inp" type="number" id="q7" placeholder="e.g. 500" min="0"></div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="back(7)">←</button>
-      <button class="btn-next" onclick="next(7)">Continue →</button>
-    </div>
+    <div class="btns"><button class="hback" onclick="hback(7)">←</button><button class="hnext" onclick="hnext(7)">Continue →</button></div>
   </div>
-
-  <div class="screen" id="screen-8">
-    <div class="q-card">
-      <div class="q-num">Question 08</div>
-      <div class="q-text">Are you registered for GST?</div>
-      <div class="q-hint">This affects how we calculate your tax obligations.</div>
-      <div class="options" id="q8-opts">
-        <div class="opt" onclick="selectOpt('q8','yes',this)"><div class="opt-dot"></div>Yes, I am GST registered</div>
-        <div class="opt" onclick="selectOpt('q8','no',this)"><div class="opt-dot"></div>No, not yet registered</div>
-        <div class="opt" onclick="selectOpt('q8','unsure',this)"><div class="opt-dot"></div>Not sure</div>
+ 
+  <!-- Q8 -->
+  <div class="hscreen" id="hs8">
+    <div class="qcard">
+      <div class="qnum">Question 08</div>
+      <div class="qtxt">Are you registered for VAT, GST, or Sales Tax?</div>
+      <div class="qhint">Includes VAT (UK/EU), GST (India/Australia/Canada), or Sales Tax (US).</div>
+      <div class="opts">
+        <div class="opt" onclick="hpick('q8','yes',this)"><div class="odot"></div>Yes, I am registered</div>
+        <div class="opt" onclick="hpick('q8','no',this)"><div class="odot"></div>No, not yet registered</div>
+        <div class="opt" onclick="hpick('q8','unsure',this)"><div class="odot"></div>Not sure</div>
       </div>
       <input type="hidden" id="q8">
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="back(8)">←</button>
-      <button class="btn-next" onclick="next(8)">Continue →</button>
-    </div>
+    <div class="btns"><button class="hback" onclick="hback(8)">←</button><button class="hnext" onclick="hnext(8)">Continue →</button></div>
   </div>
-
-  <div class="screen" id="screen-9">
-    <div class="q-card">
-      <div class="q-num">Question 09</div>
-      <div class="q-text">How long has your store been running?</div>
-      <div class="q-hint">This helps us benchmark your performance against similar stores at the same stage.</div>
-      <div class="options" id="q9-opts">
-        <div class="opt" onclick="selectOpt('q9','new',this)"><div class="opt-dot"></div>Less than 3 months — just getting started</div>
-        <div class="opt" onclick="selectOpt('q9','growing',this)"><div class="opt-dot"></div>3–12 months — building momentum</div>
-        <div class="opt" onclick="selectOpt('q9','established',this)"><div class="opt-dot"></div>1–3 years — established and scaling</div>
-        <div class="opt" onclick="selectOpt('q9','mature',this)"><div class="opt-dot"></div>3+ years — mature business</div>
+ 
+  <!-- Q9 -->
+  <div class="hscreen" id="hs9">
+    <div class="qcard">
+      <div class="qnum">Question 09</div>
+      <div class="qtxt">How long has your store been running?</div>
+      <div class="qhint">Helps benchmark your performance against similar stores.</div>
+      <div class="opts">
+        <div class="opt" onclick="hpick('q9','new',this)"><div class="odot"></div>Less than 3 months</div>
+        <div class="opt" onclick="hpick('q9','growing',this)"><div class="odot"></div>3 to 12 months</div>
+        <div class="opt" onclick="hpick('q9','established',this)"><div class="odot"></div>1 to 3 years</div>
+        <div class="opt" onclick="hpick('q9','mature',this)"><div class="odot"></div>More than 3 years</div>
       </div>
       <input type="hidden" id="q9">
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="back(9)">←</button>
-      <button class="btn-next" onclick="next(9)">Continue →</button>
-    </div>
+    <div class="btns"><button class="hback" onclick="hback(9)">←</button><button class="hnext" onclick="hnext(9)">Continue →</button></div>
   </div>
-
-  <div class="screen" id="screen-10">
-    <div class="q-card">
-      <div class="q-num">Question 10 — Last one!</div>
-      <div class="q-text">What is your biggest financial worry right now?</div>
-      <div class="q-hint">This helps us personalise your action plan.</div>
-      <div class="options" id="q10-opts">
-        <div class="opt" onclick="selectOpt('q10','profit',this)"><div class="opt-dot"></div>I don't know if I'm actually profitable</div>
-        <div class="opt" onclick="selectOpt('q10','tax',this)"><div class="opt-dot"></div>I'm scared of a big tax bill</div>
-        <div class="opt" onclick="selectOpt('q10','ads',this)"><div class="opt-dot"></div>My ads cost too much for the return I get</div>
-        <div class="opt" onclick="selectOpt('q10','cashflow',this)"><div class="opt-dot"></div>I have revenue but no cash in the bank</div>
+ 
+  <!-- Q10 -->
+  <div class="hscreen" id="hs10">
+    <div class="qcard">
+      <div class="qnum">Question 10 — Last one!</div>
+      <div class="qtxt">What is your biggest financial worry right now?</div>
+      <div class="qhint">This personalises your action plan.</div>
+      <div class="opts">
+        <div class="opt" onclick="hpick('q10','profit',this)"><div class="odot"></div>I don't know if I'm actually profitable</div>
+        <div class="opt" onclick="hpick('q10','tax',this)"><div class="odot"></div>I'm scared of a big tax bill</div>
+        <div class="opt" onclick="hpick('q10','ads',this)"><div class="odot"></div>My ads cost too much</div>
+        <div class="opt" onclick="hpick('q10','cashflow',this)"><div class="odot"></div>Revenue looks good but no cash in the bank</div>
       </div>
       <input type="hidden" id="q10">
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="back(10)">←</button>
-      <button class="btn-next" onclick="calculate()">Get my results →</button>
-    </div>
+    <div class="btns"><button class="hback" onclick="hback(10)">←</button><button class="hnext" onclick="hcalc()">Get my results →</button></div>
   </div>
-
+ 
   <!-- LOADING -->
-  <div class="screen" id="screen-loading">
-    <div class="loader-ring"></div>
-    <div class="loader-title">Analysing your store...</div>
-    <div class="loader-sub">Our AI accountant is crunching the numbers</div>
-    <div class="loader-steps">
-      <div class="lstep" id="ls1"><span class="lstep-dot"></span>Calculating real profit margin...</div>
-      <div class="lstep" id="ls2"><span class="lstep-dot"></span>Estimating tax obligations...</div>
-      <div class="lstep" id="ls3"><span class="lstep-dot"></span>Finding profit leaks...</div>
-      <div class="lstep" id="ls4"><span class="lstep-dot"></span>Generating personalised actions...</div>
-      <div class="lstep" id="ls5"><span class="lstep-dot"></span>Building your health score...</div>
+  <div class="hscreen" id="hs-loading">
+    <div class="loader">
+      <div class="spinner"></div>
+      <div style="font-family:var(--serif);font-size:18px;margin-bottom:8px">Analysing your store...</div>
+      <div style="font-size:13px;color:var(--t2);margin-bottom:20px">Our AI accountant is crunching the numbers</div>
+      <div class="lstep" id="ls1"><span class="ldot"></span>Calculating real profit margin...</div>
+      <div class="lstep" id="ls2"><span class="ldot"></span>Estimating tax obligations...</div>
+      <div class="lstep" id="ls3"><span class="ldot"></span>Finding profit leaks...</div>
+      <div class="lstep" id="ls4"><span class="ldot"></span>Generating your action plan...</div>
+      <div class="lstep" id="ls5"><span class="ldot"></span>Building your health score...</div>
     </div>
   </div>
-
+ 
   <!-- RESULTS -->
-  <div class="screen" id="screen-result">
-    <div class="result-header">
-      <div class="score-ring">
-        <svg width="120" height="120" viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r="52" fill="none" stroke="#222" stroke-width="6"/>
-          <circle cx="60" cy="60" r="52" fill="none" stroke="#c8f55a" stroke-width="6"
-            stroke-dasharray="326.7" id="score-circle" stroke-dashoffset="326.7"
-            stroke-linecap="round" style="transition: stroke-dashoffset 1.2s ease"/>
+  <div class="hscreen" id="hs-result">
+    <div style="text-align:center;margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--b1)">
+      <div class="ring-wrap" style="margin:0 auto 14px">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="var(--b1)" stroke-width="6"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="var(--acc)" stroke-width="6"
+            stroke-dasharray="263.9" id="hring" stroke-dashoffset="263.9"
+            stroke-linecap="round" style="transition:stroke-dashoffset 1.2s ease"/>
         </svg>
-        <div class="score-num" id="score-display">0<small>/100</small></div>
+        <div class="ring-num" id="hscorenum">0<small>/100</small></div>
       </div>
-      <div class="result-grade" id="result-grade"></div>
-      <div class="result-title" id="result-title"></div>
-      <div class="result-sub" id="result-sub"></div>
+      <div class="tag" id="hgrade-tag" style="margin-bottom:10px"></div>
+      <div style="font-family:var(--serif);font-size:20px;font-weight:600;margin-bottom:4px" id="hres-title"></div>
+      <div style="font-size:13px;color:var(--t2)" id="hres-sub"></div>
     </div>
-
-    <div class="metrics-grid" id="metrics-grid"></div>
-
-    <div class="section-title">Full profit breakdown</div>
-    <div class="breakdown" id="breakdown"></div>
-
-    <div class="ai-analysis" id="ai-analysis">
-      <div class="ai-badge"><span class="ai-dot"></span>AI Analysis</div>
-      <div class="ai-text" id="ai-text">Loading personalised analysis...</div>
+ 
+    <div class="grid2" style="margin-bottom:14px" id="hmetrics"></div>
+ 
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">Full profit breakdown</div>
+      <div id="hbreakdown"></div>
     </div>
-
-    <div class="section-title">Your 3 priority actions</div>
-    <div class="actions" id="actions-list"></div>
-
-    <div class="upsell">
-      <div class="upsell-title">This tool is completely free</div>
-      <div class="upsell-sub">If this helped you, share it with another Shopify store owner who needs to know their real profit. It takes 5 minutes and could save them lakhs.</div>
-      <button class="upsell-btn" onclick="shareApp()">Share this tool with a friend →</button>
+ 
+    <div class="card" style="margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--acc);animation:pulse 2s ease infinite"></div>
+        <div style="font-size:12px;color:var(--acc);font-weight:600;letter-spacing:1px;text-transform:uppercase">AI Analysis</div>
+      </div>
+      <div style="font-size:14px;color:var(--t2);line-height:1.75" id="hai-text">Loading personalised analysis...</div>
     </div>
-
-    <button class="restart-btn" onclick="restart()">← Check again with different numbers</button>
+ 
+    <div style="margin-bottom:14px">
+      <div style="font-size:14px;font-weight:600;margin-bottom:10px">Your 3 priority actions</div>
+      <div id="hactions"></div>
+    </div>
+ 
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-acc" onclick="saveCheckResult()">Save to dashboard</button>
+      <button class="btn btn-ghost" onclick="hrestart()">Check again</button>
+      <button class="btn btn-ghost" onclick="goPage('chat')">Ask AI more questions</button>
+    </div>
   </div>
-
 </div>
-
+ 
+<!-- ═══════════════════════════════════════ -->
+<!-- PAGE 3: LEDGER -->
+<!-- ═══════════════════════════════════════ -->
+<div class="page" id="page-ledger">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div>
+      <div class="page-title">Ledger</div>
+      <div class="page-sub">Record every income and expense. Your financial source of truth.</div>
+    </div>
+    <button class="btn btn-acc" onclick="openModal()">+ Add entry</button>
+  </div>
+ 
+  <div class="grid3" style="margin-bottom:16px">
+    <div class="mcard good">
+      <div class="mlabel">Total income</div>
+      <div class="mval pos" id="l-inc">$0</div>
+    </div>
+    <div class="mcard bad">
+      <div class="mlabel">Total expenses</div>
+      <div class="mval neg" id="l-exp">$0</div>
+    </div>
+    <div class="mcard" id="l-net-card">
+      <div class="mlabel">Net balance</div>
+      <div class="mval" id="l-net">$0</div>
+    </div>
+  </div>
+ 
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div class="card-title" style="margin-bottom:0">All entries</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select class="curr-sel" id="ledger-filter" onchange="renderLedger()" style="font-size:12px">
+          <option value="all">All types</option>
+          <option value="income">Income</option>
+          <option value="expense">Expenses</option>
+          <option value="ads">Ads</option>
+          <option value="refund">Refunds</option>
+          <option value="shipping">Shipping</option>
+          <option value="tax">Tax</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">Export CSV</button>
+      </div>
+    </div>
+    <div id="ledger-list">
+      <div style="text-align:center;padding:40px 0;font-size:13px;color:var(--t3)">No entries yet. Click "+ Add entry" to start recording your finances.</div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════ -->
+<!-- PAGE 4: MONTHLY TRACKER -->
+<!-- ═══════════════════════════════════════ -->
+<div class="page" id="page-tracker">
+  <div class="page-title">Monthly Tracker</div>
+  <div class="page-sub">Compare your performance month by month. Spot trends before they become problems.</div>
+ 
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">Month-by-month summary</div>
+    <div id="monthly-table-wrap">
+      <div style="text-align:center;padding:30px 0;font-size:13px;color:var(--t3)">Add entries with dates to see monthly summaries automatically</div>
+    </div>
+  </div>
+ 
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">Manual monthly snapshot</div>
+    <div class="page-sub" style="margin-bottom:16px;font-size:12px">Quickly log your monthly numbers without itemising everything</div>
+    <div class="grid2">
+      <div class="field">
+        <label class="flabel">Month</label>
+        <input class="inp" type="month" id="snap-month">
+      </div>
+      <div class="field">
+        <label class="flabel">Revenue (<span class="csym">$</span>)</label>
+        <input class="inp" type="number" id="snap-rev" placeholder="0">
+      </div>
+      <div class="field">
+        <label class="flabel">Total expenses (<span class="csym">$</span>)</label>
+        <input class="inp" type="number" id="snap-exp" placeholder="0">
+      </div>
+      <div class="field">
+        <label class="flabel">Ad spend (<span class="csym">$</span>)</label>
+        <input class="inp" type="number" id="snap-ads" placeholder="0">
+      </div>
+      <div class="field">
+        <label class="flabel">Refunds (<span class="csym">$</span>)</label>
+        <input class="inp" type="number" id="snap-ref" placeholder="0">
+      </div>
+      <div class="field">
+        <label class="flabel">Notes</label>
+        <input class="inp" id="snap-notes" placeholder="e.g. Launched new product">
+      </div>
+    </div>
+    <button class="btn btn-acc" onclick="saveSnapshot()">Save snapshot</button>
+  </div>
+ 
+  <div class="card">
+    <div class="card-title">Saved snapshots</div>
+    <div id="snapshots-list">
+      <div style="text-align:center;padding:30px 0;font-size:13px;color:var(--t3)">No snapshots yet</div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════ -->
+<!-- PAGE 5: AI CO-PILOT -->
+<!-- ═══════════════════════════════════════ -->
+<div class="page" id="page-chat">
+  <div class="page-title">AI Financial Co-Pilot</div>
+  <div class="page-sub">Ask anything about your store finances. The AI knows your data.</div>
+ 
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">Quick questions</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost btn-sm" onclick="quickQ('Why is my profit low this month?')">Why is my profit low?</button>
+      <button class="btn btn-ghost btn-sm" onclick="quickQ('How much tax should I set aside?')">How much tax to set aside?</button>
+      <button class="btn btn-ghost btn-sm" onclick="quickQ('Are my ad costs too high?')">Are my ad costs too high?</button>
+      <button class="btn btn-ghost btn-sm" onclick="quickQ('How can I improve my profit margin?')">Improve my margin</button>
+      <button class="btn btn-ghost btn-sm" onclick="quickQ('Should I increase my prices?')">Should I raise prices?</button>
+      <button class="btn btn-ghost btn-sm" onclick="quickQ('What is my biggest expense?')">Biggest expense?</button>
+    </div>
+  </div>
+ 
+  <div class="card">
+    <div class="chat-wrap" id="chat-wrap">
+      <div class="msg ai">Hello! I'm your ShopifyOS AI Financial Co-Pilot. I can see your store data and help you understand your finances. Ask me anything — about your profit, expenses, tax, pricing strategy, or what to do next.</div>
+    </div>
+    <div class="chat-input-row">
+      <input class="chat-inp" id="chat-inp" placeholder="Ask about your finances..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="btn btn-acc" onclick="sendChat()">Send</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════ -->
+<!-- PAGE 6: BOOKKEEPING -->
+<!-- ═══════════════════════════════════════ -->
+<div class="page" id="page-bookkeeping">
+  <div class="page-title">Bookkeeping</div>
+  <div class="page-sub">Your complete financial records — tax-ready summaries and reports</div>
+ 
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">Annual summary</div>
+      <div id="annual-summary">
+        <div style="font-size:13px;color:var(--t3);text-align:center;padding:20px 0">Log entries to see your annual summary</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Tax estimate</div>
+      <div id="tax-summary">
+        <div style="font-size:13px;color:var(--t3);text-align:center;padding:20px 0">Based on your logged profit</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">Profit & Loss Statement</div>
+    <div id="pnl-statement">
+      <div style="font-size:13px;color:var(--t3);text-align:center;padding:20px 0">Add entries to generate your P&L automatically</div>
+    </div>
+  </div>
+ 
+  <div class="card">
+    <div class="card-title">Need professional help?</div>
+    <p style="font-size:13px;color:var(--t2);margin-bottom:16px;line-height:1.6">ShopifyOS helps you track and understand your finances. For tax filing, audits, or complex accounting — connect with a certified accountant who can work with your exported data.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-acc" onclick="exportCSV()">Export all data (CSV)</button>
+      <button class="btn btn-ghost" onclick="printReport()">Print P&L report</button>
+    </div>
+  </div>
+</div>
+ 
 <script>
-async function getAI(prompt) {
-  try {
-    const res = await fetch('/api/gemini', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      console.log("API error:", data);
-      return null;
-    }
-
-    return data.text; // IMPORTANT
-  } catch (e) {
-    console.log("AI error:", e);
-    return null;
-  }
+// ── STATE ──────────────────────────────────
+var CURR = '$';
+var entries = JSON.parse(localStorage.getItem('sfy_entries') || '[]');
+var snapshots = JSON.parse(localStorage.getItem('sfy_snaps') || '[]');
+var hAnswers = {};
+var hCur = 1;
+var chatHistory = [];
+ 
+// ── CURRENCY ──────────────────────────────
+function setCurr(sym) {
+  CURR = sym;
+  document.querySelectorAll('.csym').forEach(function(el){ el.textContent = sym; });
+  document.querySelectorAll('#modal-sym').forEach(function(el){ el.textContent = sym; });
+  ['q1','q2','q3','q6','q7'].forEach(function(id){
+    var s = document.getElementById(id+'-sym');
+    if(s) s.textContent = sym;
+  });
+  renderAll();
 }
-function shareApp() {
-  const url = window.location.href;
-  const text = 'I just found my real Shopify profit using this free tool — it found costs I never knew about. Try it:';
-  if (navigator.share) {
-    navigator.share({ title: 'ShopifyCheck — Free Profit Calculator', text: text, url: url });
+ 
+function fmt(n) {
+  var abs = Math.abs(n);
+  if(abs >= 1000000) return CURR+(abs/1000000).toFixed(1)+'M';
+  if(abs >= 1000) return CURR+(abs/1000).toFixed(1)+'K';
+  return CURR+Math.round(abs).toLocaleString();
+}
+ 
+// ── NAVIGATION ────────────────────────────
+function goPage(name) {
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('on'); });
+  document.querySelectorAll('.ntab').forEach(function(t){ t.classList.remove('on'); });
+  document.getElementById('page-'+name).classList.add('on');
+  var tabs = document.querySelectorAll('.ntab');
+  tabs.forEach(function(t){
+    if(t.getAttribute('onclick') && t.getAttribute('onclick').includes(name)) t.classList.add('on');
+  });
+  if(name==='dashboard') renderDashboard();
+  if(name==='ledger') renderLedger();
+  if(name==='tracker') renderTracker();
+  if(name==='bookkeeping') renderBookkeeping();
+  window.scrollTo(0,0);
+}
+ 
+// ── MODAL ─────────────────────────────────
+function openModal() {
+  var today = new Date().toISOString().split('T')[0];
+  var thisMonth = today.slice(0,7);
+  document.getElementById('entry-date').value = today;
+  document.getElementById('entry-month').value = thisMonth;
+  document.getElementById('entry-desc').value = '';
+  document.getElementById('entry-amt').value = '';
+  document.getElementById('modal-sym').textContent = CURR;
+  document.getElementById('add-modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('add-modal').classList.remove('open');
+}
+function saveEntry() {
+  var desc = document.getElementById('entry-desc').value.trim();
+  var amt = parseFloat(document.getElementById('entry-amt').value);
+  var type = document.getElementById('entry-type').value;
+  var date = document.getElementById('entry-date').value;
+  var month = document.getElementById('entry-month').value;
+  if(!desc) { showNotif('Please add a description'); return; }
+  if(!amt || amt <= 0) { showNotif('Please enter a valid amount'); return; }
+  entries.push({ id: Date.now(), desc:desc, amt:amt, type:type, date:date, month:month, curr:CURR });
+  localStorage.setItem('sfy_entries', JSON.stringify(entries));
+  closeModal();
+  showNotif('Entry saved!');
+  renderAll();
+}
+ 
+// ── RENDER ALL ────────────────────────────
+function renderAll() {
+  renderDashboard();
+  renderLedger();
+  renderTracker();
+  renderBookkeeping();
+}
+ 
+// ── DASHBOARD ─────────────────────────────
+function renderDashboard() {
+  var totalRev = 0, totalExp = 0;
+  entries.forEach(function(e){
+    if(e.type==='income') totalRev += e.amt;
+    else totalExp += e.amt;
+  });
+  var profit = totalRev - totalExp;
+  var margin = totalRev > 0 ? (profit/totalRev*100).toFixed(1) : 0;
+  var tax = Math.max(0, profit * 0.25);
+ 
+  document.getElementById('d-rev').textContent = fmt(totalRev);
+  document.getElementById('d-exp').textContent = fmt(totalExp);
+  document.getElementById('d-profit').textContent = fmt(profit);
+  document.getElementById('d-profit').style.color = profit >= 0 ? 'var(--grn)' : 'var(--red)';
+  document.getElementById('d-margin').textContent = margin + '% margin';
+  document.getElementById('d-tax').textContent = fmt(tax);
+ 
+  // This month
+  var now = new Date();
+  var thisM = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  var mEnt = entries.filter(function(e){ return e.month === thisM; });
+  var mRev = 0, mExp = 0;
+  mEnt.forEach(function(e){ if(e.type==='income') mRev+=e.amt; else mExp+=e.amt; });
+  var mProfit = mRev - mExp;
+  var tmEl = document.getElementById('this-month-rows');
+  if(mEnt.length === 0) {
+    tmEl.innerHTML = '<div style="font-size:13px;color:var(--t3);text-align:center;padding:20px 0">No entries this month yet.</div>';
   } else {
-    navigator.clipboard.writeText(url).then(function() {
-      alert('Link copied! Share it with your Shopify friends.');
-    });
+    tmEl.innerHTML = [
+      '<div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--b1)"><span style="color:var(--t2)">Revenue</span><span style="color:var(--grn)">'+fmt(mRev)+'</span></div>',
+      '<div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--b1)"><span style="color:var(--t2)">Expenses</span><span style="color:var(--red)">'+fmt(mExp)+'</span></div>',
+      '<div style="display:flex;justify-content:space-between;font-size:14px;font-weight:600;padding:8px 0"><span>Net profit</span><span style="color:'+(mProfit>=0?'var(--grn)':'var(--red)')+'">'+fmt(mProfit)+'</span></div>',
+    ].join('');
+  }
+ 
+  // Expense breakdown
+  var expTypes = {};
+  entries.filter(function(e){ return e.type !== 'income'; }).forEach(function(e){
+    expTypes[e.type] = (expTypes[e.type]||0) + e.amt;
+  });
+  var expEl = document.getElementById('exp-breakdown');
+  var expKeys = Object.keys(expTypes);
+  if(expKeys.length === 0) {
+    expEl.innerHTML = '<div style="font-size:13px;color:var(--t3);text-align:center;padding:20px 0">Log expenses to see breakdown</div>';
+  } else {
+    expEl.innerHTML = expKeys.map(function(k){
+      var pct = totalExp > 0 ? (expTypes[k]/totalExp*100).toFixed(0) : 0;
+      return '<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--t2);text-transform:capitalize">'+k+'</span><span>'+fmt(expTypes[k])+' ('+pct+'%)</span></div><div class="pbar-bg"><div class="pbar-fill" style="width:'+pct+'%;background:var(--red)"></div></div></div>';
+    }).join('');
+  }
+ 
+  // Trend chart
+  var months = {};
+  entries.forEach(function(e){
+    if(!months[e.month]) months[e.month] = {rev:0,exp:0};
+    if(e.type==='income') months[e.month].rev += e.amt;
+    else months[e.month].exp += e.amt;
+  });
+  var mKeys = Object.keys(months).sort().slice(-6);
+  var tEl = document.getElementById('trend-chart');
+  if(mKeys.length < 2) {
+    tEl.innerHTML = '<div style="font-size:13px;color:var(--t3);width:100%;text-align:center;padding-top:30px">Log entries across multiple months to see your profit trend</div>';
+  } else {
+    var profits = mKeys.map(function(m){ return months[m].rev - months[m].exp; });
+    var maxP = Math.max.apply(null, profits.map(Math.abs)) || 1;
+    tEl.innerHTML = '<div style="display:flex;align-items:flex-end;gap:8px;height:100%;width:100%">'+mKeys.map(function(m,i){
+      var p = profits[i];
+      var h = Math.max(4, Math.abs(p)/maxP*80);
+      var col = p >= 0 ? 'var(--grn)' : 'var(--red)';
+      return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;height:'+h+'px;background:'+col+';border-radius:4px 4px 0 0;opacity:.8"></div><div style="font-size:9px;color:var(--t3)">'+m.slice(5)+'</div></div>';
+    }).join('')+'</div>';
   }
 }
-let current = 1;
-const total = 10;
-const answers = {};
-
-function updateProgress(q) {
-  const pct = ((q - 1) / total) * 100;
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-label').textContent = q <= total
-    ? `Question ${q} of ${total}`
-    : 'Almost done...';
-}
-
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
-}
-
-function hideError() { document.getElementById('error-box').style.display = 'none'; }
-function showError(msg) {
-  const eb = document.getElementById('error-box');
-  eb.textContent = msg || 'Please complete this question before continuing.';
-  eb.style.display = 'block';
-}
-
-function validate(q) {
-  const numIds = ['q1','q2','q3','q6','q7'];
-  const selIds = ['q4','q8','q9','q10'];
-  if (numIds.includes('q'+q)) {
-    const v = document.getElementById('q'+q).value;
-    if (v === '' || v === null) return false;
-    if (isNaN(parseFloat(v))) return false;
+ 
+// ── LEDGER ────────────────────────────────
+function renderLedger() {
+  var filter = document.getElementById('ledger-filter') ? document.getElementById('ledger-filter').value : 'all';
+  var filtered = filter === 'all' ? entries : entries.filter(function(e){ return e.type === filter; });
+  var inc = 0, exp = 0;
+  entries.forEach(function(e){ if(e.type==='income') inc+=e.amt; else exp+=e.amt; });
+  document.getElementById('l-inc').textContent = fmt(inc);
+  document.getElementById('l-exp').textContent = fmt(exp);
+  var net = inc - exp;
+  document.getElementById('l-net').textContent = fmt(net);
+  document.getElementById('l-net').style.color = net >= 0 ? 'var(--grn)' : 'var(--red)';
+ 
+  var el = document.getElementById('ledger-list');
+  if(filtered.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:40px 0;font-size:13px;color:var(--t3)">No entries found.</div>';
+    return;
   }
-  if (selIds.includes('q'+q)) {
-    if (!document.getElementById('q'+q).value) return false;
+  var sorted = filtered.slice().sort(function(a,b){ return b.date.localeCompare(a.date); });
+  el.innerHTML = sorted.map(function(e){
+    var isInc = e.type === 'income';
+    return '<div class="ledger-entry"><div class="le-left"><div class="le-name">'+e.desc+'</div><div class="le-date">'+e.date+' · <span class="tag '+(isInc?'tag-g':'tag-r')+'">'+e.type+'</span></div></div><div style="display:flex;align-items:center;gap:10px"><div class="le-amt '+(isInc?'pos':'neg')+'">'+(isInc?'+':'-')+fmt(e.amt)+'</div><button class="delete-btn" onclick="deleteEntry('+e.id+')">×</button></div></div>';
+  }).join('');
+}
+ 
+function deleteEntry(id) {
+  entries = entries.filter(function(e){ return e.id !== id; });
+  localStorage.setItem('sfy_entries', JSON.stringify(entries));
+  renderAll();
+  showNotif('Entry deleted');
+}
+ 
+function exportCSV() {
+  var rows = ['Date,Type,Description,Amount,Month'];
+  entries.forEach(function(e){
+    rows.push(e.date+','+e.type+',"'+e.desc+'",'+e.amt+','+e.month);
+  });
+  var blob = new Blob([rows.join('\n')], {type:'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'shopifyos-data.csv'; a.click();
+}
+ 
+// ── TRACKER ───────────────────────────────
+function renderTracker() {
+  // From ledger entries
+  var months = {};
+  entries.forEach(function(e){
+    if(!months[e.month]) months[e.month]={rev:0,exp:0,ads:0,ref:0};
+    if(e.type==='income') months[e.month].rev+=e.amt;
+    else if(e.type==='ads') { months[e.month].ads+=e.amt; months[e.month].exp+=e.amt; }
+    else if(e.type==='refund') { months[e.month].ref+=e.amt; months[e.month].exp+=e.amt; }
+    else months[e.month].exp+=e.amt;
+  });
+  var mKeys = Object.keys(months).sort().reverse();
+ 
+  var tbl = document.getElementById('monthly-table-wrap');
+  if(mKeys.length === 0 && snapshots.length === 0) {
+    tbl.innerHTML = '<div style="text-align:center;padding:30px 0;font-size:13px;color:var(--t3)">Add entries with dates to see monthly summaries</div>';
+  } else {
+    tbl.innerHTML = '<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Month</th><th>Revenue</th><th>Expenses</th><th>Net Profit</th><th>Margin</th><th>Status</th></tr></thead><tbody>'+
+    mKeys.map(function(m){
+      var d = months[m];
+      var p = d.rev - d.exp;
+      var mg = d.rev > 0 ? (p/d.rev*100).toFixed(1) : 0;
+      var status = p > 0 ? '<span class="tag tag-g">Profitable</span>' : '<span class="tag tag-r">Loss</span>';
+      return '<tr><td style="font-weight:500">'+m+'</td><td class="pos">'+fmt(d.rev)+'</td><td class="neg">'+fmt(d.exp)+'</td><td style="color:'+(p>=0?'var(--grn)':'var(--red)')+'">'+fmt(p)+'</td><td>'+mg+'%</td><td>'+status+'</td></tr>';
+    }).join('')+'</tbody></table></div>';
   }
+ 
+  // Snapshots
+  var snEl = document.getElementById('snapshots-list');
+  if(snapshots.length === 0) {
+    snEl.innerHTML = '<div style="text-align:center;padding:30px 0;font-size:13px;color:var(--t3)">No snapshots yet</div>';
+  } else {
+    var sorted = snapshots.slice().sort(function(a,b){ return b.month.localeCompare(a.month); });
+    snEl.innerHTML = sorted.map(function(s){
+      var p = s.rev - s.exp;
+      return '<div class="ledger-entry"><div class="le-left"><div class="le-name">'+s.month+'</div><div class="le-date" style="color:var(--t3)">Rev: '+fmt(s.rev)+' · Exp: '+fmt(s.exp)+(s.notes?' · '+s.notes:'')+'</div></div><div style="display:flex;align-items:center;gap:10px"><div class="le-amt '+(p>=0?'pos':'neg')+'">'+(p>=0?'+':'')+fmt(p)+'</div><button class="delete-btn" onclick="deleteSnap(\''+s.month+'\')">×</button></div></div>';
+    }).join('');
+  }
+}
+ 
+function saveSnapshot() {
+  var m = document.getElementById('snap-month').value;
+  var rev = parseFloat(document.getElementById('snap-rev').value)||0;
+  var exp = parseFloat(document.getElementById('snap-exp').value)||0;
+  var ads = parseFloat(document.getElementById('snap-ads').value)||0;
+  var ref = parseFloat(document.getElementById('snap-ref').value)||0;
+  var notes = document.getElementById('snap-notes').value;
+  if(!m) { showNotif('Please select a month'); return; }
+  snapshots = snapshots.filter(function(s){ return s.month !== m; });
+  snapshots.push({month:m,rev:rev,exp:exp,ads:ads,ref:ref,notes:notes});
+  localStorage.setItem('sfy_snaps', JSON.stringify(snapshots));
+  showNotif('Snapshot saved!');
+  renderTracker();
+}
+ 
+function deleteSnap(m) {
+  snapshots = snapshots.filter(function(s){ return s.month !== m; });
+  localStorage.setItem('sfy_snaps', JSON.stringify(snapshots));
+  renderTracker();
+  showNotif('Snapshot deleted');
+}
+ 
+// ── BOOKKEEPING ───────────────────────────
+function renderBookkeeping() {
+  var totalRev=0, totalExp=0, byType={};
+  entries.forEach(function(e){
+    if(e.type==='income') totalRev+=e.amt;
+    else { totalExp+=e.amt; byType[e.type]=(byType[e.type]||0)+e.amt; }
+  });
+  var profit = totalRev - totalExp;
+  var tax = Math.max(0, profit * 0.25);
+ 
+  // Annual
+  var as = document.getElementById('annual-summary');
+  as.innerHTML = [
+    '<div class="brow"><span>Total revenue</span><span class="pos">'+fmt(totalRev)+'</span></div>',
+    '<div class="brow"><span>Total expenses</span><span class="neg">'+fmt(totalExp)+'</span></div>',
+    '<div class="brow"><span>Net profit</span><span style="color:'+(profit>=0?'var(--grn)':'var(--red)')+'">'+fmt(profit)+'</span></div>',
+    '<div class="brow"><span>Profit margin</span><span>'+(totalRev>0?(profit/totalRev*100).toFixed(1):0)+'%</span></div>',
+  ].join('');
+ 
+  // Tax
+  var ts = document.getElementById('tax-summary');
+  ts.innerHTML = [
+    '<div class="brow"><span>Net profit</span><span>'+fmt(profit)+'</span></div>',
+    '<div class="brow"><span>Estimated tax (25%)</span><span class="amb">'+fmt(tax)+'</span></div>',
+    '<div class="brow"><span>After-tax profit</span><span class="pos">'+fmt(profit-tax)+'</span></div>',
+    '<div style="margin-top:12px;font-size:11px;color:var(--t3);line-height:1.6">This is an estimate. Actual tax depends on your country, business structure, and deductions. Consult a local accountant for filing.</div>',
+  ].join('');
+ 
+  // P&L
+  var pnl = document.getElementById('pnl-statement');
+  var expItems = Object.keys(byType).map(function(k){
+    return '<div class="brow"><span style="text-transform:capitalize;padding-left:14px">'+k+'</span><span class="neg">'+fmt(byType[k])+'</span></div>';
+  }).join('');
+  pnl.innerHTML = [
+    '<div class="brow" style="font-weight:600"><span>INCOME</span><span></span></div>',
+    '<div class="brow"><span style="padding-left:14px">Total revenue</span><span class="pos">'+fmt(totalRev)+'</span></div>',
+    '<div class="brow" style="font-weight:600;margin-top:8px"><span>EXPENSES</span><span></span></div>',
+    expItems || '<div class="brow"><span style="padding-left:14px;color:var(--t3)">No expenses logged</span><span>-</span></div>',
+    '<div class="brow" style="font-size:15px;font-weight:700;margin-top:8px"><span>NET PROFIT</span><span style="color:'+(profit>=0?'var(--grn)':'var(--red)')+'">'+fmt(profit)+'</span></div>',
+  ].join('');
+}
+ 
+function printReport() {
+  window.print();
+}
+ 
+// ── HEALTH CHECKER ────────────────────────
+function hprog(q) {
+  document.getElementById('hprog').style.width = ((q-1)/10*100)+'%';
+  document.getElementById('hprog-lbl').textContent = 'Question '+q+' of 10';
+}
+function hshow(id) {
+  document.querySelectorAll('.hscreen').forEach(function(s){ s.classList.remove('on'); });
+  document.getElementById(id).classList.add('on');
+}
+function hpick(name, val, el) {
+  document.getElementById(name).value = val;
+  el.closest('.opts').querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked'); });
+  el.classList.add('picked');
+}
+function hvalidate(q) {
+  var nums = [1,2,3,6,7];
+  var sels = [4,8,9,10];
+  if(nums.indexOf(q) !== -1) {
+    var v = document.getElementById('q'+q).value;
+    return v !== '' && !isNaN(parseFloat(v));
+  }
+  if(sels.indexOf(q) !== -1) return !!document.getElementById('q'+q).value;
   return true;
 }
-
-function next(q) {
-  hideError();
-  if (!validate(q)) { showError(); return; }
-  const numIds = [1,2,3,6,7];
-  if (numIds.includes(q)) answers['q'+q] = parseFloat(document.getElementById('q'+q).value) || 0;
-  if (q === 5) answers.q5 = parseFloat(document.getElementById('q5').value);
-  if ([4,8,9,10].includes(q)) answers['q'+q] = document.getElementById('q'+q).value;
-  current = q + 1;
-  updateProgress(current);
-  showScreen(current);
-  window.scrollTo({top:0,behavior:'smooth'});
+function hnext(q) {
+  document.getElementById('herr').style.display = 'none';
+  if(!hvalidate(q)) { document.getElementById('herr').style.display = 'block'; return; }
+  var nums=[1,2,3,6,7];
+  if(nums.indexOf(q)!==-1) hAnswers['q'+q]=parseFloat(document.getElementById('q'+q).value)||0;
+  if(q===5) hAnswers.q5=parseFloat(document.getElementById('q5').value);
+  if([4,8,9,10].indexOf(q)!==-1) hAnswers['q'+q]=document.getElementById('q'+q).value;
+  hCur = q+1;
+  hprog(hCur);
+  hshow('hs'+hCur);
+  window.scrollTo(0,0);
 }
-
-function back(q) {
-  hideError();
-  current = q - 1;
-  updateProgress(current);
-  showScreen(current);
-  window.scrollTo({top:0,behavior:'smooth'});
+function hback(q) {
+  document.getElementById('herr').style.display = 'none';
+  hCur = q-1;
+  hprog(hCur);
+  hshow('hs'+hCur);
+  window.scrollTo(0,0);
 }
-
-function selectOpt(name, val, el) {
-  document.getElementById(name).value = val;
-  el.closest('.options').querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-function updateRange(id, displayId, suffix) {
-  const v = document.getElementById(id).value;
-  document.getElementById(displayId).textContent = v + suffix;
-}
-
-function fmt(n) {
-  if (n >= 100000) return '₹' + (n/100000).toFixed(1) + 'L';
-  if (n >= 1000) return '₹' + (n/1000).toFixed(1) + 'K';
-  return '₹' + Math.round(n).toLocaleString('en-IN');
-}
-
-function calcNumbers() {
-  const rev = answers.q1 || 0;
-  const ads = answers.q2 || 0;
-  const cogs = answers.q3 || 0;
-  const plan = answers.q4 || 'basic';
-  const refundRate = (answers.q5 || 3) / 100;
-  const apps = answers.q6 || 0;
-  const shipping = answers.q7 || 0;
-  const gst = answers.q8;
-
-  const planFees = { basic: 1994, shopify: 7447, advanced: 29788, plus: 15000 };
-  const txnRates = { basic: 0.02, shopify: 0.01, advanced: 0.005, plus: 0.0015 };
-
-  const shopifyFee = planFees[plan] || 1994;
-  const txnFee = rev * (txnRates[plan] || 0.02);
-  const pgFee = rev * 0.023;
-  const refundLoss = rev * refundRate;
-  const totalExpenses = cogs + ads + shopifyFee + txnFee + pgFee + apps + shipping + refundLoss;
-  const realProfit = rev - totalExpenses;
-  const profitMargin = rev > 0 ? (realProfit / rev) * 100 : 0;
-
-  let gstLiability = 0;
-  if (gst === 'yes') gstLiability = Math.max(0, realProfit * 0.18);
-  let incomeTax = 0;
-  const annualProfit = realProfit * 12;
-  if (annualProfit > 1000000) incomeTax = (annualProfit - 1000000) * 0.3 / 12;
-  else if (annualProfit > 500000) incomeTax = (annualProfit - 500000) * 0.2 / 12;
-  else if (annualProfit > 250000) incomeTax = (annualProfit - 250000) * 0.05 / 12;
-  const totalTax = gstLiability + incomeTax;
-
-  let score = 50;
-  if (profitMargin > 20) score += 20;
-  else if (profitMargin > 10) score += 10;
-  else if (profitMargin < 0) score -= 20;
-  const adRatio = rev > 0 ? ads / rev : 0;
-  if (adRatio < 0.15) score += 10;
-  else if (adRatio > 0.35) score -= 15;
-  if (refundRate < 0.03) score += 10;
-  else if (refundRate > 0.08) score -= 10;
-  const feeRatio = rev > 0 ? (shopifyFee + txnFee + pgFee + apps) / rev : 0;
-  if (feeRatio < 0.05) score += 10;
-  else if (feeRatio > 0.12) score -= 5;
-  score = Math.max(10, Math.min(98, score));
-
-  return { rev, ads, cogs, shopifyFee, txnFee, pgFee, apps, shipping,
-    refundLoss, refundRate, totalExpenses, realProfit, profitMargin,
-    gstLiability, incomeTax, totalTax, score, adRatio, feeRatio };
-}
-
-function getGrade(score) {
-  if (score >= 80) return { label: 'Excellent', color: '#4ade80', bg: '#4ade8018' };
-  if (score >= 65) return { label: 'Good', color: '#c8f55a', bg: '#c8f55a18' };
-  if (score >= 50) return { label: 'Fair', color: '#fbbf24', bg: '#fbbf2418' };
-  if (score >= 35) return { label: 'Needs work', color: '#fb923c', bg: '#fb923c18' };
-  return { label: 'Critical', color: '#ff5f5f', bg: '#ff5f5f18' };
-}
-  
-function el(id) {
-  return document.getElementById(id);
-}
-
-  function renderResults(d, aiText) {
-  const grade = getGrade(d.score);
-
-  // Score ring
-  const circumference = 326.7;
-  const offset = circumference - (d.score / 100) * circumference;
-  setTimeout(() => {
-    document.getElementById('score-circle').style.strokeDashoffset = offset;
-    document.getElementById('score-circle').style.stroke = grade.color;
-    animateNumber('score-display', 0, Math.round(d.score), '/100');
-  }, 100);
-
-  el('result-grade').textContent = grade.label;
-  el('result-grade').style.background = grade.bg;
-  el('result-grade').style.color = grade.color;
-  el('result-grade').style.border = `1px solid ${grade.color}44`;
-
-  const titles = {
-    Excellent: 'Your store is financially healthy', Good: 'Your store is performing well',
-    Fair: 'Your store has room to improve', 'Needs work': 'Your store has significant leaks',
-    Critical: 'Your store finances need urgent attention'
-  };
-  el('result-title').textContent = titles[grade.label];
-  el('result-sub').textContent = `Score based on profit margin, ad efficiency, refund rate, and fee structure`;
-
-  // Metrics
-  const marginClass = d.profitMargin > 15 ? 'good' : d.profitMargin > 5 ? '' : 'bad';
-  const adClass = d.adRatio < 0.2 ? 'good' : d.adRatio > 0.35 ? 'bad' : '';
-  el('metrics-grid').innerHTML = `
-    <div class="metric ${marginClass}">
-      <div class="metric-label">Real profit margin</div>
-      <div class="metric-val">${d.profitMargin.toFixed(1)}%</div>
-      <div class="metric-sub">${d.profitMargin > 15 ? 'Healthy margin' : d.profitMargin > 0 ? 'Below ideal (aim for 15%+)' : 'You are losing money'}</div>
-    </div>
-    <div class="metric">
-      <div class="metric-label">Real monthly profit</div>
-      <div class="metric-val" style="color:${d.realProfit >= 0 ? '#4ade80' : '#ff5f5f'}">${fmt(Math.abs(d.realProfit))}</div>
-      <div class="metric-sub">${d.realProfit >= 0 ? 'After all expenses' : 'You are in the red this month'}</div>
-    </div>
-    <div class="metric ${adClass}">
-      <div class="metric-label">Ad spend ratio</div>
-      <div class="metric-val">${(d.adRatio * 100).toFixed(1)}%</div>
-      <div class="metric-sub">${d.adRatio < 0.2 ? 'Efficient ad spend' : d.adRatio > 0.35 ? 'Too high — review ROAS' : 'Acceptable range'}</div>
-    </div>
-    <div class="metric warn">
-      <div class="metric-label">Monthly tax to set aside</div>
-      <div class="metric-val" style="color:#fbbf24">${fmt(d.totalTax)}</div>
-      <div class="metric-sub">GST + income tax estimate</div>
-    </div>`;
-
-  // Breakdown
-  el('breakdown').innerHTML = `
-    <div class="b-row"><span>Monthly revenue</span><span class="b-bold">${fmt(d.rev)}</span></div>
-    <div class="b-row"><span>Product cost (COGS)</span><span class="b-neg">− ${fmt(d.cogs)}</span></div>
-    <div class="b-row"><span>Ad spend</span><span class="b-neg">− ${fmt(d.ads)}</span></div>
-    <div class="b-row"><span>Shopify plan fee</span><span class="b-neg">− ${fmt(d.shopifyFee)}</span></div>
-    <div class="b-row"><span>Transaction + PG fees</span><span class="b-neg">− ${fmt(d.txnFee + d.pgFee)}</span></div>
-    <div class="b-row"><span>Apps</span><span class="b-neg">− ${fmt(d.apps)}</span></div>
-    <div class="b-row"><span>Shipping</span><span class="b-neg">− ${fmt(d.shipping)}</span></div>
-    <div class="b-row"><span>Refund losses (${(d.refundRate*100).toFixed(1)}%)</span><span class="b-neg">− ${fmt(d.refundLoss)}</span></div>
-    <div class="b-row"><span>Real profit</span><span style="color:${d.realProfit>=0?'#4ade80':'#ff5f5f'};font-weight:500">${d.realProfit>=0?'+':''}${fmt(d.realProfit)}</span></div>`;
-
-  // AI text — call API and update when ready
-  el('ai-text').textContent = generateFallback(d);
-  const aiPrompt = `You are an expert ecommerce accountant. A Shopify store owner shared their monthly data:
-- Revenue: ₹${d.rev.toLocaleString('en-IN')}
-- Real profit: ₹${d.realProfit.toLocaleString('en-IN')} (${d.profitMargin.toFixed(1)}% margin)
-- Ad spend: ₹${d.ads.toLocaleString('en-IN')} (${(d.adRatio*100).toFixed(1)}% of revenue)
-- Refund rate: ${(d.refundRate*100).toFixed(1)}%
-- Health score: ${Math.round(d.score)}/100
-Write 3 to 4 sentences of personalised financial analysis. Be direct, specific, encouraging. Use their actual numbers. No bullet points. Speak like a trusted accountant.`;
-  getAI(aiPrompt).then(function(text) {
-    if (text) el('ai-text').textContent = text;
-  }).catch(function() {});
-
-  // Actions — generated from data
-  const actions = [];
-  if (d.adRatio > 0.25) actions.push({ title: 'Audit your ad ROAS immediately', body: `You are spending ${(d.adRatio*100).toFixed(0)}% of revenue on ads. A healthy benchmark is 15–20%. Kill campaigns with ROAS below 2x. Pause and test new creatives before scaling.` });
-  if (d.refundRate > 0.05) actions.push({ title: 'Reduce your refund rate', body: `At ${(d.refundRate*100).toFixed(1)}% returns, you are losing ${fmt(d.refundLoss)}/month. Improve product photos, add size guides, and follow up with buyers post-delivery. Even 2% improvement saves ${fmt(d.rev * 0.02)}/month.` });
-  if (d.feeRatio > 0.08) actions.push({ title: 'Audit your Shopify apps', body: `Your platform fees are eating ${(d.feeRatio*100).toFixed(1)}% of revenue. Review each app — delete unused ones. Consider upgrading your Shopify plan to reduce transaction fees if volume is high.` });
-  if (d.profitMargin < 10 && d.profitMargin >= 0) actions.push({ title: 'Increase your average order value', body: `At ${d.profitMargin.toFixed(1)}% margin, a small increase in AOV has a huge impact. Add upsells at checkout, bundle products, or test raising prices by 5–10% and watch if conversion holds.` });
-  if (d.totalTax > 0) actions.push({ title: `Set aside ${fmt(d.totalTax)} for taxes this month`, body: `Open a separate bank account today. Move ${fmt(d.totalTax)} into it every month. This prevents the painful year-end tax shock that has destroyed many otherwise profitable stores.` });
-  if (d.realProfit < 0) actions.push({ title: 'Stop scaling until you are profitable', body: 'You are currently losing money each month. Do not increase ad spend. Focus on reducing the three biggest cost lines first — ads, COGS, and refunds — before thinking about growth.' });
-
-  const top3 = actions.slice(0, 3);
-  el('actions-list').innerHTML = top3.map((a, i) => `
-    <div class="action">
-      <div class="action-num">${i+1}</div>
-      <div class="action-body"><strong>${a.title}</strong><span>${a.body}</span></div>
-    </div>`).join('');
-}
-
-function animateNumber(elId, from, to, suffix) {
-  const el = document.getElementById(elId);
-  const duration = 1000;
-  const start = performance.now();
-  function update(now) {
-    const t = Math.min((now - start) / duration, 1);
-    const val = Math.round(from + (to - from) * t);
-    el.innerHTML = val + '<small>' + suffix + '</small>';
-    if (t < 1) requestAnimationFrame(update);
-  }
-  requestAnimationFrame(update);
-}
-  
-function trackEvent(eventName) {
-  try {
-    let data = JSON.parse(localStorage.getItem("tracking")) || {};
-    data[eventName] = (data[eventName] || 0) + 1;
-    localStorage.setItem("tracking", JSON.stringify(data));
-    console.log("Tracking:", data);
-  } catch (e) {
-    console.log("Tracking error:", e);
-  }
-}
-
-async function calculate() {
-  trackEvent('completed');
-  hideError();
-  if (!validate(10)) { showError(); return; }
-  answers.q10 = document.getElementById('q10').value;
-  answers.q5 = parseFloat(document.getElementById('q5').value);
-
-  document.getElementById('progress-wrap').style.display = 'none';
-  document.getElementById('main-header').style.display = 'none';
-  showScreen('loading');
-  window.scrollTo({top:0,behavior:'smooth'});
-
-  const loadSteps = ['ls1','ls2','ls3','ls4','ls5'];
-  loadSteps.forEach((id, i) => {
-    setTimeout(() => document.getElementById(id).classList.add('done'), 600 + i * 700);
+ 
+async function hcalc() {
+  document.getElementById('herr').style.display = 'none';
+  if(!hvalidate(10)) { document.getElementById('herr').style.display = 'block'; return; }
+  hAnswers.q10 = document.getElementById('q10').value;
+  hAnswers.q5 = parseFloat(document.getElementById('q5').value);
+  document.getElementById('hprog-wrap').style.display = 'none';
+  hshow('hs-loading');
+  window.scrollTo(0,0);
+  ['ls1','ls2','ls3','ls4','ls5'].forEach(function(id,i){
+    setTimeout(function(){ document.getElementById(id).classList.add('done'); }, 700+i*700);
   });
-
-  const d = calcNumbers();
-
-  const prompt = `You are an expert ecommerce accountant. A Shopify store owner has shared their monthly financials:
-- Revenue: ₹${d.rev.toLocaleString('en-IN')}
-- Real profit: ₹${d.realProfit.toLocaleString('en-IN')} (${d.profitMargin.toFixed(1)}% margin)
-- Ad spend: ₹${d.ads.toLocaleString('en-IN')} (${(d.adRatio*100).toFixed(1)}% of revenue)
-- Refund rate: ${(d.refundRate*100).toFixed(1)}%
-- Shopify plan: ${answers.q4}
-- GST registered: ${answers.q8}
-- Store age: ${answers.q9}
-- Biggest worry: ${answers.q10}
-- Financial health score: ${Math.round(d.score)}/100
-
-Write a 3-4 sentence personalised analysis of their financial situation. Be direct, specific, and encouraging. Reference their actual numbers. Do not use bullet points. Speak like a trusted accountant, not a robot.`;
-
-  let aiText = generateFallback(d);
+ 
+  var d = hcalcNums();
+  var prompt = 'You are an expert ecommerce accountant. A Shopify store owner shared their monthly data:\n- Revenue: '+CURR+d.rev+'\n- Real profit: '+CURR+d.realProfit+' ('+d.profitMargin.toFixed(1)+'% margin)\n- Ad spend: '+CURR+d.ads+' ('+(d.adRatio*100).toFixed(1)+'% of revenue)\n- Refund rate: '+(d.refRate*100).toFixed(1)+'%\n- Shopify plan: '+hAnswers.q4+'\n- Tax registered: '+hAnswers.q8+'\n- Store age: '+hAnswers.q9+'\n- Biggest worry: '+hAnswers.q10+'\n- Health score: '+d.score+'/100\nWrite 3-4 sentences of personalised financial analysis. Be direct, specific, encouraging. Reference their actual numbers. No bullet points. Speak like a trusted accountant.';
+ 
+  var aiText = hfallback(d);
   try {
-    const result = await getAI(prompt);
-    if (result) aiText = result;
-  } catch(e) {
-    aiText = generateFallback(d);
-  }
-
-  setTimeout(() => {
-    showScreen('result');
-    renderResults(d, aiText);
-    window.scrollTo({top:0,behavior:'smooth'});
-  }, 4200);
+    var res = await fetch('/api/gemini', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({prompt:prompt})
+    });
+    if(res.ok){ var data=await res.json(); if(data.text) aiText=data.text; }
+  } catch(e) {}
+ 
+  setTimeout(function(){ hshowResult(d, aiText); }, 4200);
 }
-
-function generateFallback(d) {
-  if (d.realProfit < 0) return `Your store is currently running at a loss of ${fmt(Math.abs(d.realProfit))} per month despite generating ${fmt(d.rev)} in revenue. The gap between what Shopify shows you and your real profit is significant — this is fixable, but requires immediate attention to your three biggest cost lines. Start by cutting any ad campaigns with ROAS below 2x, and do a full audit of your app subscriptions this week.`;
-  if (d.profitMargin < 10) return `You are profitable, which is great — but your ${d.profitMargin.toFixed(1)}% margin is thin and leaves very little room for error. One bad month of returns or a spike in ad costs could push you into the red. Focus this month on improving one metric: either reduce ad spend by testing lower budgets, or improve average order value through upsells at checkout.`;
-  return `Your store is in a healthy financial position with a ${d.profitMargin.toFixed(1)}% real profit margin and a health score of ${Math.round(d.score)}/100. The numbers show you are managing your costs reasonably well. The main opportunity is ${d.adRatio > 0.25 ? 'your ad spend, which is slightly high relative to revenue' : d.refundRate > 0.05 ? 'reducing your refund rate, which is costing you ' + fmt(d.refundLoss) + ' per month' : 'maintaining consistency and using your profit to systematically reduce the highest cost line each quarter'}. Keep doing what is working and focus on the three actions below.`;
+ 
+function hcalcNums() {
+  var rev=hAnswers.q1||0, ads=hAnswers.q2||0, cogs=hAnswers.q3||0;
+  var plan=hAnswers.q4||'basic', refRate=(hAnswers.q5||3)/100;
+  var apps=hAnswers.q6||0, ship=hAnswers.q7||0;
+  var planFee={basic:29,shopify:79,advanced:299,plus:2300}[plan]||29;
+  var txnRate={basic:.02,shopify:.01,advanced:.005,plus:.0015}[plan]||.02;
+  var txnFee=rev*txnRate, pgFee=rev*.023, refLoss=rev*refRate;
+  var totalExp=cogs+ads+planFee+txnFee+pgFee+apps+ship+refLoss;
+  var realProfit=rev-totalExp;
+  var profitMargin=rev>0?(realProfit/rev)*100:0;
+  var taxEst=Math.max(0,realProfit*.25);
+  var adRatio=rev>0?ads/rev:0, feeRatio=rev>0?(planFee+txnFee+pgFee+apps)/rev:0;
+  var score=50;
+  if(profitMargin>20) score+=20; else if(profitMargin>10) score+=10; else if(profitMargin<0) score-=20;
+  if(adRatio<.15) score+=10; else if(adRatio>.35) score-=15;
+  if(refRate<.03) score+=10; else if(refRate>.08) score-=10;
+  if(feeRatio<.05) score+=10; else if(feeRatio>.12) score-=5;
+  score=Math.max(10,Math.min(98,Math.round(score)));
+  return{rev,ads,cogs,planFee,txnFee,pgFee,apps,ship,refLoss,refRate,totalExp,realProfit,profitMargin,taxEst,score,adRatio,feeRatio};
 }
-
-function restart() {
-  Object.keys(answers).forEach(k => delete answers[k]);
-  document.querySelectorAll('.inp').forEach(i => i.value = '');
-  document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
-  document.querySelectorAll('input[type=hidden]').forEach(i => i.value = '');
-  document.getElementById('q5').value = 3;
-  document.getElementById('q5-val').textContent = '3%';
-  document.querySelectorAll('.lstep').forEach(l => l.classList.remove('done'));
-  document.getElementById('score-circle').style.strokeDashoffset = '326.7';
-  document.getElementById('progress-wrap').style.display = 'block';
-  document.getElementById('main-header').style.display = 'block';
-  current = 1;
-  updateProgress(1);
-  showScreen(1);
-  window.scrollTo({top:0,behavior:'smooth'});
+ 
+function hfallback(d) {
+  if(d.realProfit<0) return 'Your store is currently running at a loss of '+fmt(Math.abs(d.realProfit))+' per month despite generating '+fmt(d.rev)+' in revenue. This is fixable — start by cutting low-performing ad campaigns and auditing your app subscriptions this week.';
+  if(d.profitMargin<10) return 'You are profitable at '+d.profitMargin.toFixed(1)+'% margin but this is thin. One bad month of returns or an ad spike could push you into the red. Focus on increasing average order value through upsells.';
+  return 'Your store is in a healthy financial position with a '+d.profitMargin.toFixed(1)+'% real profit margin and a health score of '+d.score+'/100. Keep focusing on reducing your highest cost lines each quarter.';
 }
-
-updateProgress(1);
+ 
+function hgrade(s) {
+  if(s>=80) return{l:'Excellent',c:'var(--grn)',bg:'var(--grn2)'};
+  if(s>=65) return{l:'Good',c:'var(--acc)',bg:'var(--acc2)'};
+  if(s>=50) return{l:'Fair',c:'var(--amb)',bg:'var(--amb2)'};
+  if(s>=35) return{l:'Needs work',c:'#fb923c',bg:'#fb923c20'};
+  return{l:'Critical',c:'var(--red)',bg:'var(--red2)'};
+}
+ 
+function hshowResult(d, aiText) {
+  hshow('hs-result');
+  window.scrollTo(0,0);
+  var g = hgrade(d.score);
+  var circ=263.9, offset=circ-(d.score/100)*circ;
+  setTimeout(function(){
+    document.getElementById('hring').style.strokeDashoffset=offset;
+    document.getElementById('hring').style.stroke=g.c;
+    var n=0, timer=setInterval(function(){
+      n=Math.min(n+2,d.score);
+      document.getElementById('hscorenum').innerHTML=n+'<small>/100</small>';
+      if(n>=d.score) clearInterval(timer);
+    },18);
+  },100);
+  var gt=document.getElementById('hgrade-tag');
+  gt.textContent=g.l; gt.style.background=g.bg; gt.style.color=g.c;
+  gt.style.border='1px solid '+g.c+'44';
+  var titles={Excellent:'Your store is financially healthy',Good:'Your store is performing well',Fair:'Your store has room to improve','Needs work':'Your store has significant leaks',Critical:'Your finances need urgent attention'};
+  document.getElementById('hres-title').textContent=titles[g.l]||g.l;
+  document.getElementById('hres-sub').textContent='Score based on profit margin, ad efficiency, refund rate, and fee structure';
+  var mC=d.profitMargin>15?'good':d.profitMargin>0?'':'bad';
+  var aC=d.adRatio<.2?'good':d.adRatio>.35?'bad':'';
+  document.getElementById('hmetrics').innerHTML=
+    '<div class="mcard '+mC+'"><div class="mlabel">Real profit margin</div><div class="mval" style="color:'+(d.profitMargin>0?'var(--grn)':'var(--red)')+'">'+d.profitMargin.toFixed(1)+'%</div><div class="msub">'+(d.profitMargin>15?'Healthy':d.profitMargin>0?'Below ideal 15%':'You are losing money')+'</div></div>'+
+    '<div class="mcard"><div class="mlabel">Real monthly profit</div><div class="mval" style="color:'+(d.realProfit>=0?'var(--grn)':'var(--red)')+'">'+fmt(Math.abs(d.realProfit))+'</div><div class="msub">'+(d.realProfit>=0?'After all expenses':'You are in the red')+'</div></div>'+
+    '<div class="mcard '+aC+'"><div class="mlabel">Ad spend ratio</div><div class="mval">'+(d.adRatio*100).toFixed(1)+'%</div><div class="msub">'+(d.adRatio<.2?'Efficient':d.adRatio>.35?'Too high — review ROAS':'Acceptable')+'</div></div>'+
+    '<div class="mcard warn"><div class="mlabel">Tax to set aside</div><div class="mval amb">'+fmt(d.taxEst)+'</div><div class="msub">~25% of profit</div></div>';
+  document.getElementById('hbreakdown').innerHTML=[
+    '<div class="brow"><span>Monthly revenue</span><span style="font-weight:600">'+fmt(d.rev)+'</span></div>',
+    '<div class="brow"><span>Product cost (COGS)</span><span class="neg">− '+fmt(d.cogs)+'</span></div>',
+    '<div class="brow"><span>Ad spend</span><span class="neg">− '+fmt(d.ads)+'</span></div>',
+    '<div class="brow"><span>Shopify plan fee</span><span class="neg">− '+fmt(d.planFee)+'</span></div>',
+    '<div class="brow"><span>Transaction + gateway fees</span><span class="neg">− '+fmt(d.txnFee+d.pgFee)+'</span></div>',
+    '<div class="brow"><span>Apps</span><span class="neg">− '+fmt(d.apps)+'</span></div>',
+    '<div class="brow"><span>Shipping</span><span class="neg">− '+fmt(d.ship)+'</span></div>',
+    '<div class="brow"><span>Refund losses ('+(d.refRate*100).toFixed(1)+'%)</span><span class="neg">− '+fmt(d.refLoss)+'</span></div>',
+    '<div class="brow"><span>Real profit</span><span style="color:'+(d.realProfit>=0?'var(--grn)':'var(--red)')+';font-weight:700">'+(d.realProfit>=0?'+ ':'')+fmt(d.realProfit)+'</span></div>',
+  ].join('');
+  document.getElementById('hai-text').textContent=aiText;
+  var actions=[];
+  if(d.adRatio>.25) actions.push({t:'Audit your ad campaigns',b:'You are spending '+(d.adRatio*100).toFixed(0)+'% of revenue on ads. Healthy is 15–20%. Kill campaigns with ROAS below 2x.'});
+  if(d.refRate>.05) actions.push({t:'Reduce your refund rate',b:'At '+(d.refRate*100).toFixed(1)+'% returns you are losing '+fmt(d.refLoss)+'/month. Better product photos and size guides can cut this significantly.'});
+  if(d.feeRatio>.08) actions.push({t:'Review your Shopify apps',b:'Platform fees are eating '+(d.feeRatio*100).toFixed(1)+'% of revenue. Delete unused apps this week.'});
+  if(d.profitMargin<10&&d.profitMargin>=0) actions.push({t:'Increase average order value',b:'At '+d.profitMargin.toFixed(1)+'% margin, add upsells at checkout or bundle products to improve profitability.'});
+  if(d.taxEst>0) actions.push({t:'Set aside '+fmt(d.taxEst)+' for taxes',b:'Move this amount into a separate account every month to prevent year-end tax shock.'});
+  if(d.realProfit<0) actions.push({t:'Stop scaling — fix profitability first',b:'Do not increase ad spend while losing money. Fix the top 3 cost lines first.'});
+  document.getElementById('hactions').innerHTML=actions.slice(0,3).map(function(a,i){
+    return '<div style="background:var(--s2);border:1px solid var(--b1);border-radius:10px;padding:14px 16px;display:flex;gap:12px;margin-bottom:8px"><div style="width:26px;height:26px;border-radius:7px;background:var(--acc2);border:1px solid var(--acc3);color:var(--acc);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+(i+1)+'</div><div><div style="font-size:14px;font-weight:600;margin-bottom:3px">'+a.t+'</div><div style="font-size:13px;color:var(--t2);line-height:1.5">'+a.b+'</div></div></div>';
+  }).join('');
+}
+ 
+function saveCheckResult() {
+  var d = hcalcNums();
+  var now = new Date();
+  var month = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  // Save as snapshot
+  snapshots = snapshots.filter(function(s){ return s.month !== month+'(check)'; });
+  snapshots.push({month:month+'(check)',rev:d.rev,exp:d.totalExp,ads:d.ads,ref:d.refLoss,notes:'From health check'});
+  localStorage.setItem('sfy_snaps', JSON.stringify(snapshots));
+  showNotif('Results saved to Monthly Tracker!');
+}
+ 
+function hrestart() {
+  hAnswers = {}; hCur = 1;
+  document.querySelectorAll('.hscreen input[type=number],.hscreen input[type=hidden]').forEach(function(i){ i.value=''; });
+  document.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('picked'); });
+  document.getElementById('q5').value=3;
+  document.getElementById('q5-show').textContent='3%';
+  document.querySelectorAll('.lstep').forEach(function(l){ l.classList.remove('done'); });
+  document.getElementById('hring').style.strokeDashoffset='263.9';
+  document.getElementById('hprog-wrap').style.display='block';
+  hprog(1);
+  hshow('hs1');
+  window.scrollTo(0,0);
+}
+ 
+// ── AI CHAT ───────────────────────────────
+function getStoreContext() {
+  var totalRev=0, totalExp=0, byType={};
+  entries.forEach(function(e){
+    if(e.type==='income') totalRev+=e.amt;
+    else { totalExp+=e.amt; byType[e.type]=(byType[e.type]||0)+e.amt; }
+  });
+  var profit=totalRev-totalExp;
+  var margin=totalRev>0?(profit/totalRev*100).toFixed(1):0;
+  return 'Store financial data:\n- Total revenue logged: '+CURR+totalRev+'\n- Total expenses logged: '+CURR+totalExp+'\n- Net profit: '+CURR+profit+'\n- Profit margin: '+margin+'%\n- Expense breakdown: '+JSON.stringify(byType)+'\n- Number of entries: '+entries.length+'\n- Currency: '+CURR+'\n\nYou are a friendly expert ecommerce accountant and financial advisor. Answer the user\'s question based on their store data. Be specific, practical, and encouraging. Keep answers under 4 sentences unless more detail is needed.';
+}
+ 
+function addMsg(text, role) {
+  var wrap = document.getElementById('chat-wrap');
+  var div = document.createElement('div');
+  div.className = 'msg '+role;
+  div.textContent = text;
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+  return div;
+}
+ 
+async function sendChat() {
+  var inp = document.getElementById('chat-inp');
+  var text = inp.value.trim();
+  if(!text) return;
+  inp.value = '';
+  addMsg(text, 'user');
+  chatHistory.push({role:'user', content:text});
+  var typingEl = addMsg('Thinking...', 'ai typing');
+ 
+  var context = getStoreContext();
+  var fullPrompt = context+'\n\nConversation so far:\n'+chatHistory.slice(-6).map(function(m){ return m.role+': '+m.content; }).join('\n')+'\n\nUser: '+text+'\n\nAnswer:';
+ 
+  var reply = 'I am having trouble connecting right now. Please check your internet connection and try again.';
+  try {
+    var res = await fetch('/api/gemini', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({prompt:fullPrompt})
+    });
+    if(res.ok){ var data=await res.json(); if(data.text) reply=data.text; }
+  } catch(e) {}
+ 
+  typingEl.textContent = reply;
+  typingEl.classList.remove('typing');
+  chatHistory.push({role:'assistant', content:reply});
+  document.getElementById('chat-wrap').scrollTop = document.getElementById('chat-wrap').scrollHeight;
+}
+ 
+function quickQ(q) {
+  document.getElementById('chat-inp').value = q;
+  sendChat();
+}
+ 
+// ── NOTIFICATIONS ─────────────────────────
+function showNotif(msg) {
+  var el = document.getElementById('notif');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(function(){ el.classList.remove('show'); }, 2500);
+}
+ 
+// ── INIT ──────────────────────────────────
+(function(){
+  var today = new Date();
+  document.getElementById('entry-date').value = today.toISOString().split('T')[0];
+  document.getElementById('entry-month').value = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
+  document.getElementById('snap-month').value = today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0');
+  renderAll();
+  hprog(1);
+})();
 </script>
 </body>
 </html>
+ 
+
+
+
+
