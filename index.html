@@ -209,7 +209,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
       <div>
         <div id="bps-badge" style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:20px;background:var(--s3);color:var(--t3);display:inline-block;margin-bottom:8px">WAITING FOR DATA</div>
         <div id="bps-title" style="font-family:var(--serif);font-size:26px;font-weight:700;line-height:1.1;margin-bottom:4px">Enter today's numbers</div>
-        <div id="bps-sub" style="font-size:13px;color:var(--t2)">See your profit status instantly</div>
+        <div id="bps-sub" style="font-size:13px;color:var(--t2)">Enter numbers once. Get a clear decision.</div>
       </div>
     </div>
     <div id="bps-profit" style="text-align:right">
@@ -234,7 +234,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
   <div class="status-banner neutral" id="status-banner">
     <div class="sb-icon">📊</div>
     <div>
-      <div class="sb-title" id="status-title">Enter today's numbers</div>
+      <div class="sb-title" id="status-title">Are you making or losing money today?</div>
       <div class="sb-sub" id="status-sub">Takes under 10 seconds. See your real profit instantly.</div>
     </div>
   </div>
@@ -326,7 +326,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
   <div class="card" style="margin-bottom:12px">
     <div class="card-label">Last 7 days profit</div>
     <div class="trend-wrap" id="home-trend">
-      <div style="font-size:12px;color:var(--t3);width:100%;text-align:center;padding-top:25px">Save a few days of data to see your trend</div>
+      <div style="font-size:12px;color:var(--t3);width:100%;text-align:center;padding-top:25px">Start tracking to see if you are growing or losing money</div>
     </div>
   </div>
 
@@ -535,6 +535,19 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
 var CURR = '$';
 var MODE = 'simple';
 var days = JSON.parse(localStorage.getItem('sfy_days') || '[]');
+  if(days.length === 0){
+  days.push({
+    date: today(),
+    rev: 500,
+    ads: 150,
+    cogs: 100,
+    ship: 20,
+    refund: 0,
+    other: 0,
+    profit: 230,
+    margin: 46
+  });
+}
 var alertSettings = JSON.parse(localStorage.getItem('sfy_alerts') || '{"margin":15,"ads":30}');
 var hcAnswers = {}, hcCur = 1;
 
@@ -709,7 +722,7 @@ function updateTodaysInsight(profit, margin, ads, rev, roas) {
   if (profit < 0) {
     box.style.background = 'var(--red2)'; box.style.borderColor = 'var(--red3)';
     icon.textContent = '🚨'; title.textContent = 'Stop — you are losing money';
-    body.textContent = 'Your costs exceed revenue by ' + fmt(Math.abs(profit)) + '. Do not scale ads today.';
+    body.textContent = 'Your costs exceed revenue by ' + fmt(Math.abs(profit)) + '. Do not scale ads today. Every hour you continue, you lose more.';
     action.textContent = 'See decisions ↓'; action.style.background = 'var(--red3)'; action.style.color = 'var(--red)';
   } else if (adPct > 35) {
     box.style.background = 'var(--amb2)'; box.style.borderColor = 'var(--amb3)';
@@ -720,7 +733,7 @@ function updateTodaysInsight(profit, margin, ads, rev, roas) {
     box.style.background = 'var(--grn2)'; box.style.borderColor = 'var(--grn3)';
     icon.textContent = '🚀'; title.textContent = 'Safe to scale';
     body.textContent = 'Margin ' + margin.toFixed(1) + '% + ROAS ' + roas.toFixed(1) + 'x. You have room to increase ad budget 15–20%.';
-    action.textContent = 'See break-even →'; action.style.background = 'var(--grn3)'; action.style.color = 'var(--grn)';
+    action.textContent = 'Check how much to scale →'; action.style.background = 'var(--grn3)'; action.style.color = 'var(--grn)';
     action.onclick = function(){ goPage('breakeven'); };
   } else if (margin >= 15) {
     box.style.background = 'var(--acc2)'; box.style.borderColor = 'var(--acc3)';
@@ -921,7 +934,7 @@ function renderTrends() {
       trendDecEl.style.color = 'var(--amb)';
     } else {
       decBanner.style.background = 'var(--acc2)'; decBanner.style.borderColor = 'var(--acc3)';
-      trendDecEl.textContent = '✅ Stable performance. Hold current spend and optimise conversion rate before scaling.';
+     trendDecEl.textContent = 'You are stable. Do NOT scale yet. Improve conversion first.';
       trendDecEl.style.color = 'var(--acc)';
     }
   }
