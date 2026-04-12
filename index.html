@@ -196,8 +196,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
 <!-- ══════════════════════════════════════════════ -->
 <div class="page on" id="page-home">
 
-  <div class="date-badge">
-    <div style="margin-bottom:16px">
+ <div style="margin-bottom:16px">
 
   <div style="font-family:var(--serif);font-size:26px;font-weight:700;margin-bottom:6px">
     Are you actually making profit today?
@@ -214,6 +213,9 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
   </div>
 
 </div>
+
+</div>
+  <div class="date-badge">
     <span class="live-dot"></span>
     <span id="today-date"></span>
     <span id="day-number"></span>
@@ -268,7 +270,7 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
 
   <!-- DAILY INPUT FORM -->
   <div class="daily-form" id="daily-form">
-    <div class="Check your real profit today">⚡ Know Your Real Profit <span style="font-size:12px;color:var(--acc);font-family:var(--body);font-weight:500">in 10 seconds</span></div>
+    <div class="daily-title">⚡ Know Your Real Profit <span style="font-size:12px;color:var(--acc);font-family:var(--body);font-weight:500">in 10 seconds</span></div>
 
     <div class="fields-row">
       <div class="field-wrap">
@@ -659,18 +661,7 @@ else{
   resultMsg.textContent = 'Safe to scale your ads carefully.';
 }
 
-  if(rev > 0 || ads > 0 || cogs > 0) {
-    var lr = document.getElementById('live-result');
-    lr.style.display = 'block';
-    var pEl = document.getElementById('live-profit-num');
-    pEl.textContent = fmt(profit);
-    pEl.style.color = profit >= 0 ? 'var(--grn)' : 'var(--red)';
-    var mEl = document.getElementById('live-margin-num');
-    mEl.textContent = margin.toFixed(1)+'%';
-    mEl.style.color = margin >= 15 ? 'var(--grn)' : margin >= 5 ? 'var(--amb)' : 'var(--red)';
-    var rEl = document.getElementById('live-roas-num');
-    rEl.textContent = ads > 0 ? roas.toFixed(2)+'x' : '—';
-    rEl.style.color = roas >= 3 ? 'var(--grn)' : roas >= 2 ? 'var(--amb)' : 'var(--red)';
+ resultProfit.textContent = fmt(profit);
 
     // Live update big profit status while typing
     updateBigProfitStatus(profit, margin, rev, ads);
