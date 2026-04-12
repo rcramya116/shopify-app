@@ -197,6 +197,23 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
 <div class="page on" id="page-home">
 
   <div class="date-badge">
+    <div style="margin-bottom:16px">
+
+  <div style="font-family:var(--serif);font-size:26px;font-weight:700;margin-bottom:6px">
+    Are you actually making profit today?
+  </div>
+
+  <div style="font-size:13px;color:var(--t2);margin-bottom:10px">
+    Most Shopify stores look profitable but lose money after ads and costs.
+  </div>
+
+  <div style="background:var(--red2);border:1px solid var(--red3);border-radius:10px;padding:12px">
+    <div style="font-size:12px">
+      ₹10,000 revenue → <span style="color:var(--red)">–₹1,200 loss</span>
+    </div>
+  </div>
+
+</div>
     <span class="live-dot"></span>
     <span id="today-date"></span>
     <span id="day-number"></span>
@@ -251,20 +268,20 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
 
   <!-- DAILY INPUT FORM -->
   <div class="daily-form" id="daily-form">
-    <div class="daily-title">⚡ Know Your Real Profit <span style="font-size:12px;color:var(--acc);font-family:var(--body);font-weight:500">in 10 seconds</span></div>
+    <div class="Check your real profit today">⚡ Know Your Real Profit <span style="font-size:12px;color:var(--acc);font-family:var(--body);font-weight:500">in 10 seconds</span></div>
 
     <div class="fields-row">
       <div class="field-wrap">
         <label class="field-lbl">Revenue <span class="csym">$</span></label>
-        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-rev" placeholder="0" min="0" oninput="liveCalc()"></div>
+        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-rev" placeholder="Total sales today" min="0" oninput="liveCalc()"></div>
       </div>
       <div class="field-wrap">
         <label class="field-lbl">Ad Spend <span class="csym">$</span></label>
-        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-ads" placeholder="0" min="0" oninput="liveCalc()"></div>
+        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-ads" placeholder="Facebook / Google ads" min="0" oninput="liveCalc()"></div>
       </div>
       <div class="field-wrap">
         <label class="field-lbl">Product Cost <span class="csym">$</span></label>
-        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-cogs" placeholder="0" min="0" oninput="liveCalc()"></div>
+        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-cogs" placeholder="Cost of goods" min="0" oninput="liveCalc()"></div>
       </div>
     </div>
 
@@ -287,27 +304,27 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
     </div>
 
     <!-- LIVE RESULT -->
-    <div id="live-result" style="display:none;background:var(--s2);border-radius:10px;padding:12px 14px;margin-bottom:10px;display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-        <div>
-          <div style="font-size:11px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Live profit</div>
-          <div style="font-family:var(--serif);font-size:26px;font-weight:700" id="live-profit-num">$0</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:11px;color:var(--t3);margin-bottom:3px">Margin</div>
-          <div style="font-size:18px;font-weight:600" id="live-margin-num">0%</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-size:11px;color:var(--t3);margin-bottom:3px">ROAS</div>
-          <div style="font-size:18px;font-weight:600" id="live-roas-num">—</div>
-        </div>
-      </div>
+   <div id="live-result" style="display:none;margin-bottom:10px">
+
+  <div id="result-box" style="border-radius:12px;padding:16px;border:1px solid var(--b1)">
+
+    <div id="result-status" style="font-size:18px;font-weight:700;margin-bottom:6px">
+      —
     </div>
 
-    <button class="calc-btn" onclick="saveToday()">Save & see my profit status →</button>
+    <div id="result-profit" style="font-size:28px;font-weight:700;margin-bottom:4px">
+      —
+    </div>
+
+    <div id="result-msg" style="font-size:13px;color:var(--t2)">
+      —
+    </div>
+
   </div>
 
-  <!-- QUICK INSIGHT -->
+</div>
+  
+<!-- QUICK INSIGHT -->
   <div id="quick-insights"></div>
 
   <!-- DECISION ENGINE -->
@@ -613,6 +630,34 @@ function liveCalc() {
   var profit = rev - totalExp;
   var margin = rev > 0 ? (profit/rev*100) : 0;
   var roas = ads > 0 ? (rev/ads) : 0;
+  var resultBox = document.getElementById('result-box');
+var resultStatus = document.getElementById('result-status');
+var resultProfit = document.getElementById('result-profit');
+var resultMsg = document.getElementById('result-msg');
+
+resultProfit.textContent = fmt(profit);
+
+if(profit < 0){
+  resultBox.style.background = 'var(--red2)';
+  resultBox.style.borderColor = 'var(--red3)';
+  resultStatus.textContent = '🔴 You are losing money';
+  resultProfit.style.color = 'var(--red)';
+  resultMsg.textContent = 'Stop ads or reduce costs immediately.';
+}
+else if(margin < 15){
+  resultBox.style.background = 'var(--amb2)';
+  resultBox.style.borderColor = 'var(--amb3)';
+  resultStatus.textContent = '🟡 Low profit margin';
+  resultProfit.style.color = 'var(--amb)';
+  resultMsg.textContent = 'You are profitable, but not safe to scale.';
+}
+else{
+  resultBox.style.background = 'var(--grn2)';
+  resultBox.style.borderColor = 'var(--grn3)';
+  resultStatus.textContent = '🟢 You are profitable';
+  resultProfit.style.color = 'var(--grn)';
+  resultMsg.textContent = 'Safe to scale your ads carefully.';
+}
 
   if(rev > 0 || ads > 0 || cogs > 0) {
     var lr = document.getElementById('live-result');
