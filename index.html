@@ -167,11 +167,14 @@ body{font-family:var(--body);background:var(--bg);color:var(--t1);min-height:100
   <div class="nav-logo">ShopifyOS</div>
   <div class="nav-tabs">
     <button class="ntab on" onclick="goPage('home')">🏠 Home</button>
-    <button class="ntab" onclick="goPage('trends')">📈 Trends</button>
-    <button class="ntab" onclick="goPage('breakeven')">⚖️ Break-Even</button>
-    <button class="ntab" onclick="goPage('alerts')">🚨 Alerts</button>
-    <button class="ntab" onclick="goPage('history')">📋 History</button>
-    <button class="ntab" onclick="goPage('checker')">🏥 Health Check</button>
+    <button class="ntab" onclick="comingSoon('Trends')">📈 Trends</button>
+    <button class="ntab" onclick="comingSoon('Break-even')">⚖️ Break-Even</button>
+    <button class="ntab" onclick="comingSoon('Alerts')">🚨 Alerts</button>
+    <button class="ntab" onclick="comingSoon('History')">📋 History</button>
+    <button class="ntab" onclick="comingSoon('Health Check')">🏥 Health Check</button>
+    function comingSoon(feature){
+  showNotif(feature + " coming soon 🚀");
+}
   </div>
   <div class="mode-toggle">
     <button class="mdbtn on" id="btn-simple" onclick="setMode('simple')">Simple</button>
