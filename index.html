@@ -1,155 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profit Reality Check</title>
+  <meta charset="UTF-8">
+  <title>Shopify Profit Checker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b1b34;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b1d36;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-.container {
-    background: #112240;
-    padding: 30px;
-    border-radius: 12px;
-    width: 350px;
-    text-align: center;
-}
+    .container {
+      background: #12294a;
+      padding: 30px;
+      border-radius: 12px;
+      width: 320px;
+      text-align: center;
+    }
 
-h1 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
+    .badge {
+      background: orange;
+      color: black;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
 
-.sub {
-    color: #9ca3af;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+    }
 
-.badge {
-    background: #f59e0b;
-    color: black;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    display: inline-block;
-    margin-bottom: 10px;
-}
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #2ecc71;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
 
-input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 12px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    font-size: 16px;
-}
+    .result {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 6px;
+    }
 
-button {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background: #22c55e;
-    color: black;
-    font-weight: bold;
-    cursor: pointer;
-}
+    .cta {
+      margin-top: 10px;
+      color: #00bfff;
+      font-size: 13px;
+    }
 
-.result {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 15px;
-}
+    .upgrade-btn {
+      margin-top: 15px;
+      background: #f1c40f;
+      color: black;
+    }
 
-.profit {
-    background: #064e3b;
-    color: #22c55e;
-}
-
-.loss {
-    background: #7f1d1d;
-    color: #f87171;
-}
-
-.small {
-    margin-top: 10px;
-    font-size: 13px;
-    color: #9ca3af;
-}
-
-.upgrade-btn {
-    margin-top: 10px;
-    background: #facc15;
-    color: black;
-}
-
-.cta {
-    margin-top: 12px;
-    font-size: 13px;
-    color: #38bdf8;
-}
-</style>
+  </style>
 </head>
 
 <body>
 
 <div class="container">
 
-    <div class="badge">⚠️ Most stores are wrong</div>
+  <div class="badge">⚠ Most stores are wrong</div>
 
-    <h1>You’re probably losing money. Check in 10 seconds.</h1>
+  <h2>You’re probably losing money.<br>Check in 10 seconds.</h2>
 
-    <p class="sub">Revenue ≠ Profit. Most Shopify owners don’t realize this.</p>
+  <p>Revenue ≠ Profit. Most Shopify store owners don’t realize this.</p>
 
-    <input type="number" id="revenue" placeholder="Revenue (₹)">
-    <input type="number" id="ads" placeholder="Ad Spend (₹)">
-    <input type="number" id="cost" placeholder="Product Cost (₹)">
+  <input type="number" id="revenue" placeholder="Revenue (₹)">
+  <input type="number" id="ads" placeholder="Ad Spend (₹)">
+  <input type="number" id="cost" placeholder="Product Cost (₹)">
 
-    <button onclick="calculateProfit()">Check My Profit</button>
+  <button onclick="calculateProfit()">Check My Profit</button>
 
-    <div id="resultBox" class="result"></div>
+  <div id="resultBox" class="result"></div>
 
-    <p class="small">This is why most Shopify stores fail.</p>
+  <p>This is why most Shopify stores fail.</p>
 
-    <p class="cta">👇 Want full breakdown? Comment "CHECK"</p>
+  <p class="cta">👇 Want full breakdown? Comment "CHECK"</p>
 
-    <p class="small">Free for early users • Advanced insights coming soon 🚀</p>
-
-    <button class="upgrade-btn">Get full breakdown (coming soon)</button>
+  <button class="upgrade-btn">Get full breakdown (coming soon)</button>
 
 </div>
 
 <script>
 function calculateProfit() {
-    let revenue = parseFloat(document.getElementById("revenue").value) || 0;
-    let ads = parseFloat(document.getElementById("ads").value) || 0;
-    let cost = parseFloat(document.getElementById("cost").value) || 0;
 
-    let profit = revenue - ads - cost;
+  let revenue = parseFloat(document.getElementById("revenue").value) || 0;
+  let ads = parseFloat(document.getElementById("ads").value) || 0;
+  let cost = parseFloat(document.getElementById("cost").value) || 0;
 
-    let resultBox = document.getElementById("resultBox");
+  let profit = revenue - ads - cost;
 
-    if (profit >= 0) {
-        resultBox.className = "result profit";
-        resultBox.innerHTML = "You think you made money… you actually made ₹" + profit.toFixed(2);
-    } else {
-        resultBox.className = "result loss";
-        resultBox.innerHTML = "You think you made money… you actually LOST ₹" + Math.abs(profit).toFixed(2);
-    }
+  const resultDiv = document.getElementById("resultBox");
+
+  if (profit >= 0) {
+    resultDiv.innerHTML = `
+      <div style="color:#00ff99; font-weight:bold;">
+        You THINK you made money… you actually made ₹${profit.toLocaleString()}
+      </div>
+      <p style="color:#ff4d4d; font-weight:bold;">
+        Most Shopify store owners track revenue… not profit.
+      </p>
+    `;
+  } else {
+    resultDiv.innerHTML = `
+      <div style="color:#ff4d4d; font-weight:bold;">
+        You THINK you made money… you actually LOST ₹${Math.abs(profit).toLocaleString()}
+      </div>
+      <p style="color:#ff4d4d; font-weight:bold;">
+        This is exactly why most Shopify stores fail.
+      </p>
+    `;
+  }
 }
 </script>
 
