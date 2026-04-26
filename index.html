@@ -3,46 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shopify Profit Checker</title>
+<title>Profit Reality Check</title>
 
 <style>
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    background: #0f172a;
+    background: #0b1b34;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
 }
 
 .container {
-    background: #111827;
+    background: #112240;
     padding: 30px;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 400px;
+    border-radius: 12px;
+    width: 350px;
     text-align: center;
 }
 
 h1 {
-    font-size: 22px;
+    font-size: 20px;
     margin-bottom: 10px;
 }
 
-p {
-    font-size: 14px;
+.sub {
     color: #9ca3af;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.badge {
+    background: #f59e0b;
+    color: black;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 10px;
 }
 
 input {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 12px;
+    margin-bottom: 12px;
     border-radius: 8px;
     border: none;
-    font-size: 14px;
+    outline: none;
+    font-size: 16px;
 }
 
 button {
@@ -57,26 +68,39 @@ button {
 }
 
 .result {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 10px;
-    display: none;
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
 }
 
 .profit {
-    background: #052e16;
+    background: #064e3b;
     color: #22c55e;
 }
 
 .loss {
-    background: #3f0d0d;
-    color: #ef4444;
+    background: #7f1d1d;
+    color: #f87171;
+}
+
+.small {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+.upgrade-btn {
+    margin-top: 10px;
+    background: #facc15;
+    color: black;
 }
 
 .cta {
-    margin-top: 15px;
+    margin-top: 12px;
     font-size: 13px;
-    color: #9ca3af;
+    color: #38bdf8;
 }
 </style>
 </head>
@@ -84,20 +108,29 @@ button {
 <body>
 
 <div class="container">
-    <h1>Check your real profit</h1>
-    <p>Most Shopify stores track revenue… not profit.</p>
 
-    <input type="number" id="revenue" placeholder="Revenue ($)">
-    <input type="number" id="ads" placeholder="Ad Spend ($)">
-    <input type="number" id="cost" placeholder="Product Cost ($)">
+    <div class="badge">⚠️ Most stores are wrong</div>
 
-    <button onclick="calculateProfit()">Calculate</button>
+    <h1>You’re probably losing money. Check in 10 seconds.</h1>
+
+    <p class="sub">Revenue ≠ Profit. Most Shopify owners don’t realize this.</p>
+
+    <input type="number" id="revenue" placeholder="Revenue (₹)">
+    <input type="number" id="ads" placeholder="Ad Spend (₹)">
+    <input type="number" id="cost" placeholder="Product Cost (₹)">
+
+    <button onclick="calculateProfit()">Check My Profit</button>
 
     <div id="resultBox" class="result"></div>
 
-    <div class="cta">
-        Want deeper insights? Full AI analysis coming soon 🚀
-    </div>
+    <p class="small">This is why most Shopify stores fail.</p>
+
+    <p class="cta">👇 Want full breakdown? Comment "CHECK"</p>
+
+    <p class="small">Free for early users • Advanced insights coming soon 🚀</p>
+
+    <button class="upgrade-btn">Get full breakdown (coming soon)</button>
+
 </div>
 
 <script>
@@ -109,14 +142,13 @@ function calculateProfit() {
     let profit = revenue - ads - cost;
 
     let resultBox = document.getElementById("resultBox");
-    resultBox.style.display = "block";
 
     if (profit >= 0) {
         resultBox.className = "result profit";
-        resultBox.innerHTML = "✅ You made $" + profit.toFixed(2) + " profit today";
+        resultBox.innerHTML = "You think you made money… you actually made ₹" + profit.toFixed(2);
     } else {
         resultBox.className = "result loss";
-        resultBox.innerHTML = "❌ You lost $" + Math.abs(profit).toFixed(2) + " today";
+        resultBox.innerHTML = "You think you made money… you actually LOST ₹" + Math.abs(profit).toFixed(2);
     }
 }
 </script>
