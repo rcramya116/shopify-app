@@ -1,158 +1,775 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Analytics -->
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ED92FK72K5"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-ED92FK72K5');
 </script>
-  <meta charset="UTF-8">
-  <title>Shopify Profit Checker</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Shopify Profit Checker — Are You Actually Profitable?</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Most Shopify stores think they're profitable. Many are losing money. Check your real profit in 10 seconds — free.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b1d36;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-    .container {
-      background: #12294a;
-      padding: 30px;
-      border-radius: 12px;
-      width: 320px;
-      text-align: center;
-    }
+:root{
+  --bg:#060d1a;
+  --card:#0c1929;
+  --card2:#0f2035;
+  --border:#1a3050;
+  --border2:#224070;
+  --t1:#eef2f8;
+  --t2:#7a9bc4;
+  --t3:#3a5878;
+  --grn:#00e887;
+  --grn2:#00e88715;
+  --grn3:#00e88740;
+  --red:#ff4757;
+  --red2:#ff475715;
+  --red3:#ff475740;
+  --amb:#ffb833;
+  --amb2:#ffb83315;
+  --amb3:#ffb83340;
+  --acc:#4fc3f7;
+  --acc2:#4fc3f715;
+  --acc3:#4fc3f740;
+}
 
-    .badge {
-      background: orange;
-      color: black;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      display: inline-block;
-      margin-bottom: 10px;
-    }
+body{
+  margin:0;
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--t1);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  position:relative;
+  overflow-x:hidden;
+}
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      border-radius: 6px;
-      border: none;
-      font-size: 14px;
-    }
+/* Background effect */
+body::before{
+  content:'';
+  position:fixed;
+  top:-30%;left:-20%;
+  width:60vw;height:60vw;
+  background:radial-gradient(circle,rgba(79,195,247,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+body::after{
+  content:'';
+  position:fixed;
+  bottom:-20%;right:-20%;
+  width:50vw;height:50vw;
+  background:radial-gradient(circle,rgba(0,232,135,.05) 0%,transparent 70%);
+  pointer-events:none;
+}
 
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #2ecc71;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
+/* CARD */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  width:100%;
+  max-width:400px;
+  padding:32px 28px;
+  position:relative;
+  z-index:1;
+  animation:fadeUp .5s ease both;
+}
 
-    .result {
-      margin-top: 15px;
-      padding: 10px;
-      border-radius: 6px;
-    }
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
 
-    .cta {
-      margin-top: 10px;
-      color: #00bfff;
-      font-size: 13px;
-    }
+/* BADGE */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(255,71,87,.12);
+  border:1px solid rgba(255,71,87,.3);
+  color:var(--red);
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+.badge-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--red);
+  animation:pulse 1.5s ease infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-    .upgrade-btn {
-      margin-top: 15px;
-      background: #f1c40f;
-      color: black;
-    }
+/* HEADLINE */
+.headline{
+  font-family:'Syne',sans-serif;
+  font-size:24px;
+  font-weight:800;
+  line-height:1.2;
+  margin-bottom:8px;
+  letter-spacing:-.3px;
+}
+.headline .red{color:var(--red)}
+.headline .grn{color:var(--grn)}
 
-  </style>
+.sub{
+  font-size:13px;
+  color:var(--t2);
+  line-height:1.6;
+  margin-bottom:24px;
+}
+
+/* CURRENCY */
+.curr-row{
+  display:flex;
+  gap:6px;
+  margin-bottom:16px;
+}
+.curr-btn{
+  flex:1;
+  padding:7px 0;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--t2);
+  font-family:'DM Sans',sans-serif;
+  font-size:12px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .15s;
+}
+.curr-btn.on{
+  background:var(--acc2);
+  border-color:var(--acc3);
+  color:var(--acc);
+  font-weight:600;
+}
+
+/* INPUTS */
+.field{margin-bottom:10px;position:relative}
+.field-label{
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--t3);
+  margin-bottom:5px;
+  display:block;
+}
+.inp-wrap{
+  display:flex;
+  align-items:center;
+  background:var(--card2);
+  border:1.5px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  transition:border-color .15s;
+}
+.inp-wrap:focus-within{border-color:var(--acc3)}
+.inp-sym{
+  padding:12px 12px;
+  font-size:13px;
+  color:var(--t3);
+  flex-shrink:0;
+  user-select:none;
+}
+.inp-wrap input{
+  flex:1;
+  padding:12px 12px 12px 0;
+  background:transparent;
+  border:none;
+  outline:none;
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  color:var(--t1);
+  width:100%;
+}
+.inp-wrap input::placeholder{color:var(--t3);font-size:13px}
+
+/* EXAMPLE HINT */
+.example-hint{
+  font-size:11px;
+  color:var(--t3);
+  text-align:right;
+  margin-top:3px;
+  cursor:pointer;
+  transition:color .15s;
+}
+.example-hint:hover{color:var(--acc)}
+
+/* BUTTON */
+.calc-btn{
+  width:100%;
+  padding:14px;
+  background:var(--grn);
+  color:#060d1a;
+  font-family:'Syne',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  margin-top:6px;
+  transition:opacity .15s, transform .1s;
+  letter-spacing:.3px;
+}
+.calc-btn:hover{opacity:.9}
+.calc-btn:active{transform:scale(.98)}
+
+/* RESULT */
+#result-box{
+  margin-top:16px;
+  border-radius:14px;
+  overflow:hidden;
+  display:none;
+  animation:fadeUp .4s ease both;
+}
+
+.result-header{
+  padding:18px 20px 14px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.result-status{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.result-profit{
+  font-family:'Syne',sans-serif;
+  font-size:34px;
+  font-weight:800;
+  line-height:1;
+  margin-bottom:3px;
+}
+.result-monthly{
+  font-size:12px;
+  opacity:.7;
+}
+.result-icon{font-size:32px;flex-shrink:0;margin-top:2px}
+
+.result-insight{
+  padding:12px 20px;
+  font-size:12px;
+  line-height:1.6;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+.result-actions{
+  padding:12px 20px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.result-action-item{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  font-size:12px;
+  color:rgba(255,255,255,.75);
+  line-height:1.45;
+}
+.rai-dot{
+  width:5px;height:5px;
+  border-radius:50%;
+  flex-shrink:0;
+  margin-top:5px;
+}
+
+/* WHAT TO DO */
+.wtd-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+/* SHARE BUTTON */
+.share-btn{
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  background:transparent;
+  border:1px solid var(--border2);
+  border-radius:10px;
+  color:var(--t2);
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .15s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+}
+.share-btn:hover{
+  border-color:var(--acc3);
+  color:var(--acc);
+  background:var(--acc2);
+}
+.share-btn.copied{
+  border-color:var(--grn3);
+  color:var(--grn);
+  background:var(--grn2);
+}
+
+/* FULL BREAKDOWN CTA */
+.breakdown-box{
+  margin-top:12px;
+  background:var(--acc2);
+  border:1px solid var(--acc3);
+  border-radius:12px;
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  text-decoration:none;
+  transition:all .15s;
+}
+.breakdown-box:hover{
+  background:rgba(79,195,247,.12);
+}
+.bb-icon{font-size:20px;flex-shrink:0}
+.bb-body{flex:1}
+.bb-title{
+  font-size:13px;
+  font-weight:600;
+  color:var(--acc);
+  margin-bottom:2px;
+}
+.bb-sub{font-size:11px;color:var(--t2)}
+.bb-arrow{font-size:16px;color:var(--acc);flex-shrink:0}
+
+/* FOOTER */
+.footer{
+  margin-top:20px;
+  text-align:center;
+  font-size:11px;
+  color:var(--t3);
+  line-height:1.6;
+}
+.footer a{color:var(--t2);text-decoration:none}
+.footer a:hover{color:var(--acc)}
+
+/* TOOLTIP */
+.tooltip{
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%) translateY(60px);
+  background:var(--card2);
+  border:1px solid var(--border2);
+  border-radius:10px;
+  padding:10px 18px;
+  font-size:13px;
+  color:var(--t1);
+  z-index:500;
+  opacity:0;
+  transition:all .3s;
+  pointer-events:none;
+  white-space:nowrap;
+}
+.tooltip.show{
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+
+/* MARGIN METER */
+.margin-meter{
+  margin-top:4px;
+}
+.mm-bar{
+  height:5px;
+  background:var(--border);
+  border-radius:3px;
+  overflow:hidden;
+  margin-bottom:3px;
+}
+.mm-fill{
+  height:100%;
+  border-radius:3px;
+  transition:width .6s ease;
+}
+.mm-labels{
+  display:flex;
+  justify-content:space-between;
+  font-size:9px;
+  color:var(--t3);
+}
+</style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="card">
 
-  <div class="badge">⚠ Most stores are wrong</div>
+  <!-- BADGE -->
+  <div class="badge">
+    <div class="badge-dot"></div>
+    Most stores are wrong
+  </div>
 
-  <h2>You’re probably losing money.<br>Check in 10 seconds.</h2>
+  <!-- HEADLINE -->
+  <div class="headline">
+    You're probably <span class="red">losing money.</span><br>
+    Check in 10 seconds.
+  </div>
+  <div class="sub">Revenue ≠ Profit. Most Shopify owners celebrate revenue while quietly losing money every day.</div>
 
-  <p>Revenue ≠ Profit. Most Shopify store owners don’t realize this.</p>
-    <select id="currency" style="margin-bottom:10px; padding:8px; border-radius:6px;">
-  <option value="₹">₹ INR</option>
-  <option value="$">$ USD</option>
-  <option value="€">€ EUR</option>
-</select>
+  <!-- CURRENCY SELECTOR -->
+  <div class="curr-row">
+    <button class="curr-btn on" id="c-usd" onclick="setCurr('$','USD')">$ USD</button>
+    <button class="curr-btn" id="c-gbp" onclick="setCurr('£','GBP')">£ GBP</button>
+    <button class="curr-btn" id="c-eur" onclick="setCurr('€','EUR')">€ EUR</button>
+    <button class="curr-btn" id="c-inr" onclick="setCurr('₹','INR')">₹ INR</button>
+  </div>
 
-  <input type="number" id="revenue" placeholder="Revenue  ($ or ₹)">
-  <input type="number" id="ads" placeholder="Ad Spend (₹)">
-  <input type="number" id="cost" placeholder="Product Cost (₹)">
+  <!-- INPUTS -->
+  <div class="field">
+    <label class="field-label">Revenue <span id="lbl-sym">$</span></label>
+    <div class="inp-wrap">
+      <span class="inp-sym" id="sym1">$</span>
+      <input type="number" id="revenue" placeholder="Total sales today" min="0" oninput="liveCalc()">
+    </div>
+  </div>
 
-  <button onclick="calculateProfit()">Check My Profit</button>
+  <div class="field">
+    <label class="field-label">Ad Spend <span id="lbl-sym2">$</span></label>
+    <div class="inp-wrap">
+      <span class="inp-sym" id="sym2">$</span>
+      <input type="number" id="ads" placeholder="Facebook, Google, TikTok" min="0" oninput="liveCalc()">
+    </div>
+  </div>
 
-  <div id="resultBox" class="result"></div>
+  <div class="field">
+    <label class="field-label">Product Cost <span id="lbl-sym3">$</span></label>
+    <div class="inp-wrap">
+      <span class="inp-sym" id="sym3">$</span>
+      <input type="number" id="cost" placeholder="Cost of goods sold" min="0" oninput="liveCalc()">
+    </div>
+    <div class="example-hint" onclick="loadExample()">Try example numbers →</div>
+  </div>
 
-  <p>This is why most Shopify stores fail.</p>
+  <button class="calc-btn" onclick="calculate()">Check My Real Profit →</button>
 
-  <p class="cta">👇 Want full breakdown? Comment "CHECK"</p>
+  <!-- RESULT BOX -->
+  <div id="result-box">
 
-  <button class="upgrade-btn">Get full breakdown (coming soon)</button>
+    <div class="result-header">
+      <div>
+        <div class="result-status" id="r-status">—</div>
+        <div class="result-profit" id="r-profit">—</div>
+        <div class="result-monthly" id="r-monthly">—</div>
+      </div>
+      <div class="result-icon" id="r-icon">—</div>
+    </div>
+
+    <!-- MARGIN METER -->
+    <div style="padding:0 20px 14px">
+      <div style="font-size:10px;color:var(--t3);margin-bottom:5px;font-weight:600;letter-spacing:1px;text-transform:uppercase">Profit Margin</div>
+      <div class="mm-bar"><div class="mm-fill" id="mm-fill" style="width:0%"></div></div>
+      <div class="mm-labels"><span>0%</span><span id="mm-pct">—</span><span>50%+</span></div>
+    </div>
+
+    <div class="result-insight" id="r-insight">—</div>
+
+    <!-- WHAT TO DO NEXT -->
+    <div class="result-actions" id="r-actions">
+      <div class="wtd-label" id="wtd-label">What to do next</div>
+    </div>
+
+    <!-- SHARE BUTTON -->
+    <div style="padding:0 20px 6px">
+      <button class="share-btn" id="share-btn" onclick="shareResult()">
+        <span>📤</span>
+        <span id="share-text">Share your result — tell other Shopify owners</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- FULL BREAKDOWN CTA -->
+  <a class="breakdown-box" href="https://shopify-app-omega-nine.vercel.app" target="_blank" onclick="trackBreakdown()">
+    <div class="bb-icon">🔍</div>
+    <div class="bb-body">
+      <div class="bb-title">Get your full profit dashboard</div>
+      <div class="bb-sub">Daily tracking · Trends · Break-even · AI advice — free</div>
+    </div>
+    <div class="bb-arrow">→</div>
+  </a>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    No signup. No data stored. 100% free.<br>
+    Built by <a href="https://instagram.com/ecommercefix" target="_blank">@ecommercefix</a>
+  </div>
 
 </div>
 
+<!-- TOOLTIP -->
+<div class="tooltip" id="tooltip"></div>
+
 <script>
-function calculateProfit() {
-     let currency = document.getElementById("currency").value;
-  gtag('event', 'check_profit_clicked', {
-  event_category: 'engagement',
-  event_label: 'profit_calculation'
-});
+// ── STATE ──────────────────────────────────────────────
+var CURR = '$';
+var CURR_CODE = 'USD';
+var lastProfit = 0;
+var lastMargin = 0;
+var lastRev = 0;
 
-  let revenue = parseFloat(document.getElementById("revenue").value) || 0;
-  let ads = parseFloat(document.getElementById("ads").value) || 0;
-  let cost = parseFloat(document.getElementById("cost").value) || 0;
+// ── CURRENCY ───────────────────────────────────────────
+function setCurr(sym, code) {
+  CURR = sym; CURR_CODE = code;
+  ['usd','gbp','eur','inr'].forEach(function(c) {
+    document.getElementById('c-'+c).classList.remove('on');
+  });
+  document.getElementById('c-'+code.toLowerCase()).classList.add('on');
+  // Update all symbols and labels
+  ['sym1','sym2','sym3'].forEach(function(id) {
+    document.getElementById(id).textContent = sym;
+  });
+  ['lbl-sym','lbl-sym2','lbl-sym3'].forEach(function(id) {
+    document.getElementById(id).textContent = sym;
+  });
+  liveCalc();
+  gtag('event', 'currency_changed', { currency: code });
+}
 
-  let profit = revenue - ads - cost;
+// ── EXAMPLE ────────────────────────────────────────────
+function loadExample() {
+  document.getElementById('revenue').value = CURR_CODE === 'INR' ? 50000 : 1200;
+  document.getElementById('ads').value    = CURR_CODE === 'INR' ? 18000 : 380;
+  document.getElementById('cost').value   = CURR_CODE === 'INR' ? 14000 : 290;
+  liveCalc();
+  showTooltip('Example numbers loaded — these are typical Shopify numbers');
+  gtag('event', 'example_loaded', {});
+}
 
-  const resultDiv = document.getElementById("resultBox");
-
-  if (profit >= 0) {
-    resultDiv.innerHTML = `
-      <div style="color:#00ff99; font-weight:bold;">
-        You THINK you made money… you actually made ${currency}${profit.toLocaleString()}
-      </div>
-      <p style="color:#ff4d4d; font-weight:bold;">
-        Most Shopify store owners track revenue… not profit.
-      </p>
-    `;
-  } else {
-    resultDiv.innerHTML = `
-      <div style="color:#ff4d4d; font-weight:bold;">
-        Most store owners get this wrong.
-Your real profit: ${currency}${profit.toLocaleString()}
-      </div>
-      <p style="color:#ff4d4d; font-weight:bold;">
-        This is exactly why most Shopify stores fail.
-      </p>
-    `;
+// ── LIVE CALC (runs on every keystroke) ────────────────
+function liveCalc() {
+  var rev  = parseFloat(document.getElementById('revenue').value) || 0;
+  var ads  = parseFloat(document.getElementById('ads').value)     || 0;
+  var cost = parseFloat(document.getElementById('cost').value)    || 0;
+  if (rev > 0 || ads > 0 || cost > 0) {
+    renderResult(rev, ads, cost);
   }
 }
+
+// ── MAIN CALCULATE ─────────────────────────────────────
+function calculate() {
+  var rev  = parseFloat(document.getElementById('revenue').value) || 0;
+  var ads  = parseFloat(document.getElementById('ads').value)     || 0;
+  var cost = parseFloat(document.getElementById('cost').value)    || 0;
+
+  if (rev <= 0 && ads <= 0 && cost <= 0) {
+    showTooltip('Please enter at least one number first');
+    return;
+  }
+
+  renderResult(rev, ads, cost);
+  gtag('event', 'check_profit_clicked', {
+    event_category: 'engagement',
+    event_label: 'profit_calculation',
+    revenue: rev,
+    profit: rev - ads - cost
+  });
+}
+
+// ── RENDER RESULT ──────────────────────────────────────
+function renderResult(rev, ads, cost) {
+  var profit  = rev - ads - cost;
+  var margin  = rev > 0 ? (profit / rev * 100) : 0;
+  var monthly = profit * 30;
+  var roas    = ads > 0 ? (rev / ads) : 0;
+  lastProfit = profit; lastMargin = margin; lastRev = rev;
+
+  var box = document.getElementById('result-box');
+  box.style.display = 'block';
+
+  // Profit number
+  var profitFmt = CURR + Math.abs(Math.round(profit)).toLocaleString();
+  document.getElementById('r-profit').textContent = (profit < 0 ? '-' : '') + profitFmt;
+
+  // Monthly projection
+  var monthlyFmt = CURR + Math.abs(Math.round(monthly)).toLocaleString();
+  document.getElementById('r-monthly').textContent =
+    'At this rate: ' + (monthly < 0 ? '-' : '') + monthlyFmt + ' per month';
+
+  // Margin meter
+  var meterPct = Math.min(100, Math.max(0, margin / 50 * 100));
+  var meterColor = margin >= 20 ? 'var(--grn)' : margin >= 10 ? 'var(--amb)' : 'var(--red)';
+  document.getElementById('mm-fill').style.width  = meterPct + '%';
+  document.getElementById('mm-fill').style.background = meterColor;
+  document.getElementById('mm-pct').textContent = margin.toFixed(1) + '%';
+
+  // Status, icon, insight, actions
+  var status, icon, bg, insightHTML, actions;
+
+  if (profit < 0) {
+    status = 'You are losing money';
+    icon = '🔴';
+    bg   = 'linear-gradient(135deg, var(--red2), rgba(255,71,87,.05))';
+    document.getElementById('r-profit').style.color = 'var(--red)';
+    document.getElementById('r-status').style.color = 'var(--red)';
+    insightHTML = '<b style="color:var(--red)">Every hour you keep running like this, the loss grows.</b><br>' +
+      'You are losing <b>' + CURR + Math.abs(Math.round(profit)).toLocaleString() + '</b> today — ' +
+      'that is <b>' + CURR + Math.abs(Math.round(profit * 30)).toLocaleString() + '</b> every month if nothing changes.';
+    actions = [
+      { dot: 'var(--red)',  text: '<b>Stop or reduce ad spend immediately</b> — every dollar spent now makes the loss bigger' },
+      { dot: 'var(--amb)',  text: '<b>Find your biggest cost</b> — is it ads, product cost, or shipping? Cut the highest one first' },
+      { dot: 'var(--amb)',  text: '<b>Can you raise your price by 10%?</b> — even small price increases can flip you to profit' },
+    ];
+  } else if (margin < 10) {
+    status = 'Barely profitable — fragile';
+    icon = '🟡';
+    bg   = 'linear-gradient(135deg, var(--amb2), rgba(255,184,51,.05))';
+    document.getElementById('r-profit').style.color = 'var(--amb)';
+    document.getElementById('r-status').style.color = 'var(--amb)';
+    insightHTML = '<b style="color:var(--amb)">You are making money but one bad week will wipe it out.</b><br>' +
+      'At ' + margin.toFixed(1) + '% margin you have almost no safety net. ' +
+      'Target 15%+ before scaling anything.' +
+      (roas > 0 ? ' Your ROAS is ' + roas.toFixed(1) + 'x — ' + (roas >= 3 ? 'decent, but margin still too low to scale.' : 'too low.') : '');
+    actions = [
+      { dot: 'var(--amb)', text: '<b>Hold ad spend at current level</b> — do not increase until margin hits 15%' },
+      { dot: 'var(--grn)', text: '<b>Add an upsell or bundle</b> — even ' + CURR + '5 more per order significantly improves margin' },
+      { dot: 'var(--grn)', text: '<b>Renegotiate product cost</b> — even a 5% supplier discount can move you to healthy margin' },
+    ];
+  } else if (margin < 20) {
+    status = 'Profitable — but cautious';
+    icon = '🟢';
+    bg   = 'linear-gradient(135deg, var(--grn2), rgba(0,232,135,.04))';
+    document.getElementById('r-profit').style.color = 'var(--grn)';
+    document.getElementById('r-status').style.color = 'var(--grn)';
+    var safeIncrease = Math.round((margin - 10) * rev / 100);
+    insightHTML = '<b style="color:var(--grn)">You are profitable at ' + margin.toFixed(1) + '% margin.</b><br>' +
+      'This is healthy but there is room to improve. ' +
+      (roas > 0 ? 'ROAS of ' + roas.toFixed(1) + 'x is ' + (roas >= 3 ? 'good.' : 'below ideal — aim for 3x+.') : '') +
+      ' Track this daily to catch drops early.';
+    actions = [
+      { dot: 'var(--grn)', text: '<b>Test increasing ad budget by 10–15%</b> — margin supports careful scaling' },
+      { dot: 'var(--acc)', text: '<b>Identify your best product</b> — find what drives most of this profit and double down' },
+      { dot: 'var(--acc)', text: '<b>Track this daily</b> — use the full dashboard below to spot when margin starts dropping' },
+    ];
+  } else {
+    status = 'Strong profit — scale it';
+    icon = '🚀';
+    bg   = 'linear-gradient(135deg, rgba(0,232,135,.1), rgba(0,232,135,.03))';
+    document.getElementById('r-profit').style.color = 'var(--grn)';
+    document.getElementById('r-status').style.color = 'var(--grn)';
+    var scalePct = Math.round((margin - 15) / margin * 100);
+    insightHTML = '<b style="color:var(--grn)">Excellent — ' + margin.toFixed(1) + '% margin is strong.</b><br>' +
+      'You can safely increase ad spend by up to <b>' + scalePct + '%</b> while staying profitable. ' +
+      (roas > 0 ? 'ROAS of ' + roas.toFixed(1) + 'x ' + (roas >= 4 ? '— outstanding.' : 'is solid.') : '');
+    actions = [
+      { dot: 'var(--grn)', text: '<b>Scale ads by 15–20%</b> on your best campaign — margin fully supports this' },
+      { dot: 'var(--grn)', text: '<b>Test a new audience</b> — strong unit economics mean you can afford to experiment' },
+      { dot: 'var(--acc)', text: '<b>Build a repeat purchase system</b> — email or SMS to bring buyers back at zero ad cost' },
+    ];
+  }
+
+  document.getElementById('result-box').style.background = bg;
+  document.getElementById('r-icon').textContent   = icon;
+  document.getElementById('r-status').textContent = status;
+  document.getElementById('r-insight').innerHTML  = insightHTML;
+  document.getElementById('r-insight').style.color = 'rgba(255,255,255,.7)';
+
+  // Render what to do next
+  var actionsEl = document.getElementById('r-actions');
+  actionsEl.innerHTML = '<div class="wtd-label">What to do right now</div>' +
+    actions.map(function(a) {
+      return '<div class="result-action-item"><div class="rai-dot" style="background:' + a.dot + '"></div><div>' + a.text + '</div></div>';
+    }).join('');
+}
+
+// ── SHARE RESULT ───────────────────────────────────────
+function shareResult() {
+  var profit  = lastProfit;
+  var margin  = lastMargin;
+  var monthly = profit * 30;
+  var text;
+
+  if (profit < 0) {
+    text = 'I just checked my real Shopify profit — turns out I was LOSING ' +
+      CURR + Math.abs(Math.round(profit)).toLocaleString() + ' 😅\n\n' +
+      'Revenue looked fine but after ads + costs = actual loss.\n\n' +
+      'Every Shopify owner needs to check this free tool:\n' +
+      'shopify-rfyq20un5-rcramya116-8792s-projects.vercel.app\n\n' +
+      '#Shopify #Ecommerce #ShopifyTips';
+  } else {
+    text = 'Just checked my real Shopify profit margin — ' + margin.toFixed(1) + '% ✅\n\n' +
+      'Real profit after all costs: ' + CURR + Math.abs(Math.round(profit)).toLocaleString() + '/day\n' +
+      'That is ' + CURR + Math.abs(Math.round(monthly)).toLocaleString() + '/month at this rate.\n\n' +
+      'Most sellers only look at revenue. This free tool shows the real number:\n' +
+      'shopify-rfyq20un5-rcramya116-8792s-projects.vercel.app\n\n' +
+      '#Shopify #Ecommerce #ShopifyOwner';
+  }
+
+  var btn = document.getElementById('share-btn');
+  var btnText = document.getElementById('share-text');
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(function() {
+      btn.classList.add('copied');
+      btnText.textContent = '✓ Copied — paste it on Twitter, Reddit, or WhatsApp!';
+      setTimeout(function() {
+        btn.classList.remove('copied');
+        btnText.textContent = 'Share your result — tell other Shopify owners';
+      }, 3000);
+    });
+  } else {
+    prompt('Copy and share this:', text);
+  }
+
+  gtag('event', 'share_result', {
+    profit_positive: profit >= 0,
+    margin: Math.round(margin)
+  });
+}
+
+// ── BREAKDOWN TRACKING ─────────────────────────────────
+function trackBreakdown() {
+  gtag('event', 'breakdown_clicked', {
+    event_category: 'conversion',
+    from_result: lastProfit !== 0
+  });
+}
+
+// ── TOOLTIP ────────────────────────────────────────────
+function showTooltip(msg) {
+  var el = document.getElementById('tooltip');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(function() { el.classList.remove('show'); }, 2500);
+}
+
+// ── INIT ───────────────────────────────────────────────
+// Set USD as default on load
+document.addEventListener('DOMContentLoaded', function() {
+  gtag('event', 'page_view_profit_checker', {
+    event_category: 'engagement'
+  });
+});
 </script>
 
 </body>
