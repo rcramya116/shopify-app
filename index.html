@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ED92FK72K5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-ED92FK72K5');
+</script>
   <meta charset="UTF-8">
   <title>Shopify Profit Checker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,7 +95,7 @@
 
   <p>Revenue ≠ Profit. Most Shopify store owners don’t realize this.</p>
 
-  <input type="number" id="revenue" placeholder="Revenue (₹)">
+  <input type="number" id="revenue" placeholder="Revenue  ($ or ₹)">
   <input type="number" id="ads" placeholder="Ad Spend (₹)">
   <input type="number" id="cost" placeholder="Product Cost (₹)">
 
@@ -104,6 +113,10 @@
 
 <script>
 function calculateProfit() {
+  gtag('event', 'check_profit_clicked', {
+  event_category: 'engagement',
+  event_label: 'profit_calculation'
+});
 
   let revenue = parseFloat(document.getElementById("revenue").value) || 0;
   let ads = parseFloat(document.getElementById("ads").value) || 0;
