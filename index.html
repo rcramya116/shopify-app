@@ -94,6 +94,11 @@
   <h2>You’re probably losing money.<br>Check in 10 seconds.</h2>
 
   <p>Revenue ≠ Profit. Most Shopify store owners don’t realize this.</p>
+    <select id="currency" style="margin-bottom:10px; padding:8px; border-radius:6px;">
+  <option value="₹">₹ INR</option>
+  <option value="$">$ USD</option>
+  <option value="€">€ EUR</option>
+</select>
 
   <input type="number" id="revenue" placeholder="Revenue  ($ or ₹)">
   <input type="number" id="ads" placeholder="Ad Spend (₹)">
@@ -113,6 +118,7 @@
 
 <script>
 function calculateProfit() {
+     let currency = document.getElementById("currency").value;
   gtag('event', 'check_profit_clicked', {
   event_category: 'engagement',
   event_label: 'profit_calculation'
@@ -129,7 +135,7 @@ function calculateProfit() {
   if (profit >= 0) {
     resultDiv.innerHTML = `
       <div style="color:#00ff99; font-weight:bold;">
-        You THINK you made money… you actually made ₹${profit.toLocaleString()}
+        You THINK you made money… you actually made ${currency}${profit.toLocaleString()}
       </div>
       <p style="color:#ff4d4d; font-weight:bold;">
         Most Shopify store owners track revenue… not profit.
