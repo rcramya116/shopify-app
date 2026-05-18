@@ -1,197 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ED92FK72K5"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
+  window.dataLayer=window.dataLayer||[];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-ED92FK72K5');
+  gtag('js',new Date());
+  gtag('config','G-ED92FK72K5');
 </script>
 <meta charset="UTF-8">
-<title>ShopifyOS — Daily Profit Tracker</title>
+<title>ProfitSnap — See Your Real Shopify Profit</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Track your real Shopify profit every day. Streak system, 7-day trends, AI advice. Free forever.">
+<meta name="description" content="ProfitSnap calculates your real Shopify profit after all 8 costs — ads, COGS, fees, shipping, refunds and more. Free. No signup required.">
+<meta property="og:title" content="ProfitSnap — Real Shopify Profit Calculator">
+<meta property="og:description" content="See what you actually made after every cost. Free forever. No signup.">
+<meta name="twitter:card" content="summary">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#060d1a;--card:#0c1929;--card2:#0f2035;--card3:#111f38;
-  --border:#1a3050;--border2:#224070;--border3:#2a5090;
+  --border:#1a3050;--border2:#224070;
   --t1:#eef2f8;--t2:#7a9bc4;--t3:#3a5878;
-  --grn:#00e887;--grn2:#00e88712;--grn3:#00e88735;
-  --red:#ff4757;--red2:#ff475712;--red3:#ff475735;
-  --amb:#ffb833;--amb2:#ffb83312;--amb3:#ffb83335;
-  --acc:#4fc3f7;--acc2:#4fc3f712;--acc3:#4fc3f735;
-  --pur:#a78bfa;--pur2:#a78bfa12;--pur3:#a78bfa35;
-  --gold:#f59e0b;--gold2:#f59e0b12;--gold3:#f59e0b35;
+  --grn:#00e887;--grn2:#00e88714;--grn3:#00e88738;
+  --red:#ff4757;--red2:#ff475714;--red3:#ff475738;
+  --amb:#ffb833;--amb2:#ffb83314;--amb3:#ffb83338;
+  --acc:#4fc3f7;--acc2:#4fc3f714;--acc3:#4fc3f738;
+  --pur:#a78bfa;--pur2:#a78bfa14;--pur3:#a78bfa38;
+  --gold:#f59e0b;--gold2:#f59e0b14;--gold3:#f59e0b38;
 }
-body{margin:0;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;padding:16px;overflow-x:hidden}
-body::before{content:'';position:fixed;top:-30%;left:-20%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(79,195,247,.05) 0%,transparent 70%);pointer-events:none}
-body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(0,232,135,.04) 0%,transparent 70%);pointer-events:none}
+body{margin:0;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;padding:16px 16px 60px;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-30%;left:-20%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(79,195,247,.05),transparent 70%);pointer-events:none}
+body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(0,232,135,.04),transparent 70%);pointer-events:none}
 
-.wrap{max-width:420px;margin:0 auto;padding-bottom:40px}
+.wrap{max-width:420px;margin:0 auto}
 
-/* HEADER */
-.top-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 0 20px}
-.logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--acc);letter-spacing:.5px}
-.logo span{color:var(--t2);font-weight:600}
-.top-date{font-size:11px;color:var(--t3)}
-
-/* STREAK BANNER */
-.streak-banner{border-radius:16px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;overflow:hidden;border:1px solid var(--border)}
-.streak-banner.alive{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.03));border-color:var(--gold3)}
-.streak-banner.zero{background:var(--card);border-color:var(--border)}
-.sb-left{display:flex;align-items:center;gap:14px}
-.streak-num{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;line-height:1;color:var(--gold)}
-.streak-num.zero{color:var(--t3)}
-.sb-info{}
-.sb-title{font-size:14px;font-weight:600;color:var(--t1);margin-bottom:2px}
-.sb-sub{font-size:11px;color:var(--t2)}
-.sb-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
-.streak-dots{display:flex;gap:5px}
-.sd{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;border:1px solid var(--border)}
-.sd.hit{background:var(--gold3);border-color:var(--gold3);color:var(--gold)}
-.sd.today{background:var(--gold);border-color:var(--gold);color:#060d1a}
-.sd.miss{background:var(--red2);border-color:var(--red3);color:var(--red)}
-.sd.future{background:transparent;color:var(--t3)}
-
-/* GOAL BAR */
-.goal-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:14px}
-.goal-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:10px;flex-wrap:wrap}
-.goal-label{font-size:11px;color:var(--t2);font-weight:500}
-.goal-val{font-size:12px;font-weight:600;color:var(--acc)}
-.goal-inp-row{display:flex;gap:8px;align-items:center}
-.goal-inp{flex:1;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--t1);outline:none;font-family:'DM Sans',sans-serif}
-.goal-btn{padding:8px 14px;background:var(--acc2);border:1px solid var(--acc3);color:var(--acc);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
-.goal-bar-wrap{margin-top:8px}
-.goal-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
-.goal-fill{height:100%;border-radius:3px;transition:width .5s ease}
-.goal-bar-lbl{display:flex;justify-content:space-between;font-size:9px;color:var(--t3);margin-top:4px}
-
-/* CARD */
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:14px;position:relative;z-index:1}
-.card-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:12px}
-
-/* BADGE */
-.badge{display:inline-flex;align-items:center;gap:6px;background:var(--red2);border:1px solid var(--red3);color:var(--red);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:14px}
-.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1.5s ease infinite}
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.anim{animation:fadeUp .35s ease both}
 
-/* HEADLINE */
-.headline{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;line-height:1.2;margin-bottom:6px;letter-spacing:-.3px}
-.headline .red{color:var(--red)}
-.sub{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:20px}
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 0 20px}
+.logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--t1)}
+.logo b{color:var(--acc)}
+.beta-tag{font-size:10px;font-weight:600;color:var(--amb);background:var(--amb2);border:1px solid var(--amb3);padding:3px 9px;border-radius:20px;letter-spacing:.5px}
+
+/* ── PHASE 1: CALCULATOR ONLY ── */
+.phase{display:none}
+.phase.active{display:block;animation:fadeUp .4s ease both}
+
+/* HERO */
+.hero{margin-bottom:22px}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);margin-bottom:12px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--grn);animation:pulse 1.8s ease infinite}
+.hero-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1.2;margin-bottom:8px}
+.hero-title .acc{color:var(--acc)}
+.hero-sub{font-size:13px;color:var(--t2);line-height:1.65;margin-bottom:14px}
+.hero-pills{display:flex;gap:6px;flex-wrap:wrap}
+.hp{font-size:11px;color:var(--t2);background:var(--card);border:1px solid var(--border);padding:4px 11px;border-radius:20px}
+
+/* CALCULATOR CARD */
+.calc-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:12px}
 
 /* CURRENCY */
-.curr-row{display:flex;gap:5px;margin-bottom:14px}
+.curr-row{display:flex;gap:5px;margin-bottom:16px}
 .curr-btn{flex:1;padding:7px 0;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
 .curr-btn.on{background:var(--acc2);border-color:var(--acc3);color:var(--acc);font-weight:600}
 
-/* INPUTS */
-.field{margin-bottom:10px}
-.field-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:5px;display:block}
-.inp-wrap{display:flex;align-items:center;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .15s}
-.inp-wrap:focus-within{border-color:var(--acc3)}
-.inp-sym{padding:12px 12px;font-size:13px;color:var(--t3);flex-shrink:0;user-select:none}
-.inp-wrap input{flex:1;padding:12px 12px 12px 0;background:transparent;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--t1);width:100%}
-.inp-wrap input::placeholder{color:var(--t3);font-size:13px}
-.example-hint{font-size:11px;color:var(--t3);text-align:right;margin-top:3px;cursor:pointer;transition:color .15s}
-.example-hint:hover{color:var(--acc)}
+/* FIELDS */
+.field{margin-bottom:11px}
+.field-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.field-lbl{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t3)}
+.field-info{background:none;border:none;font-size:10px;color:var(--t3);cursor:pointer;font-family:'DM Sans',sans-serif;padding:2px 5px;border-radius:4px;transition:all .15s}
+.field-info:hover{color:var(--acc);background:var(--acc2)}
+.field-explain{display:none;font-size:11.5px;color:var(--t2);background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:9px 11px;line-height:1.6;margin-bottom:7px}
+.field-explain.show{display:block;animation:fadeUp .2s ease}
+.inp-g{display:flex;align-items:center;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.inp-g:focus-within{border-color:var(--acc3)}
+.inp-sym{padding:12px 11px;font-size:13px;color:var(--t3);flex-shrink:0;user-select:none}
+.inp-g input{flex:1;padding:12px 11px 12px 0;background:transparent;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--t1);width:100%}
+.inp-g input::placeholder{color:var(--t3);font-size:12px}
 
-/* BUTTON */
-.calc-btn{width:100%;padding:14px;background:var(--grn);color:#060d1a;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;border:none;border-radius:12px;cursor:pointer;margin-top:6px;transition:opacity .15s,transform .1s;letter-spacing:.3px}
+/* ADVANCED TOGGLE */
+.adv-toggle{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-top:1px solid var(--border);margin-top:4px;margin-bottom:8px;cursor:pointer}
+.adv-toggle-lbl{font-size:11.5px;color:var(--t2);display:flex;align-items:center;gap:6px}
+.adv-toggle-lbl span{font-size:10px;color:var(--acc);background:var(--acc2);border:1px solid var(--acc3);padding:2px 7px;border-radius:10px}
+.adv-icon{font-size:11px;color:var(--t3);transition:transform .2s}
+.adv-icon.open{transform:rotate(180deg)}
+.adv-section{display:none}
+.adv-section.show{display:block;animation:fadeUp .25s ease}
+.opt-lbl{font-size:9px;color:var(--t3);background:var(--card3);padding:1px 6px;border-radius:8px;margin-left:4px}
+
+/* BUTTONS */
+.calc-btn{width:100%;padding:14px;background:var(--grn);color:#060d1a;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;border:none;border-radius:12px;cursor:pointer;margin-top:8px;transition:opacity .15s,transform .1s;letter-spacing:.3px}
 .calc-btn:hover{opacity:.9}
 .calc-btn:active{transform:scale(.98)}
-.save-btn{width:100%;padding:12px;background:var(--acc2);border:1px solid var(--acc3);color:var(--acc);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;border-radius:12px;cursor:pointer;margin-top:8px;transition:all .15s}
-.save-btn:hover{background:rgba(79,195,247,.18)}
+.save-btn{width:100%;padding:11px;background:var(--card2);border:1px solid var(--border2);color:var(--acc);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;border-radius:11px;cursor:pointer;margin-top:8px;transition:all .2s;display:none}
+.save-btn:hover{background:var(--acc2)}
+.example-hint{background:none;border:none;font-size:11px;color:var(--t3);cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;text-align:right;margin-top:3px;transition:color .15s;display:block}
+.example-hint:hover{color:var(--acc)}
 
 /* RESULT */
-#result-box{margin-top:14px;border-radius:14px;overflow:hidden;display:none;animation:fadeUp .4s ease both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.result-header{padding:18px 20px 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.result-status{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
-.result-profit{font-family:'Syne',sans-serif;font-size:34px;font-weight:800;line-height:1;margin-bottom:3px}
-.result-monthly{font-size:12px;opacity:.7}
-.result-icon{font-size:32px;flex-shrink:0;margin-top:2px}
-.result-insight{padding:12px 20px;font-size:12px;line-height:1.6;border-top:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.7)}
-.result-actions{padding:12px 20px 16px;display:flex;flex-direction:column;gap:7px;border-top:1px solid rgba(255,255,255,.06)}
-.wtd-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;color:rgba(255,255,255,.4)}
-.rai{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:rgba(255,255,255,.75);line-height:1.45}
-.rai-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}
-.mm-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:3px}
+#result-wrap{display:none;margin-top:14px}
+.result-card{border-radius:14px;overflow:hidden}
+.result-top{padding:18px 20px 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.r-status{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
+.r-profit{font-family:'Syne',sans-serif;font-size:34px;font-weight:800;line-height:1;margin-bottom:4px}
+.r-monthly{font-size:12px;opacity:.65}
+.r-icon{font-size:30px;flex-shrink:0;margin-top:2px}
+
+/* MARGIN METER */
+.margin-wrap{padding:0 20px 14px}
+.margin-lbl-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.margin-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.margin-explain-btn{background:none;border:none;font-size:10px;color:var(--t3);cursor:pointer;font-family:'DM Sans',sans-serif;padding:2px 5px;border-radius:4px;transition:all .15s}
+.margin-explain-btn:hover{color:var(--acc);background:var(--acc2)}
+.margin-explain{display:none;font-size:11px;color:var(--t2);line-height:1.6;margin-bottom:7px;background:rgba(255,255,255,.04);border-radius:6px;padding:8px 10px}
+.margin-explain.show{display:block}
+.mm-bar{height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-bottom:3px}
 .mm-fill{height:100%;border-radius:3px;transition:width .6s ease}
-.mm-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--t3)}
+.mm-labels{display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,.3)}
+
+/* BREAKDOWN */
+.breakdown{padding:12px 20px;border-top:1px solid rgba(255,255,255,.06)}
+.breakdown-title{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:9px}
+.bd-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.bd-row:last-child{border:none;font-weight:700;margin-top:4px;font-size:13px}
+.bd-lbl{color:rgba(255,255,255,.55)}
+.bd-val{font-weight:500}
+
+/* INSIGHT */
+.r-insight{padding:12px 20px;font-size:12.5px;line-height:1.65;border-top:1px solid rgba(255,255,255,.06);color:rgba(255,255,255,.7)}
+
+/* ACTIONS */
+.r-actions{padding:11px 20px 15px;border-top:1px solid rgba(255,255,255,.06)}
+.r-actions-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px}
+.r-action{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:rgba(255,255,255,.75);line-height:1.45;margin-bottom:6px}
+.r-action-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}
 
 /* SHARE */
-.share-btn{width:100%;margin-top:10px;padding:11px;background:transparent;border:1px solid var(--border2);border-radius:10px;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:7px}
+.share-btn{width:100%;margin-top:10px;padding:11px;background:transparent;border:1px solid var(--border2);border-radius:10px;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:7px}
 .share-btn:hover{border-color:var(--acc3);color:var(--acc);background:var(--acc2)}
 .share-btn.copied{border-color:var(--grn3);color:var(--grn);background:var(--grn2)}
 
-/* 7-DAY CHART */
-.chart-wrap{display:flex;align-items:flex-end;gap:5px;height:80px;margin-top:8px}
-.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;position:relative}
-.bar-col:hover .bar-tip{display:block}
-.bar-inner{width:100%;border-radius:4px 4px 0 0;min-height:3px;transition:all .3s}
-.bar-day{font-size:9px;color:var(--t3);white-space:nowrap}
-.bar-tip{display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--border2);border-radius:6px;padding:4px 8px;font-size:10px;color:var(--t1);white-space:nowrap;z-index:10;margin-bottom:4px}
+/* ── PHASE 2: AFTER FIRST CALCULATION ── */
+/* STREAK */
+.streak-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.streak-card.alive{background:linear-gradient(135deg,var(--gold2),rgba(245,158,11,.03));border-color:var(--gold3)}
+.sk-left{display:flex;align-items:center;gap:13px}
+.sk-num{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;line-height:1;color:var(--gold)}
+.sk-num.zero{color:var(--t3)}
+.sk-title{font-size:13px;font-weight:600;margin-bottom:2px;color:var(--t1)}
+.sk-sub{font-size:11px;color:var(--t2)}
+.sk-dots{display:flex;gap:4px}
+.sd{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;border:1px solid var(--border)}
+.sd.hit{background:var(--gold3);border-color:var(--gold3);color:var(--gold)}
+.sd.today-hit{background:var(--gold);border-color:var(--gold);color:#060d1a}
+.sd.miss{background:var(--red2);border-color:var(--red3);color:var(--red)}
+.sd.empty{color:var(--t3)}
 
-/* HISTORY LIST */
-.hist-item{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:var(--card2);border-radius:9px;margin-bottom:6px;cursor:pointer;transition:background .15s}
-.hist-item:hover{background:var(--card3)}
-.hi-date{font-size:12px;color:var(--t2)}
-.hi-rev{font-size:11px;color:var(--t3);margin-top:1px}
-.hi-profit{font-size:14px;font-weight:600;text-align:right}
-.hi-margin{font-size:11px;color:var(--t3);text-align:right;margin-top:1px}
-
-/* ACHIEVEMENTS */
-.ach-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
-.ach-row::-webkit-scrollbar{display:none}
-.ach{flex-shrink:0;width:70px;text-align:center;padding:10px 6px;border-radius:10px;border:1px solid var(--border);background:var(--card2)}
-.ach.unlocked{border-color:var(--gold3);background:var(--gold2)}
-.ach.next{border-color:var(--acc3);border-style:dashed}
-.ach-icon{font-size:20px;margin-bottom:4px}
-.ach-lbl{font-size:9px;color:var(--t3);line-height:1.3}
-.ach.unlocked .ach-lbl{color:var(--gold)}
+/* GOAL */
+.goal-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.goal-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.goal-lbl{font-size:11px;color:var(--t2);font-weight:500}
+.goal-val{font-size:11px;font-weight:600;color:var(--acc)}
+.goal-inp-row{display:flex;gap:6px;margin-bottom:8px}
+.goal-inp{flex:1;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--t1);outline:none;font-family:'DM Sans',sans-serif}
+.goal-set-btn{padding:8px 14px;background:var(--acc2);border:1px solid var(--acc3);color:var(--acc);border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.goal-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.goal-fill{height:100%;border-radius:2px;transition:width .5s ease}
+.goal-bar-lbls{display:flex;justify-content:space-between;font-size:9px;color:var(--t3);margin-top:4px}
 
 /* VS YESTERDAY */
-.vs-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
-.vs-card{background:var(--card2);border-radius:10px;padding:10px 12px;text-align:center;border:1px solid var(--border)}
-.vs-lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.vs-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;display:none}
+.vs-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:8px}
+.vs-item{background:var(--card2);border-radius:9px;padding:9px 10px;text-align:center}
+.vs-lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
 .vs-val{font-size:16px;font-weight:600;font-family:'Syne',sans-serif}
 
-/* BREAKDOWN CTA */
-.breakdown-box{display:flex;align-items:center;gap:12px;background:var(--acc2);border:1px solid var(--acc3);border-radius:14px;padding:14px 16px;margin-bottom:14px;cursor:pointer;text-decoration:none;transition:all .15s}
-.breakdown-box:hover{background:rgba(79,195,247,.1)}
-.bb-icon{font-size:20px;flex-shrink:0}
-.bb-body{flex:1}
-.bb-title{font-size:13px;font-weight:600;color:var(--acc);margin-bottom:2px}
-.bb-sub{font-size:11px;color:var(--t2)}
-.bb-arrow{font-size:16px;color:var(--acc)}
+/* CHART */
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;display:none}
+.chart-bars{display:flex;align-items:flex-end;gap:5px;height:72px;margin-top:8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
+.bar-col:hover .bar-tip{display:block}
+.bar-inner{width:100%;border-radius:3px 3px 0 0;min-height:3px;transition:height .3s}
+.bar-lbl{font-size:9px;color:var(--t3)}
+.bar-tip{display:none;position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:var(--card2);border:1px solid var(--border2);border-radius:6px;padding:4px 8px;font-size:10px;color:var(--t1);white-space:nowrap;z-index:10}
 
-/* SAVE TOAST */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--grn3);border-radius:10px;padding:10px 20px;font-size:13px;color:var(--grn);z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+/* ACHIEVEMENTS */
+.ach-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.ach-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.ach-row::-webkit-scrollbar{display:none}
+.ach{flex-shrink:0;width:66px;text-align:center;padding:8px 4px;border-radius:9px;border:1px solid var(--border);background:var(--card2)}
+.ach.done{border-color:var(--gold3);background:var(--gold2)}
+.ach.next{border-color:var(--acc3);border-style:dashed}
+.ach-ic{font-size:18px;margin-bottom:3px}
+.ach-lbl{font-size:9px;color:var(--t3);line-height:1.3}
+.ach.done .ach-lbl{color:var(--gold)}
 
-/* PRO TEASER */
-.pro-teaser{background:linear-gradient(135deg,rgba(167,139,250,.1),rgba(167,139,250,.03));border:1px solid var(--pur3);border-radius:14px;padding:16px;margin-bottom:14px;display:flex;align-items:flex-start;gap:12px}
-.pt-icon{font-size:22px;flex-shrink:0}
-.pt-body{}
-.pt-title{font-size:13px;font-weight:600;color:var(--pur);margin-bottom:4px}
-.pt-sub{font-size:12px;color:var(--t2);line-height:1.55}
-.pt-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 10px;border-radius:20px;background:var(--pur2);border:1px solid var(--pur3);color:var(--pur);margin-top:6px}
+/* HISTORY */
+.hist-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.hist-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.hist-row{display:flex;justify-content:space-between;align-items:center;padding:9px 10px;background:var(--card2);border-radius:8px;margin-bottom:5px}
+.hr-date{font-size:12px;color:var(--t2)}
+.hr-sub{font-size:10px;color:var(--t3);margin-top:1px}
+.hr-profit{font-size:14px;font-weight:600;text-align:right}
+.hr-margin{font-size:10px;color:var(--t3);text-align:right;margin-top:1px}
+.mini-btn{padding:4px 10px;background:var(--card2);border:1px solid var(--border);color:var(--t2);border-radius:6px;font-size:10px;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* ── PHASE 3: WAITLIST + FEEDBACK ── */
+.waitlist-card{background:linear-gradient(135deg,var(--acc2),rgba(79,195,247,.04));border:1px solid var(--acc3);border-radius:14px;padding:16px;margin-bottom:12px}
+.wl-icon{font-size:22px;margin-bottom:8px}
+.wl-title{font-size:14px;font-weight:700;color:var(--acc);margin-bottom:4px}
+.wl-sub{font-size:12px;color:var(--t2);line-height:1.55;margin-bottom:12px}
+.wl-row{display:flex;gap:6px}
+.wl-inp{flex:1;padding:10px 12px;background:var(--card2);border:1.5px solid var(--border);border-radius:8px;font-size:13px;color:var(--t1);outline:none;font-family:'DM Sans',sans-serif;transition:border-color .15s}
+.wl-inp:focus{border-color:var(--acc3)}
+.wl-btn{padding:10px 16px;background:var(--acc);color:#060d1a;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.wl-thanks{display:none;font-size:11px;color:var(--grn);margin-top:7px;line-height:1.5}
+
+.feedback-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.fb-title{font-size:12px;font-weight:600;color:var(--t1);margin-bottom:4px}
+.fb-sub{font-size:11px;color:var(--t2);margin-bottom:10px;line-height:1.5}
+.fb-inp{width:100%;padding:10px 12px;background:var(--card2);border:1.5px solid var(--border);border-radius:8px;font-size:12px;color:var(--t1);outline:none;font-family:'DM Sans',sans-serif;resize:vertical;min-height:60px;transition:border-color .15s;display:block}
+.fb-inp:focus{border-color:var(--acc3)}
+.fb-btn{margin-top:8px;padding:9px 18px;background:var(--card2);border:1px solid var(--border2);color:var(--t2);border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.fb-btn:hover{border-color:var(--acc3);color:var(--acc)}
+.fb-thanks{display:none;font-size:11px;color:var(--grn);margin-top:6px}
 
 /* FOOTER */
-.footer{text-align:center;font-size:11px;color:var(--t3);line-height:1.7;padding-top:8px}
+.footer{text-align:center;font-size:11px;color:var(--t3);line-height:1.7;margin-top:8px}
 .footer a{color:var(--t2);text-decoration:none}
 .footer a:hover{color:var(--acc)}
 
-/* TOOLTIP */
-.tooltip{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 18px;font-size:13px;color:var(--t1);z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
-.tooltip.show{transform:translateX(-50%) translateY(0);opacity:1}
+/* CARD LABEL */
+.card-lbl{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
 
-.section-divider{height:1px;background:var(--border);margin:4px 0 14px}
+/* TOAST / TOOLTIP */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--grn3);border-radius:10px;padding:10px 20px;font-size:13px;color:var(--grn);z-index:999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.tip{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 18px;font-size:13px;color:var(--t1);z-index:999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.tip.show{transform:translateX(-50%) translateY(0);opacity:1}
 </style>
 </head>
 <body>
@@ -199,230 +250,358 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
 
 <!-- TOP BAR -->
 <div class="top-bar">
-  <div class="logo">Shopify<span>OS</span></div>
-  <div class="top-date" id="top-date"></div>
+  <div class="logo">Profit<b>Snap</b></div>
+  <div class="beta-tag">Free Beta</div>
 </div>
 
-<!-- STREAK BANNER -->
-<div class="streak-banner zero" id="streak-banner">
-  <div class="sb-left">
-    <div class="streak-num zero" id="streak-num">0</div>
-    <div class="sb-info">
-      <div class="sb-title" id="streak-title">Start your streak today</div>
-      <div class="sb-sub" id="streak-sub">Log profit daily to build your habit</div>
+<!-- ══ PHASE 1 — CALCULATOR (always visible) ══ -->
+<div id="phase1">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag"><div class="live-dot"></div> Real-time profit calculator</div>
+    <div class="hero-title">See your real profit <span class="acc">clearly.</span></div>
+    <div class="hero-sub">Not just revenue. Not just ROAS. What you actually made after every cost — calculated honestly.</div>
+    <div class="hero-pills">
+      <div class="hp">No signup</div>
+      <div class="hp">8 costs tracked</div>
+      <div class="hp">Free forever</div>
     </div>
   </div>
-  <div class="sb-right">
-    <div class="streak-dots" id="streak-dots"></div>
-  </div>
-</div>
 
-<!-- GOAL BAR -->
-<div class="goal-section" id="goal-section">
-  <div class="goal-row">
-    <div class="goal-label">Daily profit goal</div>
-    <div class="goal-val" id="goal-display">Not set</div>
-  </div>
-  <div class="goal-inp-row">
-    <span class="inp-sym" id="goal-sym" style="padding:8px 4px;font-size:13px;color:var(--t3)">$</span>
-    <input class="goal-inp" type="number" id="goal-inp" placeholder="Set your daily goal..." min="0">
-    <button class="goal-btn" onclick="saveGoal()">Set goal</button>
-  </div>
-  <div class="goal-bar-wrap" id="goal-bar-wrap" style="display:none">
-    <div class="goal-bar"><div class="goal-fill" id="goal-fill" style="width:0%"></div></div>
-    <div class="goal-bar-lbl"><span>$0</span><span id="goal-bar-lbl-mid"></span><span id="goal-bar-lbl-end"></span></div>
-  </div>
-</div>
+  <!-- CALCULATOR -->
+  <div class="calc-card">
+    <!-- Currency -->
+    <div class="curr-row">
+      <button class="curr-btn on" id="c-usd" onclick="setCurr('$','USD')">$ USD</button>
+      <button class="curr-btn" id="c-gbp" onclick="setCurr('£','GBP')">£ GBP</button>
+      <button class="curr-btn" id="c-eur" onclick="setCurr('€','EUR')">€ EUR</button>
+      <button class="curr-btn" id="c-inr" onclick="setCurr('₹','INR')">₹ INR</button>
+    </div>
 
-<!-- MAIN CARD -->
-<div class="card">
-  <div class="badge"><div class="badge-dot"></div>Most stores are wrong</div>
-  <div class="headline">You're probably <span class="red">losing money.</span><br>Check in 10 seconds.</div>
-  <div class="sub">Revenue ≠ Profit. Enter your numbers — see your real profit instantly.</div>
-
-  <div class="curr-row">
-    <button class="curr-btn on" id="c-usd" onclick="setCurr('$','USD')">$ USD</button>
-    <button class="curr-btn" id="c-gbp" onclick="setCurr('£','GBP')">£ GBP</button>
-    <button class="curr-btn" id="c-eur" onclick="setCurr('€','EUR')">€ EUR</button>
-    <button class="curr-btn" id="c-inr" onclick="setCurr('₹','INR')">₹ INR</button>
-  </div>
-
-  <div class="field">
-    <label class="field-label">Revenue <span class="csym">$</span></label>
-    <div class="inp-wrap"><span class="inp-sym csym">$</span><input type="number" id="revenue" placeholder="Total sales today" min="0" oninput="liveCalc()"></div>
-  </div>
-  <div class="field">
-    <label class="field-label">Ad Spend <span class="csym">$</span></label>
-    <div class="inp-wrap"><span class="inp-sym csym">$</span><input type="number" id="ads" placeholder="Facebook, Google, TikTok" min="0" oninput="liveCalc()"></div>
-  </div>
-  <div class="field">
-    <label class="field-label">Product Cost <span class="csym">$</span></label>
-    <div class="inp-wrap"><span class="inp-sym csym">$</span><input type="number" id="cost" placeholder="Cost of goods sold" min="0" oninput="liveCalc()"></div>
-    <div class="example-hint" onclick="loadExample()">Try example numbers →</div>
-  </div>
-
-  <button class="calc-btn" onclick="calculate()">Check My Real Profit →</button>
-  <button class="save-btn" id="save-btn" onclick="saveToday()" style="display:none">💾 Save today's entry — build your streak</button>
-
-  <!-- RESULT -->
-  <div id="result-box">
-    <div class="result-header">
-      <div>
-        <div class="result-status" id="r-status"></div>
-        <div class="result-profit" id="r-profit"></div>
-        <div class="result-monthly" id="r-monthly"></div>
+    <!-- Core fields -->
+    <div class="field">
+      <div class="field-top">
+        <label class="field-lbl">Revenue <span class="csym">$</span></label>
+        <button class="field-info" onclick="toggleExp('e-rev')">What is this?</button>
       </div>
-      <div class="result-icon" id="r-icon"></div>
+      <div class="field-explain" id="e-rev">Total money customers paid your store. This is what Shopify shows on your dashboard — it is NOT your profit.</div>
+      <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-rev" placeholder="Total sales today" min="0" oninput="liveCalc()"></div>
     </div>
-    <div style="padding:0 20px 14px">
-      <div style="font-size:10px;color:var(--t3);margin-bottom:5px;font-weight:600;letter-spacing:1px;text-transform:uppercase">Profit Margin</div>
-      <div class="mm-bar"><div class="mm-fill" id="mm-fill" style="width:0%"></div></div>
-      <div class="mm-labels"><span>0%</span><span id="mm-pct">—</span><span>50%+</span></div>
+
+    <div class="field">
+      <div class="field-top">
+        <label class="field-lbl">Ad Spend <span class="csym">$</span></label>
+        <button class="field-info" onclick="toggleExp('e-ads')">What is this?</button>
+      </div>
+      <div class="field-explain" id="e-ads">Total paid to Facebook, Google, TikTok, or any ad platform to show your ads. Usually the largest single cost for Shopify sellers.</div>
+      <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-ads" placeholder="Facebook, Google, TikTok" min="0" oninput="liveCalc()"></div>
     </div>
-    <div class="result-insight" id="r-insight"></div>
-    <div class="result-actions" id="r-actions"></div>
-    <div style="padding:0 20px 14px">
-      <button class="share-btn" id="share-btn" onclick="shareResult()"><span>📤</span><span id="share-text">Share your result</span></button>
+
+    <div class="field">
+      <div class="field-top">
+        <label class="field-lbl">Product Cost <span class="csym">$</span></label>
+        <button class="field-info" onclick="toggleExp('e-cogs')">What is this?</button>
+      </div>
+      <div class="field-explain" id="e-cogs">What you paid your supplier for products sold today. Also called COGS. If you sold 10 items at $8 each, your COGS is $80.</div>
+      <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-cogs" placeholder="Cost of goods sold" min="0" oninput="liveCalc()"></div>
+    </div>
+
+    <!-- Advanced costs -->
+    <div class="adv-toggle" onclick="toggleAdv()">
+      <div class="adv-toggle-lbl">Add more costs <span>recommended for accuracy</span></div>
+      <div class="adv-icon" id="adv-ic">▼</div>
+    </div>
+    <div class="adv-section" id="adv-sec">
+      <div class="field">
+        <div class="field-top">
+          <label class="field-lbl">Shipping <span class="csym">$</span> <span class="opt-lbl">optional</span></label>
+          <button class="field-info" onclick="toggleExp('e-ship')">What is this?</button>
+        </div>
+        <div class="field-explain" id="e-ship">What you paid to ship orders to customers. FedEx, DHL, Shopify Shipping, or any courier costs.</div>
+        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-ship" placeholder="Courier and fulfillment costs" min="0" oninput="liveCalc()"></div>
+      </div>
+      <div class="field">
+        <div class="field-top">
+          <label class="field-lbl">Shopify Fees <span class="csym">$</span> <span class="opt-lbl">optional</span></label>
+          <button class="field-info" onclick="toggleExp('e-fees')">What is this?</button>
+        </div>
+        <div class="field-explain" id="e-fees">Shopify charges in 3 ways: monthly plan ($29-$299), transaction fee (0.5-2% per sale), payment processing (2.9% + $0.30 per card). Add them together.</div>
+        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-fees" placeholder="Plan + transaction + payment fees" min="0" oninput="liveCalc()"></div>
+      </div>
+      <div class="field">
+        <div class="field-top">
+          <label class="field-lbl">Refunds <span class="csym">$</span> <span class="opt-lbl">optional</span></label>
+          <button class="field-info" onclick="toggleExp('e-ref')">What is this?</button>
+        </div>
+        <div class="field-explain" id="e-ref">Money returned to customers for returned or cancelled orders. Even a 5% refund rate significantly reduces real profit.</div>
+        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-ref" placeholder="Customer refunds and returns" min="0" oninput="liveCalc()"></div>
+      </div>
+      <div class="field">
+        <div class="field-top">
+          <label class="field-lbl">App Fees <span class="csym">$</span> <span class="opt-lbl">optional</span></label>
+          <button class="field-info" onclick="toggleExp('e-app')">What is this?</button>
+        </div>
+        <div class="field-explain" id="e-app">Monthly Shopify app costs. Review apps, upsell tools, email marketing tools. Most stores spend $50-200/month here without realising.</div>
+        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-app" placeholder="App subscription costs" min="0" oninput="liveCalc()"></div>
+      </div>
+      <div class="field">
+        <div class="field-top">
+          <label class="field-lbl">Other <span class="csym">$</span> <span class="opt-lbl">optional</span></label>
+          <button class="field-info" onclick="toggleExp('e-oth')">What is this?</button>
+        </div>
+        <div class="field-explain" id="e-oth">Packaging, chargebacks, currency conversion losses, taxes, or any cost not listed above.</div>
+        <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-oth" placeholder="Packaging, chargebacks, taxes..." min="0" oninput="liveCalc()"></div>
+      </div>
+    </div>
+
+    <button class="example-hint" onclick="loadExample()">Try example numbers →</button>
+    <button class="calc-btn" onclick="calculate()">Calculate My Real Profit →</button>
+    <button class="save-btn" id="save-btn" onclick="saveToday()">💾 Save today — build your streak</button>
+
+    <!-- RESULT -->
+    <div id="result-wrap">
+      <div class="result-card" id="result-card">
+        <div class="result-top">
+          <div>
+            <div class="r-status" id="r-status"></div>
+            <div class="r-profit" id="r-profit"></div>
+            <div class="r-monthly" id="r-monthly"></div>
+          </div>
+          <div class="r-icon" id="r-icon"></div>
+        </div>
+        <div class="margin-wrap">
+          <div class="margin-lbl-row">
+            <div class="margin-lbl">Profit Margin</div>
+            <button class="margin-explain-btn" onclick="toggleExp('e-margin')">What is a good margin?</button>
+          </div>
+          <div class="field-explain" id="e-margin" style="margin-bottom:6px">Below 15% — do not scale. 15-20% — optimise first. 20-30% — healthy, scale carefully. Above 30% — excellent, scale with confidence.</div>
+          <div class="mm-bar"><div class="mm-fill" id="mm-fill" style="width:0%"></div></div>
+          <div class="mm-labels"><span>0%</span><span id="mm-pct">—</span><span>50%+</span></div>
+        </div>
+        <div class="breakdown" id="breakdown"></div>
+        <div class="r-insight" id="r-insight"></div>
+        <div class="r-actions" id="r-actions"></div>
+        <div style="padding:0 20px 14px">
+          <button class="share-btn" id="share-btn" onclick="shareResult()"><span>📤</span><span id="share-txt">Share your result</span></button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- VS YESTERDAY -->
-<div class="card" id="vs-card" style="display:none">
-  <div class="card-label">Today vs yesterday</div>
-  <div class="vs-grid">
-    <div class="vs-card"><div class="vs-lbl">Profit Δ</div><div class="vs-val" id="vs-profit">—</div></div>
-    <div class="vs-card"><div class="vs-lbl">Revenue Δ</div><div class="vs-val" id="vs-rev">—</div></div>
-    <div class="vs-card"><div class="vs-lbl">Margin Δ</div><div class="vs-val" id="vs-margin">—</div></div>
+<!-- ══ PHASE 2 — revealed after first calculation ══ -->
+<div id="phase2" style="display:none">
+
+  <!-- STREAK -->
+  <div class="streak-card zero" id="streak-card">
+    <div class="sk-left">
+      <div class="sk-num zero" id="sk-num">0</div>
+      <div>
+        <div class="sk-title" id="sk-title">Start your daily streak</div>
+        <div class="sk-sub" id="sk-sub">Save your result daily to track progress</div>
+      </div>
+    </div>
+    <div class="sk-dots" id="sk-dots"></div>
   </div>
-</div>
 
-<!-- 7-DAY CHART -->
-<div class="card" id="chart-card" style="display:none">
-  <div class="card-label">7-day profit trend</div>
-  <div class="chart-wrap" id="chart-wrap"></div>
-</div>
-
-<!-- ACHIEVEMENTS -->
-<div class="card">
-  <div class="card-label">Your milestones</div>
-  <div class="ach-row" id="ach-row"></div>
-</div>
-
-<!-- HISTORY -->
-<div class="card" id="hist-card">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-    <div class="card-label" style="margin-bottom:0">History</div>
-    <div style="display:flex;gap:6px">
-      <button onclick="exportCSV()" style="padding:5px 10px;background:var(--card2);border:1px solid var(--border);color:var(--t2);border-radius:6px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif">Export CSV</button>
-      <button onclick="clearAll()" style="padding:5px 10px;background:var(--red2);border:1px solid var(--red3);color:var(--red);border-radius:6px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif">Clear</button>
+  <!-- GOAL -->
+  <div class="goal-card">
+    <div class="goal-top">
+      <div class="goal-lbl">Daily profit goal</div>
+      <div class="goal-val" id="goal-val">Not set</div>
+    </div>
+    <div class="goal-inp-row">
+      <input class="goal-inp" type="number" id="goal-inp" placeholder="Set your daily goal..." min="0">
+      <button class="goal-set-btn" onclick="saveGoal()">Set goal</button>
+    </div>
+    <div id="goal-bar-wrap" style="display:none">
+      <div class="goal-bar"><div class="goal-fill" id="goal-fill" style="width:0%;background:var(--acc)"></div></div>
+      <div class="goal-bar-lbls"><span id="gl1">$0</span><span id="gl2"></span><span id="gl3"></span></div>
     </div>
   </div>
-  <div id="hist-list"><div style="font-size:13px;color:var(--t3);text-align:center;padding:24px 0">No entries yet. Start tracking today.</div></div>
-</div>
 
-<!-- PRO TEASER -->
-<div class="pro-teaser">
-  <div class="pt-icon">🔐</div>
-  <div class="pt-body">
-    <div class="pt-title">ShopifyOS Pro — coming soon</div>
-    <div class="pt-sub">Unlimited history · 30-day trends · Weekly AI email report · Break-even calculator · Multi-store support</div>
-    <div class="pt-badge">$4.99/month · Free for early users</div>
+  <!-- VS YESTERDAY -->
+  <div class="vs-card" id="vs-card">
+    <div class="card-lbl">Today vs yesterday</div>
+    <div class="vs-grid">
+      <div class="vs-item"><div class="vs-lbl">Profit</div><div class="vs-val" id="vs-p">—</div></div>
+      <div class="vs-item"><div class="vs-lbl">Revenue</div><div class="vs-val" id="vs-r">—</div></div>
+      <div class="vs-item"><div class="vs-lbl">Margin</div><div class="vs-val" id="vs-m">—</div></div>
+    </div>
   </div>
-</div>
 
-<!-- BREAKDOWN CTA -->
-<a class="breakdown-box" href="https://shopify-app-omega-nine.vercel.app" target="_blank">
-  <div class="bb-icon">🔍</div>
-  <div class="bb-body">
-    <div class="bb-title">View full profit dashboard</div>
-    <div class="bb-sub">Trends · Break-even · AI advisor — free</div>
+  <!-- CHART -->
+  <div class="chart-card" id="chart-card">
+    <div class="card-lbl">7-day profit trend</div>
+    <div class="chart-bars" id="chart-bars"></div>
   </div>
-  <div class="bb-arrow">→</div>
-</a>
 
-<div class="footer">
-  No signup. No data sent anywhere. 100% free.<br>
-  Built by <a href="https://instagram.com/ecommercefix" target="_blank">@ecommercefix</a>
+  <!-- ACHIEVEMENTS -->
+  <div class="ach-card">
+    <div class="card-lbl">Your milestones</div>
+    <div class="ach-row" id="ach-row"></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="hist-card" id="hist-card">
+    <div class="hist-header">
+      <div class="card-lbl" style="margin-bottom:0">History</div>
+      <div style="display:flex;gap:6px">
+        <button class="mini-btn" onclick="exportCSV()">CSV</button>
+        <button class="mini-btn" style="color:var(--red);border-color:var(--red3)" onclick="clearAll()">Clear</button>
+      </div>
+    </div>
+    <div id="hist-list"><div style="font-size:13px;color:var(--t3);text-align:center;padding:16px">No entries yet.</div></div>
+  </div>
+
 </div>
 
+<!-- ══ PHASE 3 — always visible at bottom ══ -->
+<div id="phase3">
+
+  <!-- SHOPIFY SYNC WAITLIST — connects to Google Form -->
+  <div class="waitlist-card">
+    <div class="wl-icon">🔗</div>
+    <div class="wl-title">Shopify Auto-Sync — Coming Soon</div>
+    <div class="wl-sub">Connect your store once. Orders, refunds, and fees pull automatically every day. No more manual entry. Join the waitlist to be first to know.</div>
+    <div class="wl-row">
+      <input class="wl-inp" type="email" id="wl-email" placeholder="your@email.com">
+      <button class="wl-btn" onclick="joinWaitlist()">Notify me</button>
+    </div>
+    <div class="wl-thanks" id="wl-thanks">You are on the waitlist! We will email you when Shopify sync launches. Thank you 🙏</div>
+  </div>
+
+  <!-- FEEDBACK — connects to Google Form -->
+  <div class="feedback-card">
+    <div class="fb-title">💬 What is missing from ProfitSnap?</div>
+    <div class="fb-sub">Your feedback shapes what gets built next. We read every response personally.</div>
+    <textarea class="fb-inp" id="fb-text" placeholder="e.g. I want to track product-level profit, or I wish it connected to my Shopify store automatically..."></textarea>
+    <button class="fb-btn" onclick="submitFeedback()">Send feedback</button>
+    <div class="fb-thanks" id="fb-thanks">Thank you. We genuinely read every message. 🙏</div>
+  </div>
+
+  <div class="footer">
+    Free forever. No data stored on servers. No signup required.<br>
+    Built by <a href="https://instagram.com/ecommercefix" target="_blank">@ecommercefix</a>
+  </div>
+
 </div>
+
+</div><!-- end wrap -->
 
 <div class="toast" id="toast"></div>
-<div class="tooltip" id="tooltip"></div>
+<div class="tip" id="tip"></div>
+
+<!-- ══ GOOGLE FORMS iframe (hidden) for real data capture ══ -->
+<!-- 
+  SETUP INSTRUCTIONS FOR RAMYA:
+  
+  1. Go to forms.google.com
+  2. Create Form 1 — "ProfitSnap Waitlist"
+     Question: Email address (short answer, required)
+  3. Create Form 2 — "ProfitSnap Feedback"  
+     Question 1: Feedback (paragraph, required)
+     Question 2: Date (short answer)
+  4. For each form: click 3 dots > Get pre-filled link
+  5. Fill in a test answer, click Get link
+  6. Copy the URL and replace the placeholders below
+  
+  The form submits silently in the background.
+  You see all responses in Google Sheets automatically.
+-->
+<iframe id="hidden-iframe" name="hidden-iframe" style="display:none"></iframe>
 
 <script>
-// ── STATE ──────────────────────────────────────────────────────
+// ── STATE ──────────────────────────────────────────────
 var CURR='$', CURR_CODE='USD';
-var days=JSON.parse(localStorage.getItem('sfy_days')||'[]');
-var dailyGoal=parseFloat(localStorage.getItem('sfy_goal')||'0');
-var lastProfit=0, lastMargin=0;
+var days=JSON.parse(localStorage.getItem('ps_days')||'[]');
+var dailyGoal=parseFloat(localStorage.getItem('ps_goal')||'0');
+var hasCalculated=false;
+var lastProfit=0,lastMargin=0,lastRev=0,lastData={};
 
-function save(){localStorage.setItem('sfy_days',JSON.stringify(days))}
+// REPLACE THESE WITH YOUR REAL GOOGLE FORM URLs
+// Go to forms.google.com, create the forms, get pre-filled links
+var WAITLIST_FORM_URL='https://docs.google.com/forms/d/e/YOUR_WAITLIST_FORM_ID/formResponse';
+var WAITLIST_EMAIL_FIELD='entry.XXXXXXXXX'; // replace with real entry ID
+var FEEDBACK_FORM_URL='https://docs.google.com/forms/d/e/YOUR_FEEDBACK_FORM_ID/formResponse';
+var FEEDBACK_TEXT_FIELD='entry.XXXXXXXXX'; // replace with real entry ID
+
+function save(){localStorage.setItem('ps_days',JSON.stringify(days))}
 function today(){return new Date().toISOString().split('T')[0]}
+function dayN(d){return['S','M','T','W','T','F','S'][new Date(d+'T12:00:00').getDay()]}
 function fmt(n,sign){
   var abs=Math.abs(n);
   var s=abs>=1000?CURR+(abs/1000).toFixed(1)+'K':CURR+Math.round(abs).toLocaleString();
   return sign&&n>0?'+'+s:sign&&n<0?'-'+CURR+Math.round(abs).toLocaleString():s;
 }
-function dayName(d){return['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(d+'T12:00:00').getDay()]}
+function getV(id){return parseFloat(document.getElementById(id).value)||0}
 
-// ── INIT ───────────────────────────────────────────────────────
-(function init(){
-  var now=new Date();
-  document.getElementById('top-date').textContent=now.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
-  if(dailyGoal>0){document.getElementById('goal-inp').value=dailyGoal;}
-  updateGoalDisplay(null);
-  renderStreak();
-  renderChart();
-  renderHistory();
-  renderAchievements();
-  renderVsYesterday();
-  gtag('event','page_view_profit_checker',{event_category:'engagement'});
+// ── INIT ───────────────────────────────────────────────
+(function(){
+  if(dailyGoal>0)document.getElementById('goal-inp').value=dailyGoal;
+  updateGoal(null);
+  renderStreak();renderChart();renderHistory();renderAchievements();renderVs();
+  // If user has history, show phase 2 immediately
+  if(days.length>0){showPhase2();}
+  gtag('event','page_view',{});
 })();
 
-// ── CURRENCY ───────────────────────────────────────────────────
+function showPhase2(){
+  document.getElementById('phase2').style.display='block';
+  document.getElementById('save-btn').style.display='block';
+  hasCalculated=true;
+}
+
+// ── CURRENCY ───────────────────────────────────────────
 function setCurr(sym,code){
   CURR=sym;CURR_CODE=code;
   document.querySelectorAll('.curr-btn').forEach(function(b){b.classList.remove('on')});
   document.getElementById('c-'+code.toLowerCase()).classList.add('on');
   document.querySelectorAll('.csym').forEach(function(el){el.textContent=sym});
-  document.getElementById('goal-sym').textContent=sym;
-  liveCalc();
-  gtag('event','currency_changed',{currency:code});
+  if(hasCalculated)liveCalc();
 }
 
-// ── GOAL ───────────────────────────────────────────────────────
+// ── TOGGLES ────────────────────────────────────────────
+function toggleAdv(){
+  var s=document.getElementById('adv-sec');
+  var ic=document.getElementById('adv-ic');
+  s.classList.toggle('show');
+  ic.classList.toggle('open');
+}
+function toggleExp(id){
+  document.getElementById(id).classList.toggle('show');
+}
+
+// ── GOAL ───────────────────────────────────────────────
 function saveGoal(){
   var v=parseFloat(document.getElementById('goal-inp').value)||0;
-  dailyGoal=v;
-  localStorage.setItem('sfy_goal',v);
-  updateGoalDisplay(lastProfit||null);
-  showToast(v>0?'Daily goal set to '+fmt(v):'Goal cleared');
+  dailyGoal=v;localStorage.setItem('ps_goal',v);
+  updateGoal(lastProfit||null);
+  if(v>0)showToast('Goal set to '+fmt(v));
 }
-
-function updateGoalDisplay(profit){
-  var gd=document.getElementById('goal-display');
+function updateGoal(profit){
+  var gv=document.getElementById('goal-val');
   var gbw=document.getElementById('goal-bar-wrap');
-  if(dailyGoal<=0){gd.textContent='Not set';gbw.style.display='none';return;}
-  gd.textContent=fmt(dailyGoal)+' today';
+  if(dailyGoal<=0){gv.textContent='Not set';gbw.style.display='none';return;}
+  gv.textContent=fmt(dailyGoal);
   gbw.style.display='block';
   var p=profit!==null?profit:0;
   var pct=Math.min(100,Math.max(0,p/dailyGoal*100));
   var fill=document.getElementById('goal-fill');
   fill.style.width=pct+'%';
   fill.style.background=pct>=100?'var(--grn)':pct>=60?'var(--acc)':'var(--amb)';
-  document.getElementById('goal-bar-lbl-mid').textContent=pct>=100?'🎯 Goal reached!':Math.round(pct)+'% of goal';
-  document.getElementById('goal-bar-lbl-end').textContent=fmt(dailyGoal);
+  document.getElementById('gl2').textContent=pct>=100?'🎯 Hit!':Math.round(pct)+'%';
+  document.getElementById('gl3').textContent=fmt(dailyGoal);
 }
 
-// ── STREAK ─────────────────────────────────────────────────────
+// ── STREAK ─────────────────────────────────────────────
 function calcStreak(){
   if(!days.length)return 0;
   var sorted=days.slice().sort(function(a,b){return b.date.localeCompare(a.date)});
-  var streak=0;
-  var check=today();
-  var yd=new Date();yd.setDate(yd.getDate()-1);var yesterday=yd.toISOString().split('T')[0];
+  var streak=0,check=today();
+  var yd=new Date();yd.setDate(yd.getDate()-1);
+  var yesterday=yd.toISOString().split('T')[0];
   if(sorted[0].date!==today()&&sorted[0].date!==yesterday)return 0;
   if(sorted[0].date===yesterday)check=yesterday;
   for(var i=0;i<sorted.length;i++){
@@ -434,260 +613,317 @@ function calcStreak(){
   }
   return streak;
 }
-
 function renderStreak(){
   var streak=calcStreak();
-  var numEl=document.getElementById('streak-num');
-  var banner=document.getElementById('streak-banner');
-  var titleEl=document.getElementById('streak-title');
-  var subEl=document.getElementById('streak-sub');
-  numEl.textContent=streak;
-  if(streak===0){numEl.className='streak-num zero';banner.className='streak-banner zero';titleEl.textContent='Start your streak today';subEl.textContent='Log your profit once a day'}
-  else if(streak<3){numEl.className='streak-num';banner.className='streak-banner alive';titleEl.textContent='🌱 Building your habit';subEl.textContent=streak+' day streak — keep going!'}
-  else if(streak<7){numEl.className='streak-num';banner.className='streak-banner alive';titleEl.textContent='🔥 '+streak+' day streak!';subEl.textContent='You are in the top 20% of users'}
-  else if(streak<14){numEl.className='streak-num';banner.className='streak-banner alive';titleEl.textContent='⚡ '+streak+' days strong!';subEl.textContent='One week+ streak — you are serious'}
-  else if(streak<30){numEl.className='streak-num';banner.className='streak-banner alive';titleEl.textContent='💎 '+streak+' day streak!';subEl.textContent='Two weeks+ — top 5% of all users'}
-  else{numEl.className='streak-num';banner.className='streak-banner alive';titleEl.textContent='👑 '+streak+' day legend!';subEl.textContent='30+ days — absolute champion'}
-
-  // Dots for last 7 days
-  var dotsEl=document.getElementById('streak-dots');
-  var datesWithData=new Set(days.map(function(d){return d.date}));
+  var card=document.getElementById('streak-card');
+  var num=document.getElementById('sk-num');
+  var title=document.getElementById('sk-title');
+  var sub=document.getElementById('sk-sub');
+  num.textContent=streak;
+  if(streak===0){num.className='sk-num zero';card.className='streak-card zero';title.textContent='Start your daily streak';sub.textContent='Save your result each day';}
+  else if(streak<3){num.className='sk-num';card.className='streak-card alive';title.textContent='🌱 Building habit';sub.textContent=streak+' day streak — keep going!';}
+  else if(streak<7){num.className='sk-num';card.className='streak-card alive';title.textContent='🔥 '+streak+' day streak!';sub.textContent='Consistency is your superpower';}
+  else if(streak<14){num.className='sk-num';card.className='streak-card alive';title.textContent='⚡ '+streak+' days!';sub.textContent='One full week+ — serious seller';}
+  else{num.className='sk-num';card.className='streak-card alive';title.textContent='👑 '+streak+' day legend';sub.textContent='Top 1% of all ProfitSnap users';}
+  var datesSet=new Set(days.map(function(d){return d.date}));
   var dotHtml='';
   for(var i=6;i>=0;i--){
     var d=new Date();d.setDate(d.getDate()-i);
     var ds=d.toISOString().split('T')[0];
-    var dn=dayName(ds).slice(0,1);
     var isToday=ds===today();
-    var hasData=datesWithData.has(ds);
-    var cls=isToday&&hasData?'sd today':hasData?'sd hit':isToday?'sd future':new Date(ds)<new Date(today())?'sd miss':'sd future';
-    dotHtml+='<div class="'+cls+'">'+dn+'</div>';
+    var hasData=datesSet.has(ds);
+    var cls=isToday&&hasData?'sd today-hit':hasData?'sd hit':isToday?'sd empty':new Date(ds)<new Date(today())?'sd miss':'sd empty';
+    dotHtml+='<div class="'+cls+'">'+dayN(ds)+'</div>';
   }
-  dotsEl.innerHTML=dotHtml;
+  document.getElementById('sk-dots').innerHTML=dotHtml;
 }
 
-// ── ACHIEVEMENTS ────────────────────────────────────────────────
+// ── ACHIEVEMENTS ────────────────────────────────────────
 function renderAchievements(){
-  var streak=calcStreak();
-  var total=days.length;
+  var streak=calcStreak(),total=days.length;
   var profDays=days.filter(function(d){return d.profit>0}).length;
   var items=[
-    {icon:'📅',lbl:'Day 1',done:total>=1},
-    {icon:'🔥',lbl:'3 streak',done:streak>=3},
-    {icon:'⚡',lbl:'7 streak',done:streak>=7},
-    {icon:'💰',lbl:'First profit',done:profDays>=1},
-    {icon:'📈',lbl:'7 days',done:total>=7},
-    {icon:'💎',lbl:'14 streak',done:streak>=14},
-    {icon:'🚀',lbl:'30 days',done:total>=30},
-    {icon:'👑',lbl:'30 streak',done:streak>=30},
+    {ic:'📅',lbl:'Day 1',done:total>=1},
+    {ic:'🔥',lbl:'3 streak',done:streak>=3},
+    {ic:'⚡',lbl:'7 streak',done:streak>=7},
+    {ic:'💰',lbl:'Profit day',done:profDays>=1},
+    {ic:'📈',lbl:'7 days',done:total>=7},
+    {ic:'💎',lbl:'14 streak',done:streak>=14},
+    {ic:'🚀',lbl:'30 days',done:total>=30},
+    {ic:'👑',lbl:'30 streak',done:streak>=30},
   ];
   var nextSet=false;
-  var html=items.map(function(it){
-    var cls=it.done?'ach unlocked':(!nextSet&&!it.done?(nextSet=true,'ach next'):'ach');
-    return '<div class="'+cls+'"><div class="ach-icon">'+(it.done?'✅':it.icon)+'</div><div class="ach-lbl">'+it.lbl+'</div></div>';
+  document.getElementById('ach-row').innerHTML=items.map(function(it){
+    var cls=it.done?'ach done':(!nextSet&&!it.done?(nextSet=true,'ach next'):'ach');
+    return '<div class="'+cls+'"><div class="ach-ic">'+(it.done?'✅':it.ic)+'</div><div class="ach-lbl">'+it.lbl+'</div></div>';
   }).join('');
-  document.getElementById('ach-row').innerHTML=html;
 }
 
-// ── CHART ──────────────────────────────────────────────────────
+// ── CHART ──────────────────────────────────────────────
 function renderChart(){
   var last7=days.slice(-7);
-  var chartCard=document.getElementById('chart-card');
-  if(last7.length<2){chartCard.style.display='none';return;}
-  chartCard.style.display='block';
+  var cc=document.getElementById('chart-card');
+  if(last7.length<2){cc.style.display='none';return;}
+  cc.style.display='block';
   var maxP=Math.max.apply(null,last7.map(function(d){return Math.abs(d.profit)}))||1;
-  var html=last7.map(function(d){
-    var h=Math.max(5,Math.abs(d.profit)/maxP*72);
-    var col=d.profit>=0?'var(--grn)':'var(--red)';
-    var isToday=d.date===today();
-    var tip=d.date+': '+fmt(d.profit)+'  ('+d.margin.toFixed(1)+'%)';
-    return '<div class="bar-col"><div class="bar-tip">'+tip+'</div><div class="bar-inner" style="height:'+h+'px;background:'+col+';opacity:'+(isToday?'1':'.55')+'"></div><div class="bar-day">'+dayName(d.date).slice(0,1)+'</div></div>';
+  document.getElementById('chart-bars').innerHTML=last7.map(function(d){
+    var h=Math.max(4,Math.abs(d.profit)/maxP*64);
+    return '<div class="bar-col"><div class="bar-tip">'+fmt(d.profit)+' ('+d.margin.toFixed(1)+'%)</div><div class="bar-inner" style="height:'+h+'px;background:'+(d.profit>=0?'var(--grn)':'var(--red)')+';opacity:'+(d.date===today()?'1':'.55')+'"></div><div class="bar-lbl">'+dayN(d.date)+'</div></div>';
   }).join('');
-  document.getElementById('chart-wrap').innerHTML=html;
 }
 
-// ── VS YESTERDAY ───────────────────────────────────────────────
-function renderVsYesterday(){
-  var vsCard=document.getElementById('vs-card');
-  if(days.length<2){vsCard.style.display='none';return;}
+// ── VS YESTERDAY ───────────────────────────────────────
+function renderVs(){
+  var vc=document.getElementById('vs-card');
+  if(days.length<2){vc.style.display='none';return;}
   var td=days.find(function(d){return d.date===today()});
   var sorted=days.slice().sort(function(a,b){return b.date.localeCompare(a.date)});
-  var yesterday=sorted.find(function(d){return d.date!==today()});
-  if(!td||!yesterday){vsCard.style.display='none';return;}
-  vsCard.style.display='block';
-  var dp=td.profit-yesterday.profit;
-  var dr=td.rev-yesterday.rev;
-  var dm=td.margin-yesterday.margin;
-  document.getElementById('vs-profit').textContent=fmt(dp,true);
-  document.getElementById('vs-profit').style.color=dp>=0?'var(--grn)':'var(--red)';
-  document.getElementById('vs-rev').textContent=fmt(dr,true);
-  document.getElementById('vs-rev').style.color=dr>=0?'var(--grn)':'var(--red)';
-  document.getElementById('vs-margin').textContent=(dm>=0?'+':'')+dm.toFixed(1)+'%';
-  document.getElementById('vs-margin').style.color=dm>=0?'var(--grn)':'var(--red)';
+  var yest=sorted.find(function(d){return d.date!==today()});
+  if(!td||!yest){vc.style.display='none';return;}
+  vc.style.display='block';
+  var dp=td.profit-yest.profit,dr=td.rev-yest.rev,dm=td.margin-yest.margin;
+  var vp=document.getElementById('vs-p'),vr=document.getElementById('vs-r'),vm=document.getElementById('vs-m');
+  vp.textContent=fmt(dp,true);vp.style.color=dp>=0?'var(--grn)':'var(--red)';
+  vr.textContent=fmt(dr,true);vr.style.color=dr>=0?'var(--grn)':'var(--red)';
+  vm.textContent=(dm>=0?'+':'')+dm.toFixed(1)+'%';vm.style.color=dm>=0?'var(--grn)':'var(--red)';
 }
 
-// ── HISTORY ────────────────────────────────────────────────────
+// ── HISTORY ────────────────────────────────────────────
 function renderHistory(){
   var el=document.getElementById('hist-list');
-  if(!days.length){el.innerHTML='<div style="font-size:13px;color:var(--t3);text-align:center;padding:24px 0">No entries yet. Start tracking today.</div>';return;}
+  if(!days.length){el.innerHTML='<div style="font-size:13px;color:var(--t3);text-align:center;padding:16px 0">No entries yet.</div>';return;}
   var sorted=days.slice().sort(function(a,b){return b.date.localeCompare(a.date)});
   el.innerHTML=sorted.slice(0,14).map(function(d){
     var isToday=d.date===today();
-    var roas=d.ads>0?(d.rev/d.ads).toFixed(1)+'x':null;
-    return '<div class="hist-item">'+
-      '<div><div class="hi-date">'+(isToday?'Today — ':'')+d.date+'</div><div class="hi-rev">Rev: '+fmt(d.rev)+(d.ads>0?' · Ads: '+fmt(d.ads):'')+( roas?' · ROAS: '+roas:'')+'</div></div>'+
-      '<div><div class="hi-profit" style="color:'+(d.profit>=0?'var(--grn)':'var(--red)')+'">'+fmt(d.profit,true)+'</div><div class="hi-margin">'+d.margin.toFixed(1)+'% margin</div></div>'+
-      '</div>';
+    return '<div class="hist-row">'+
+      '<div><div class="hr-date">'+(isToday?'Today — ':'')+d.date+'</div>'+
+      '<div class="hr-sub">Rev: '+fmt(d.rev)+(d.ads>0?' · Ads: '+fmt(d.ads):'')+'</div></div>'+
+      '<div><div class="hr-profit" style="color:'+(d.profit>=0?'var(--grn)':'var(--red)')+'">'+fmt(d.profit,true)+'</div>'+
+      '<div class="hr-margin">'+d.margin.toFixed(1)+'% margin</div></div></div>';
   }).join('');
 }
 
-// ── LIVE CALC ──────────────────────────────────────────────────
+// ── CALC ───────────────────────────────────────────────
 function liveCalc(){
-  var rev=parseFloat(document.getElementById('revenue').value)||0;
-  var ads=parseFloat(document.getElementById('ads').value)||0;
-  var cost=parseFloat(document.getElementById('cost').value)||0;
-  if(rev>0||ads>0||cost>0){
-    renderResult(rev,ads,cost);
-    document.getElementById('save-btn').style.display='block';
-  }
+  if(!getV('f-rev')&&!getV('f-ads')&&!getV('f-cogs'))return;
+  renderResult();
+  if(!hasCalculated){showPhase2();}
 }
 
 function calculate(){
-  var rev=parseFloat(document.getElementById('revenue').value)||0;
-  var ads=parseFloat(document.getElementById('ads').value)||0;
-  var cost=parseFloat(document.getElementById('cost').value)||0;
-  if(!rev&&!ads&&!cost){showTooltip('Enter at least one number first');return;}
-  renderResult(rev,ads,cost);
-  document.getElementById('save-btn').style.display='block';
-  gtag('event','check_profit_clicked',{event_category:'engagement',revenue:rev,profit:rev-ads-cost});
+  if(!getV('f-rev')&&!getV('f-ads')&&!getV('f-cogs')){showTip('Enter at least one number first');return;}
+  renderResult();
+  if(!hasCalculated){showPhase2();}
+  gtag('event','calculate',{currency:CURR_CODE,revenue:getV('f-rev')});
 }
 
 function loadExample(){
   var isINR=CURR_CODE==='INR';
-  document.getElementById('revenue').value=isINR?50000:1200;
-  document.getElementById('ads').value=isINR?18000:380;
-  document.getElementById('cost').value=isINR?14000:290;
-  liveCalc();
-  showTooltip('Example numbers loaded');
+  document.getElementById('f-rev').value=isINR?80000:1800;
+  document.getElementById('f-ads').value=isINR?22000:480;
+  document.getElementById('f-cogs').value=isINR?20000:420;
+  document.getElementById('adv-sec').classList.add('show');
+  document.getElementById('adv-ic').classList.add('open');
+  document.getElementById('f-ship').value=isINR?4000:80;
+  document.getElementById('f-fees').value=isINR?2400:52;
+  document.getElementById('f-ref').value=isINR?1600:35;
+  renderResult();
+  if(!hasCalculated){showPhase2();}
+  showTip('Example loaded with 6 real costs');
   gtag('event','example_loaded',{});
 }
 
-function renderResult(rev,ads,cost){
-  var profit=rev-ads-cost;
-  var margin=rev>0?(profit/rev*100):0;
-  var monthly=profit*30;
-  var roas=ads>0?(rev/ads):0;
-  lastProfit=profit;lastMargin=margin;
-  document.getElementById('result-box').style.display='block';
+function renderResult(){
+  var rev=getV('f-rev'),ads=getV('f-ads'),cogs=getV('f-cogs');
+  var ship=getV('f-ship'),fees=getV('f-fees'),ref=getV('f-ref');
+  var app=getV('f-app'),oth=getV('f-oth');
+  var totalCosts=ads+cogs+ship+fees+ref+app+oth;
+  var profit=rev-totalCosts,margin=rev>0?(profit/rev*100):0;
+  var monthly=profit*30,roas=ads>0?(rev/ads):0;
+  lastProfit=profit;lastMargin=margin;lastRev=rev;
+  lastData={rev,ads,cogs,ship,fees,ref,app,oth,totalCosts,profit,margin};
+  updateGoal(profit);
+
+  document.getElementById('result-wrap').style.display='block';
   document.getElementById('r-profit').textContent=(profit<0?'-':'')+fmt(profit);
-  document.getElementById('r-monthly').textContent='At this rate: '+(monthly<0?'-':'')+fmt(monthly)+' per month';
+  document.getElementById('r-monthly').textContent='At this rate: '+(monthly<0?'-':'')+fmt(monthly)+' / month';
+
   var mPct=Math.min(100,Math.max(0,margin/50*100));
-  var mCol=margin>=20?'var(--grn)':margin>=10?'var(--amb)':'var(--red)';
+  var mCol=margin>=25?'var(--grn)':margin>=15?'var(--acc)':margin>=8?'var(--amb)':'var(--red)';
   document.getElementById('mm-fill').style.width=mPct+'%';
   document.getElementById('mm-fill').style.background=mCol;
   document.getElementById('mm-pct').textContent=margin.toFixed(1)+'%';
-  updateGoalDisplay(profit);
+
+  // Cost breakdown
+  var rows=[];
+  rows.push({lbl:'Revenue',val:fmt(rev),cls:'',bold:false});
+  if(ads>0)rows.push({lbl:'Ad Spend',val:'-'+fmt(ads),cls:'',bold:false});
+  if(cogs>0)rows.push({lbl:'Product Cost',val:'-'+fmt(cogs),cls:'',bold:false});
+  if(ship>0)rows.push({lbl:'Shipping',val:'-'+fmt(ship),cls:'',bold:false});
+  if(fees>0)rows.push({lbl:'Shopify Fees',val:'-'+fmt(fees),cls:'',bold:false});
+  if(ref>0)rows.push({lbl:'Refunds',val:'-'+fmt(ref),cls:'',bold:false});
+  if(app>0)rows.push({lbl:'App Fees',val:'-'+fmt(app),cls:'',bold:false});
+  if(oth>0)rows.push({lbl:'Other Costs',val:'-'+fmt(oth),cls:'',bold:false});
+  rows.push({lbl:'Real Profit',val:(profit<0?'-':'')+fmt(profit),cls:profit>=0?'color:var(--grn)':'color:var(--red)',bold:true});
+  document.getElementById('breakdown').innerHTML=
+    '<div class="breakdown-title">Full cost breakdown</div>'+
+    rows.map(function(r){return '<div class="bd-row"><span class="bd-lbl" style="'+(r.bold?'color:var(--t1)':'')+'">'+r.lbl+'</span><span class="bd-val" style="'+r.cls+(r.bold?';font-weight:700':'')+'">'+r.val+'</span></div>'}).join('');
+
+  // Status
   var status,icon,bg,insight,actions;
   if(profit<0){
-    status='Losing money';icon='🔴';bg='linear-gradient(135deg,var(--red2),rgba(255,71,87,.03))';
+    status='Losing money today';icon='🔴';bg='linear-gradient(135deg,var(--red2),rgba(255,71,87,.02))';
     document.getElementById('r-profit').style.color='var(--red)';
     document.getElementById('r-status').style.color='var(--red)';
-    insight='<b style="color:var(--red)">Every hour this continues, the loss grows.</b><br>Losing '+fmt(Math.abs(profit))+' today = '+fmt(Math.abs(monthly))+' per month if nothing changes.';
-    actions=[{dot:'var(--red)',t:'<b>Pause or reduce ad spend now</b> — every rupee spent increases your loss'},{dot:'var(--amb)',t:'<b>Find your highest cost</b> — ads, product cost, or shipping? Cut it first'},{dot:'var(--amb)',t:'<b>Can you raise price by 10%?</b> — even small increases flip you to profit'}];
-  }else if(margin<10){
-    status='Barely profitable';icon='🟡';bg='linear-gradient(135deg,var(--amb2),rgba(255,184,51,.03))';
+    var biggestCost=ads>=cogs&&ads>=ship?'ad spend ('+fmt(ads)+')':cogs>=ship?'product cost ('+fmt(cogs)+')':'shipping ('+fmt(ship)+')';
+    insight='<b style="color:var(--red)">Costs exceed revenue by '+fmt(Math.abs(profit))+'.</b> Your biggest cost is '+biggestCost+'. Reducing this is your most urgent action.';
+    actions=[
+      {dot:'var(--red)',t:'<b>Pause or reduce ads</b> — every rupee spent now increases the loss'},
+      {dot:'var(--amb)',t:'<b>Review your biggest cost</b> — find one way to reduce it by 10%'},
+      {dot:'var(--amb)',t:'<b>Can you raise your price?</b> — even a 10% price increase can flip you to profit'},
+    ];
+  }else if(margin<15){
+    status='Profitable — margin too thin';icon='🟡';bg='linear-gradient(135deg,var(--amb2),rgba(255,184,51,.02))';
     document.getElementById('r-profit').style.color='var(--amb)';
     document.getElementById('r-status').style.color='var(--amb)';
-    insight='<b style="color:var(--amb)">Making money but one bad week wipes it out.</b><br>At '+margin.toFixed(1)+'% margin you have no safety net. Target 15%+ before scaling.'+(roas>0?' ROAS: '+roas.toFixed(1)+'x.':'');
-    actions=[{dot:'var(--amb)',t:'<b>Hold ad spend level</b> — do not increase until margin hits 15%'},{dot:'var(--grn)',t:'<b>Add an upsell or bundle</b> — even '+CURR+'5 more per order improves margin significantly'},{dot:'var(--grn)',t:'<b>Renegotiate product cost</b> — 5% supplier discount can move you to healthy margin'}];
-  }else if(margin<20){
-    status='Profitable — stay cautious';icon='🟢';bg='linear-gradient(135deg,var(--grn2),rgba(0,232,135,.03))';
+    insight='<b style="color:var(--amb)">Profitable at '+margin.toFixed(1)+'% but fragile.</b> One bad week breaks even. Target 15%+ before scaling.'+(roas>0?' ROAS: '+roas.toFixed(1)+'x.':'');
+    actions=[
+      {dot:'var(--amb)',t:'<b>Hold ad spend level</b> — do not increase until margin hits 15%'},
+      {dot:'var(--grn)',t:'<b>Add an upsell or bundle</b> — '+CURR+'5 more per order pushes margin significantly'},
+      {dot:'var(--grn)',t:'<b>Renegotiate product cost</b> — a 5% supplier discount can make the difference'},
+    ];
+  }else if(margin<25){
+    status='Profitable — solid margin';icon='🟢';bg='linear-gradient(135deg,var(--grn2),rgba(0,232,135,.02))';
     document.getElementById('r-profit').style.color='var(--grn)';
     document.getElementById('r-status').style.color='var(--grn)';
-    insight='<b style="color:var(--grn)">Profitable at '+margin.toFixed(1)+'% margin.</b><br>Healthy but room to improve. '+(roas>0?'ROAS '+roas.toFixed(1)+'x '+(roas>=3?'is good.':'— aim for 3x+.'):'')+'Track daily to catch drops early.';
-    actions=[{dot:'var(--grn)',t:'<b>Test increasing ad budget by 10–15%</b> — margin supports careful scaling'},{dot:'var(--acc)',t:'<b>Find your best product</b> — double down on what drives most profit'},{dot:'var(--acc)',t:'<b>Track this daily</b> — save each day to spot when margin starts dropping'}];
+    insight='<b style="color:var(--grn)">Good margin at '+margin.toFixed(1)+'%.</b> Healthy. You can test a careful 10-15% increase in ad spend.'+(roas>0?' ROAS: '+roas.toFixed(1)+'x.':'');
+    actions=[
+      {dot:'var(--grn)',t:'<b>Test increasing ad spend by 10-15%</b> on your best campaign'},
+      {dot:'var(--acc)',t:'<b>Track this daily</b> — save each entry to catch when margin starts dropping'},
+      {dot:'var(--acc)',t:'<b>Find your best product</b> — double down on what drives the most profit'},
+    ];
   }else{
-    status='Strong profit — scale it';icon='🚀';bg='linear-gradient(135deg,rgba(0,232,135,.08),rgba(0,232,135,.02))';
+    status='Strong profit — scale it';icon='🚀';bg='linear-gradient(135deg,rgba(0,232,135,.08),rgba(0,232,135,.01))';
     document.getElementById('r-profit').style.color='var(--grn)';
     document.getElementById('r-status').style.color='var(--grn)';
-    var sp=Math.round((margin-15)/margin*100);
-    insight='<b style="color:var(--grn)">Excellent — '+margin.toFixed(1)+'% margin is strong.</b><br>Safe to increase ad spend by up to <b>'+sp+'%</b> while staying profitable. '+(roas>0?'ROAS '+roas.toFixed(1)+'x '+(roas>=4?'— outstanding!':'is solid.'):'');
-    actions=[{dot:'var(--grn)',t:'<b>Scale ads 15–20%</b> on best campaign — margin fully supports this'},{dot:'var(--grn)',t:'<b>Test a new audience</b> — strong economics mean you can afford to experiment'},{dot:'var(--acc)',t:'<b>Build repeat purchase flow</b> — email or SMS brings buyers back at zero ad cost'}];
+    insight='<b style="color:var(--grn)">Excellent — '+margin.toFixed(1)+'% is a strong margin.</b>'+(roas>0?' ROAS: '+roas.toFixed(1)+'x.':'')+' Scale methodically and track daily to protect it.';
+    actions=[
+      {dot:'var(--grn)',t:'<b>Scale ads 15-20%</b> on your best campaign — margin fully supports this'},
+      {dot:'var(--grn)',t:'<b>Test a new audience</b> — strong economics mean you can afford to experiment'},
+      {dot:'var(--acc)',t:'<b>Build repeat purchase flow</b> — email or SMS brings buyers back at zero ad cost'},
+    ];
   }
-  document.getElementById('result-box').style.background=bg;
+
+  document.getElementById('result-card').style.background=bg;
   document.getElementById('r-icon').textContent=icon;
   document.getElementById('r-status').textContent=status;
   document.getElementById('r-insight').innerHTML=insight;
-  document.getElementById('r-actions').innerHTML='<div class="wtd-label">What to do right now</div>'+actions.map(function(a){return'<div class="rai"><div class="rai-dot" style="background:'+a.dot+'"></div><div>'+a.t+'</div></div>'}).join('');
+  document.getElementById('r-actions').innerHTML=
+    '<div class="r-actions-lbl">What to do right now</div>'+
+    actions.map(function(a){return'<div class="r-action"><div class="r-action-dot" style="background:'+a.dot+'"></div><div>'+a.t+'</div></div>'}).join('');
 }
 
-// ── SAVE TODAY ─────────────────────────────────────────────────
+// ── SAVE ───────────────────────────────────────────────
 function saveToday(){
-  var rev=parseFloat(document.getElementById('revenue').value)||0;
-  var ads=parseFloat(document.getElementById('ads').value)||0;
-  var cost=parseFloat(document.getElementById('cost').value)||0;
-  if(!rev&&!ads&&!cost){showTooltip('Enter numbers first');return;}
-  var profit=rev-ads-cost;
-  var margin=rev>0?(profit/rev*100):0;
-  var todayStr=today();
-  days=days.filter(function(d){return d.date!==todayStr});
-  days.push({date:todayStr,rev:rev,ads:ads,cost:cost,profit:profit,margin:margin});
+  var rev=getV('f-rev'),ads=getV('f-ads'),cogs=getV('f-cogs');
+  var ship=getV('f-ship'),fees=getV('f-fees'),ref=getV('f-ref'),app=getV('f-app'),oth=getV('f-oth');
+  if(!rev&&!ads&&!cogs){showTip('Enter numbers first');return;}
+  var totalCosts=ads+cogs+ship+fees+ref+app+oth;
+  var profit=rev-totalCosts,margin=rev>0?(profit/rev*100):0;
+  var d=today();
+  days=days.filter(function(x){return x.date!==d});
+  days.push({date:d,rev,ads,cogs,ship,fees,ref,app,oth,totalCosts,profit,margin});
   days.sort(function(a,b){return a.date.localeCompare(b.date)});
   save();
   var streak=calcStreak();
-  renderStreak();renderChart();renderHistory();renderAchievements();renderVsYesterday();
-  showToast('✅ Day '+days.length+' saved! Streak: '+streak+' 🔥');
-  document.getElementById('save-btn').style.display='none';
-  checkStreakMilestone(streak);
-  gtag('event','day_saved',{streak:streak,profit:Math.round(profit),margin:Math.round(margin)});
+  renderStreak();renderChart();renderHistory();renderAchievements();renderVs();
+  showToast('Day '+days.length+' saved! Streak: '+streak+' 🔥');
+  checkMilestone(streak,profit);
+  gtag('event','day_saved',{streak,margin:Math.round(margin)});
 }
 
-function checkStreakMilestone(streak){
-  var milestones={3:'🔥 3-day streak! You are building a habit.',7:'⚡ One full week streak!',14:'💎 Two weeks — incredible!',30:'👑 30 days — you are a legend!'};
-  if(milestones[streak])setTimeout(function(){showToast(milestones[streak])},1200);
+function checkMilestone(streak,profit){
+  var msgs={3:'🔥 3-day streak — habit forming!',7:'⚡ One full week streak!',14:'💎 Two weeks — incredible!',30:'👑 30 days — legendary!'};
+  if(msgs[streak])setTimeout(function(){showToast(msgs[streak])},1200);
+  if(profit>0&&days.length>1){
+    var maxP=Math.max.apply(null,days.map(function(d){return d.profit}));
+    if(profit>=maxP)setTimeout(function(){showToast('📈 New personal best profit day!')},2500);
+  }
 }
 
-// ── SHARE ──────────────────────────────────────────────────────
+// ── SHARE ──────────────────────────────────────────────
 function shareResult(){
   var monthly=lastProfit*30;
+  var url='profitsnap.vercel.app'; // UPDATE THIS to your real domain
   var text=lastProfit<0?
-    'I just checked my real Shopify profit — turns out I was LOSING '+CURR+Math.abs(Math.round(lastProfit)).toLocaleString()+' today 😅\n\nRevenue looked fine but after ads + costs = actual loss.\n\nEvery store owner needs this free check:\nshopify-rfyq20un5-rcramya116-8792s-projects.vercel.app\n\n#Shopify #Ecommerce':
-    'Just checked my real Shopify profit: '+lastMargin.toFixed(1)+'% margin ✅\n\nReal profit after all costs: '+CURR+Math.abs(Math.round(lastProfit)).toLocaleString()+'\nAt this rate: '+fmt(monthly)+'/month\n\nMost sellers only track revenue. Free checker:\nshopify-rfyq20un5-rcramya116-8792s-projects.vercel.app\n\n#Shopify #EcommerceProfit';
+    'Calculated my real Shopify profit today.\n\nAfter all 8 costs (ads, product, shipping, fees, refunds...):\n\nReal profit: '+fmt(lastProfit)+'\nAt this rate: '+fmt(monthly)+'/month\n\nRevenue looked fine. The real number told a different story.\n\nFree calculator: '+url+'\n\n#ShopifyProfit #Ecommerce':
+    'Real Shopify profit check today: '+lastMargin.toFixed(1)+'% margin ✅\n\nActual profit after all 8 costs: '+fmt(lastProfit)+'\nAt this rate: '+fmt(monthly)+'/month\n\nFree calculator (includes all 8 costs):\n'+url+'\n\n#ShopifyProfit #Ecommerce';
   var btn=document.getElementById('share-btn');
-  var bt=document.getElementById('share-text');
+  var bt=document.getElementById('share-txt');
   if(navigator.clipboard){
     navigator.clipboard.writeText(text).then(function(){
-      btn.classList.add('copied');bt.textContent='✓ Copied — paste on Twitter, Reddit or WhatsApp!';
+      btn.classList.add('copied');bt.textContent='✓ Copied — paste on Twitter, Reddit or WhatsApp';
       setTimeout(function(){btn.classList.remove('copied');bt.textContent='Share your result'},3000);
     });
   }else{prompt('Copy:',text);}
-  gtag('event','share_result',{profit_positive:lastProfit>=0,margin:Math.round(lastMargin)});
+  gtag('event','share',{profit_positive:lastProfit>=0});
 }
 
-// ── EXPORT ─────────────────────────────────────────────────────
+// ── GOOGLE FORM SUBMISSIONS (real backend) ──────────────
+function joinWaitlist(){
+  var em=document.getElementById('wl-email').value.trim();
+  if(!em||!em.includes('@')){showTip('Please enter a valid email');return;}
+
+  // Submit to Google Form
+  var formData=new FormData();
+  formData.append(WAITLIST_EMAIL_FIELD,em);
+  fetch(WAITLIST_FORM_URL,{method:'POST',body:formData,mode:'no-cors'})
+    .catch(function(){/* no-cors means we ignore the response */});
+
+  // Always show success (Google Forms always accepts)
+  document.getElementById('wl-email').value='';
+  document.getElementById('wl-thanks').style.display='block';
+  gtag('event','waitlist_join',{});
+}
+
+function submitFeedback(){
+  var text=document.getElementById('fb-text').value.trim();
+  if(!text){showTip('Please write your feedback first');return;}
+
+  // Submit to Google Form
+  var formData=new FormData();
+  formData.append(FEEDBACK_TEXT_FIELD,text);
+  fetch(FEEDBACK_FORM_URL,{method:'POST',body:formData,mode:'no-cors'})
+    .catch(function(){});
+
+  document.getElementById('fb-text').value='';
+  document.getElementById('fb-thanks').style.display='block';
+  setTimeout(function(){document.getElementById('fb-thanks').style.display='none'},5000);
+  gtag('event','feedback_submit',{length:text.length});
+}
+
+// ── EXPORT + CLEAR ─────────────────────────────────────
 function exportCSV(){
-  var rows=['Date,Revenue,AdSpend,ProductCost,Profit,Margin%'];
-  days.forEach(function(d){rows.push([d.date,d.rev,d.ads,d.cost,d.profit.toFixed(2),d.margin.toFixed(2)].join(','))});
+  var rows=['Date,Revenue,AdSpend,COGS,Shipping,ShopifyFees,Refunds,AppFees,Other,TotalCosts,Profit,Margin%'];
+  days.forEach(function(d){
+    rows.push([d.date,d.rev,d.ads,d.cogs,d.ship||0,d.fees||0,d.ref||0,d.app||0,d.oth||0,d.totalCosts,d.profit.toFixed(2),d.margin.toFixed(2)].join(','));
+  });
   var blob=new Blob([rows.join('\n')],{type:'text/csv'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='shopify-profit-data.csv';a.click();
-  showToast('CSV exported!');
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='profitsnap-export.csv';a.click();
+  showToast('CSV downloaded!');
 }
 
 function clearAll(){
   if(confirm('Delete all saved data? This cannot be undone.')){
-    days=[];save();renderStreak();renderChart();renderHistory();renderAchievements();renderVsYesterday();
-    showToast('All data cleared');
+    days=[];save();
+    renderStreak();renderChart();renderHistory();renderAchievements();renderVs();
+    showToast('Data cleared');
   }
 }
 
-// ── UTILS ──────────────────────────────────────────────────────
-function showToast(msg){
-  var el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');
-  setTimeout(function(){el.classList.remove('show')},2800);
-}
-function showTooltip(msg){
-  var el=document.getElementById('tooltip');el.textContent=msg;el.classList.add('show');
-  setTimeout(function(){el.classList.remove('show')},2500);
-}
+// ── UTILS ──────────────────────────────────────────────
+function showToast(msg){var el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(function(){el.classList.remove('show')},2800);}
+function showTip(msg){var el=document.getElementById('tip');el.textContent=msg;el.classList.add('show');setTimeout(function(){el.classList.remove('show')},2500);}
 </script>
 </body>
 </html>
