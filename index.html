@@ -876,8 +876,8 @@ function joinWaitlist(){
 
   // Submit to Google Form
   var formData=new FormData();
-  formData.append(WAITLIST_EMAIL_FIELD,em);
-  fetch(WAITLIST_FORM_URL,{method:'POST',body:formData,mode:'no-cors'})
+ formData.append("entry.1825383551", em);
+  fetch("https://docs.google.com/forms/d/e/1FAIpQLSfYYFAFkq81wVl-iakec4ViA329gBk9w7pjGW7EEjXS3Ju6WQ/formResponse",{method:'POST',body:formData,mode:'no-cors'})
     .catch(function(){/* no-cors means we ignore the response */});
 
   // Always show success (Google Forms always accepts)
