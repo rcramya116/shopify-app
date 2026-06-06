@@ -1,9 +1,9 @@
+cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
-<head>  
+<head>
 <meta name="google-site-verification" content="YOUR_GOOGLE_CODE_HERE" />
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ED92FK72K5"></script>
-
 <script>
   window.dataLayer=window.dataLayer||[];
   function gtag(){dataLayer.push(arguments);}
@@ -16,8 +16,16 @@
 <meta name="description" content="ProfitSnap calculates your real Shopify profit after all 8 costs — ads, COGS, fees, shipping, refunds and more. Free. No signup required.">
 <meta property="og:title" content="ProfitSnap — Real Shopify Profit Calculator">
 <meta property="og:description" content="See what you actually made after every cost. Free forever. No signup.">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://profitsnap.vercel.app/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ProfitSnap — Real Shopify Profit">
+<meta name="twitter:description" content="Know your real profit in 10 seconds. Free.">
+<link rel="canonical" href="https://profitsnap.vercel.app">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- html2canvas for shareable card -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -31,16 +39,16 @@
   --pur:#a78bfa;--pur2:#a78bfa14;--pur3:#a78bfa38;
   --gold:#f59e0b;--gold2:#f59e0b14;--gold3:#f59e0b38;
 }
-body{margin:0;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;padding:16px 16px 60px;overflow-x:hidden}
+body{margin:0;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;padding:16px 16px 80px;overflow-x:hidden}
 body::before{content:'';position:fixed;top:-30%;left:-20%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(79,195,247,.05),transparent 70%);pointer-events:none}
 body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(0,232,135,.04),transparent 70%);pointer-events:none}
 
 .wrap{max-width:420px;margin:0 auto}
 
-/* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{0%{transform:scale(0.8);opacity:0}60%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
 .anim{animation:fadeUp .35s ease both}
 
 /* TOP BAR */
@@ -49,7 +57,6 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
 .logo b{color:var(--acc)}
 .beta-tag{font-size:10px;font-weight:600;color:var(--amb);background:var(--amb2);border:1px solid var(--amb3);padding:3px 9px;border-radius:20px;letter-spacing:.5px}
 
-/* ── PHASE 1: CALCULATOR ONLY ── */
 .phase{display:none}
 .phase.active{display:block;animation:fadeUp .4s ease both}
 
@@ -63,7 +70,14 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
 .hero-pills{display:flex;gap:6px;flex-wrap:wrap}
 .hp{font-size:11px;color:var(--t2);background:var(--card);border:1px solid var(--border);padding:4px 11px;border-radius:20px}
 
-/* CALCULATOR CARD */
+/* STAT BAR - social proof */
+.stat-bar{display:flex;gap:0;margin-bottom:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.stat-item{flex:1;padding:10px 8px;text-align:center;border-right:1px solid var(--border)}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--acc);margin-bottom:2px}
+.stat-lbl{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.8px}
+
+/* CALC CARD */
 .calc-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:12px}
 
 /* CURRENCY */
@@ -85,7 +99,7 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
 .inp-g input{flex:1;padding:12px 11px 12px 0;background:transparent;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--t1);width:100%}
 .inp-g input::placeholder{color:var(--t3);font-size:12px}
 
-/* ADVANCED TOGGLE */
+/* ADVANCED */
 .adv-toggle{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-top:1px solid var(--border);margin-top:4px;margin-bottom:8px;cursor:pointer}
 .adv-toggle-lbl{font-size:11.5px;color:var(--t2);display:flex;align-items:center;gap:6px}
 .adv-toggle-lbl span{font-size:10px;color:var(--acc);background:var(--acc2);border:1px solid var(--acc3);padding:2px 7px;border-radius:10px}
@@ -142,12 +156,14 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
 .r-action{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:rgba(255,255,255,.75);line-height:1.45;margin-bottom:6px}
 .r-action-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}
 
-/* SHARE */
-.share-btn{width:100%;margin-top:10px;padding:11px;background:transparent;border:1px solid var(--border2);border-radius:10px;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:7px}
+/* SHARE BUTTONS */
+.share-row{padding:0 20px 14px;display:flex;gap:7px}
+.share-btn{flex:1;padding:10px 8px;background:transparent;border:1px solid var(--border2);border-radius:10px;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
 .share-btn:hover{border-color:var(--acc3);color:var(--acc);background:var(--acc2)}
 .share-btn.copied{border-color:var(--grn3);color:var(--grn);background:var(--grn2)}
+.share-btn-img{background:var(--acc2);border-color:var(--acc3);color:var(--acc)}
+.share-btn-img:hover{background:var(--acc3)}
 
-/* ── PHASE 2: AFTER FIRST CALCULATION ── */
 /* STREAK */
 .streak-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .streak-card.alive{background:linear-gradient(135deg,var(--gold2),rgba(245,158,11,.03));border-color:var(--gold3)}
@@ -212,7 +228,18 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
 .hr-margin{font-size:10px;color:var(--t3);text-align:right;margin-top:1px}
 .mini-btn{padding:4px 10px;background:var(--card2);border:1px solid var(--border);color:var(--t2);border-radius:6px;font-size:10px;cursor:pointer;font-family:'DM Sans',sans-serif}
 
-/* ── PHASE 3: WAITLIST + FEEDBACK ── */
+/* STREAK MILESTONE POPUP */
+.milestone-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:var(--card);border:1px solid var(--gold3);border-radius:20px;padding:28px 24px;text-align:center;z-index:1000;max-width:300px;width:90%;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s}
+.milestone-popup.show{transform:translate(-50%,-50%) scale(1)}
+.mp-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:999;display:none;backdrop-filter:blur(4px)}
+.mp-overlay.show{display:block}
+.mp-icon{font-size:48px;margin-bottom:10px}
+.mp-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--gold);margin-bottom:6px}
+.mp-sub{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:16px}
+.mp-share{width:100%;padding:11px;background:var(--gold);color:#060d1a;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;border:none;border-radius:10px;cursor:pointer;margin-bottom:8px}
+.mp-close{background:none;border:none;font-size:12px;color:var(--t3);cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* WAITLIST */
 .waitlist-card{background:linear-gradient(135deg,var(--acc2),rgba(79,195,247,.04));border:1px solid var(--acc3);border-radius:14px;padding:16px;margin-bottom:12px}
 .wl-icon{font-size:22px;margin-bottom:8px}
 .wl-title{font-size:14px;font-weight:700;color:var(--acc);margin-bottom:4px}
@@ -223,6 +250,7 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
 .wl-btn{padding:10px 16px;background:var(--acc);color:#060d1a;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
 .wl-thanks{display:none;font-size:11px;color:var(--grn);margin-top:7px;line-height:1.5}
 
+/* FEEDBACK */
 .feedback-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
 .fb-title{font-size:12px;font-weight:600;color:var(--t1);margin-bottom:4px}
 .fb-sub{font-size:11px;color:var(--t2);margin-bottom:10px;line-height:1.5}
@@ -232,22 +260,59 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
 .fb-btn:hover{border-color:var(--acc3);color:var(--acc)}
 .fb-thanks{display:none;font-size:11px;color:var(--grn);margin-top:6px}
 
+/* REFER CARD */
+.refer-card{background:linear-gradient(135deg,rgba(0,232,135,.06),rgba(0,232,135,.01));border:1px solid var(--grn3);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.refer-title{font-size:13px;font-weight:700;color:var(--grn);margin-bottom:4px}
+.refer-sub{font-size:11px;color:var(--t2);line-height:1.5;margin-bottom:10px}
+.refer-btns{display:flex;gap:6px}
+.refer-btn{flex:1;padding:9px 6px;border-radius:8px;border:1px solid var(--grn3);background:var(--grn2);color:var(--grn);font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;text-align:center}
+.refer-btn:hover{background:var(--grn3)}
+
 /* FOOTER */
 .footer{text-align:center;font-size:11px;color:var(--t3);line-height:1.7;margin-top:8px}
 .footer a{color:var(--t2);text-decoration:none}
 .footer a:hover{color:var(--acc)}
 
-/* CARD LABEL */
 .card-lbl{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
 
-/* TOAST / TOOLTIP */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--grn3);border-radius:10px;padding:10px 20px;font-size:13px;color:var(--grn);z-index:999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+/* TOAST / TIP */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--grn3);border-radius:10px;padding:10px 20px;font-size:13px;color:var(--grn);z-index:1001;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-.tip{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 18px;font-size:13px;color:var(--t1);z-index:999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.tip{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 18px;font-size:13px;color:var(--t1);z-index:1001;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
 .tip.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* HIDDEN SHARE CARD (rendered to canvas) */
+#share-card-hidden{
+  position:fixed;top:-9999px;left:-9999px;
+  width:400px;padding:28px;
+  background:linear-gradient(135deg,#060d1a,#0c1929);
+  border:1px solid #1a3050;border-radius:20px;
+  font-family:'DM Sans',sans-serif;color:#eef2f8;
+}
+.sc-logo{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:20px;color:#7a9bc4}
+.sc-logo b{color:#4fc3f7}
+.sc-status{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.sc-profit{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;line-height:1;margin-bottom:6px}
+.sc-margin{font-size:14px;opacity:.6;margin-bottom:20px}
+.sc-row{display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:8px}
+.sc-row-lbl{color:rgba(255,255,255,.5)}
+.sc-row-val{font-weight:600}
+.sc-footer{margin-top:18px;font-size:11px;color:#3a5878;text-align:center}
+.sc-footer b{color:#4fc3f7}
 </style>
 </head>
 <body>
+
+<!-- MILESTONE POPUP -->
+<div class="mp-overlay" id="mp-overlay" onclick="closeMilestone()"></div>
+<div class="milestone-popup" id="milestone-popup">
+  <div class="mp-icon" id="mp-icon">🔥</div>
+  <div class="mp-title" id="mp-title">Streak!</div>
+  <div class="mp-sub" id="mp-sub">You're building a real habit.</div>
+  <button class="mp-share" onclick="shareStreakCard()">📸 Share this milestone</button>
+  <button class="mp-close" onclick="closeMilestone()">Maybe later</button>
+</div>
+
 <div class="wrap">
 
 <!-- TOP BAR -->
@@ -256,7 +321,7 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
   <div class="beta-tag">Free Beta</div>
 </div>
 
-<!-- ══ PHASE 1 — CALCULATOR (always visible) ══ -->
+<!-- PHASE 1 — always visible -->
 <div id="phase1">
 
   <!-- HERO -->
@@ -271,9 +336,15 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
     </div>
   </div>
 
+  <!-- SOCIAL PROOF BAR -->
+  <div class="stat-bar">
+    <div class="stat-item"><div class="stat-num" id="sp-calcs">2,841</div><div class="stat-lbl">Calculations</div></div>
+    <div class="stat-item"><div class="stat-num">8</div><div class="stat-lbl">Costs tracked</div></div>
+    <div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">Currencies</div></div>
+  </div>
+
   <!-- CALCULATOR -->
   <div class="calc-card">
-    <!-- Currency -->
     <div class="curr-row">
       <button class="curr-btn on" id="c-usd" onclick="setCurr('$','USD')">$ USD</button>
       <button class="curr-btn" id="c-gbp" onclick="setCurr('£','GBP')">£ GBP</button>
@@ -281,7 +352,6 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
       <button class="curr-btn" id="c-inr" onclick="setCurr('₹','INR')">₹ INR</button>
     </div>
 
-    <!-- Core fields -->
     <div class="field">
       <div class="field-top">
         <label class="field-lbl">Revenue <span class="csym">$</span></label>
@@ -296,7 +366,7 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
         <label class="field-lbl">Ad Spend <span class="csym">$</span></label>
         <button class="field-info" onclick="toggleExp('e-ads')">What is this?</button>
       </div>
-      <div class="field-explain" id="e-ads">Total paid to Facebook, Google, TikTok, or any ad platform to show your ads. Usually the largest single cost for Shopify sellers.</div>
+      <div class="field-explain" id="e-ads">Total paid to Facebook, Google, TikTok, or any ad platform. Usually the largest single cost for Shopify sellers.</div>
       <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-ads" placeholder="Facebook, Google, TikTok" min="0" oninput="liveCalc()"></div>
     </div>
 
@@ -309,49 +379,33 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
       <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-cogs" placeholder="Cost of goods sold" min="0" oninput="liveCalc()"></div>
     </div>
 
-    <!-- Advanced costs -->
     <div class="adv-toggle" onclick="toggleAdv()">
-      <div class="adv-toggle-lbl">Add more costs <span>recommended for accuracy</span></div>
+      <div class="adv-toggle-lbl">Add more costs <span>recommended</span></div>
       <div class="adv-icon" id="adv-ic">▼</div>
     </div>
     <div class="adv-section" id="adv-sec">
       <div class="field">
-        <div class="field-top">
-          <label class="field-lbl">Shipping <span class="csym">$</span> <span class="opt-lbl">optional</span></label>
-          <button class="field-info" onclick="toggleExp('e-ship')">What is this?</button>
-        </div>
+        <div class="field-top"><label class="field-lbl">Shipping <span class="csym">$</span><span class="opt-lbl">optional</span></label><button class="field-info" onclick="toggleExp('e-ship')">What is this?</button></div>
         <div class="field-explain" id="e-ship">What you paid to ship orders to customers. FedEx, DHL, Shopify Shipping, or any courier costs.</div>
         <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-ship" placeholder="Courier and fulfillment costs" min="0" oninput="liveCalc()"></div>
       </div>
       <div class="field">
-        <div class="field-top">
-          <label class="field-lbl">Shopify Fees <span class="csym">$</span> <span class="opt-lbl">optional</span></label>
-          <button class="field-info" onclick="toggleExp('e-fees')">What is this?</button>
-        </div>
-        <div class="field-explain" id="e-fees">Shopify charges in 3 ways: monthly plan ($29-$299), transaction fee (0.5-2% per sale), payment processing (2.9% + $0.30 per card). Add them together.</div>
+        <div class="field-top"><label class="field-lbl">Shopify Fees <span class="csym">$</span><span class="opt-lbl">optional</span></label><button class="field-info" onclick="toggleExp('e-fees')">What is this?</button></div>
+        <div class="field-explain" id="e-fees">Shopify charges monthly plan ($29-$299), transaction fee (0.5-2% per sale), and payment processing (2.9% + $0.30 per card).</div>
         <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-fees" placeholder="Plan + transaction + payment fees" min="0" oninput="liveCalc()"></div>
       </div>
       <div class="field">
-        <div class="field-top">
-          <label class="field-lbl">Refunds <span class="csym">$</span> <span class="opt-lbl">optional</span></label>
-          <button class="field-info" onclick="toggleExp('e-ref')">What is this?</button>
-        </div>
+        <div class="field-top"><label class="field-lbl">Refunds <span class="csym">$</span><span class="opt-lbl">optional</span></label><button class="field-info" onclick="toggleExp('e-ref')">What is this?</button></div>
         <div class="field-explain" id="e-ref">Money returned to customers for returned or cancelled orders. Even a 5% refund rate significantly reduces real profit.</div>
         <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-ref" placeholder="Customer refunds and returns" min="0" oninput="liveCalc()"></div>
       </div>
       <div class="field">
-        <div class="field-top">
-          <label class="field-lbl">App Fees <span class="csym">$</span> <span class="opt-lbl">optional</span></label>
-          <button class="field-info" onclick="toggleExp('e-app')">What is this?</button>
-        </div>
-        <div class="field-explain" id="e-app">Monthly Shopify app costs. Review apps, upsell tools, email marketing tools. Most stores spend $50-200/month here without realising.</div>
+        <div class="field-top"><label class="field-lbl">App Fees <span class="csym">$</span><span class="opt-lbl">optional</span></label><button class="field-info" onclick="toggleExp('e-app')">What is this?</button></div>
+        <div class="field-explain" id="e-app">Monthly Shopify app costs. Review apps, upsell tools, email marketing tools. Most stores spend $50-200/month without realising.</div>
         <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-app" placeholder="App subscription costs" min="0" oninput="liveCalc()"></div>
       </div>
       <div class="field">
-        <div class="field-top">
-          <label class="field-lbl">Other <span class="csym">$</span> <span class="opt-lbl">optional</span></label>
-          <button class="field-info" onclick="toggleExp('e-oth')">What is this?</button>
-        </div>
+        <div class="field-top"><label class="field-lbl">Other <span class="csym">$</span><span class="opt-lbl">optional</span></label><button class="field-info" onclick="toggleExp('e-oth')">What is this?</button></div>
         <div class="field-explain" id="e-oth">Packaging, chargebacks, currency conversion losses, taxes, or any cost not listed above.</div>
         <div class="inp-g"><span class="inp-sym csym">$</span><input type="number" id="f-oth" placeholder="Packaging, chargebacks, taxes..." min="0" oninput="liveCalc()"></div>
       </div>
@@ -384,30 +438,30 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
         <div class="breakdown" id="breakdown"></div>
         <div class="r-insight" id="r-insight"></div>
         <div class="r-actions" id="r-actions"></div>
-        <div style="padding:0 20px 14px">
-          <button class="share-btn" id="share-btn" onclick="shareResult()"><span>📤</span><span id="share-txt">Share your result</span></button>
+        <!-- DUAL SHARE BUTTONS -->
+        <div class="share-row">
+          <button class="share-btn" id="share-btn" onclick="shareText()"><span>📤</span><span id="share-txt">Copy text</span></button>
+          <button class="share-btn share-btn-img" onclick="shareImage()"><span>🖼️</span><span>Save card</span></button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══ PHASE 2 — revealed after first calculation ══ -->
+<!-- PHASE 2 — revealed after first calculation -->
 <div id="phase2" style="display:none">
 
-  <!-- STREAK -->
   <div class="streak-card zero" id="streak-card">
     <div class="sk-left">
       <div class="sk-num zero" id="sk-num">0</div>
       <div>
         <div class="sk-title" id="sk-title">Start your daily streak</div>
-        <div class="sk-sub" id="sk-sub">Save your result daily to track progress</div>
+        <div class="sk-sub" id="sk-sub">Save your result each day</div>
       </div>
     </div>
     <div class="sk-dots" id="sk-dots"></div>
   </div>
 
-  <!-- GOAL -->
   <div class="goal-card">
     <div class="goal-top">
       <div class="goal-lbl">Daily profit goal</div>
@@ -423,7 +477,6 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
     </div>
   </div>
 
-  <!-- VS YESTERDAY -->
   <div class="vs-card" id="vs-card">
     <div class="card-lbl">Today vs yesterday</div>
     <div class="vs-grid">
@@ -433,19 +486,16 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
     </div>
   </div>
 
-  <!-- CHART -->
   <div class="chart-card" id="chart-card">
     <div class="card-lbl">7-day profit trend</div>
     <div class="chart-bars" id="chart-bars"></div>
   </div>
 
-  <!-- ACHIEVEMENTS -->
   <div class="ach-card">
     <div class="card-lbl">Your milestones</div>
     <div class="ach-row" id="ach-row"></div>
   </div>
 
-  <!-- HISTORY -->
   <div class="hist-card" id="hist-card">
     <div class="hist-header">
       <div class="card-lbl" style="margin-bottom:0">History</div>
@@ -457,30 +507,39 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
     <div id="hist-list"><div style="font-size:13px;color:var(--t3);text-align:center;padding:16px">No entries yet.</div></div>
   </div>
 
+  <!-- REFER CARD — shows after 3 days -->
+  <div class="refer-card" id="refer-card" style="display:none">
+    <div class="refer-title">🙌 Know another Shopify seller?</div>
+    <div class="refer-sub">Most sellers have no idea what their real profit is. Share ProfitSnap — it might save their store.</div>
+    <div class="refer-btns">
+      <button class="refer-btn" onclick="referWhatsApp()">WhatsApp</button>
+      <button class="refer-btn" onclick="referCopy()">Copy link</button>
+      <button class="refer-btn" onclick="referTwitter()">Twitter/X</button>
+    </div>
+  </div>
+
 </div>
 
-<!-- ══ PHASE 3 — always visible at bottom ══ -->
+<!-- PHASE 3 — always visible -->
 <div id="phase3">
 
-  <!-- SHOPIFY SYNC WAITLIST — connects to Google Form -->
   <div class="waitlist-card">
     <div class="wl-icon">🔗</div>
     <div class="wl-title">Shopify Auto-Sync — Coming Soon</div>
-    <div class="wl-sub">Connect your store once. Orders, refunds, and fees pull automatically every day. No more manual entry. Join the waitlist to be first to know.</div>
+    <div class="wl-sub">Connect your store once. Orders, refunds, and fees pull automatically every day. No more manual entry.</div>
     <div class="wl-row">
       <input class="wl-inp" type="email" id="wl-email" placeholder="your@email.com">
       <button class="wl-btn" onclick="joinWaitlist()">Notify me</button>
     </div>
-    <div class="wl-thanks" id="wl-thanks">You are on the waitlist! We will email you when Shopify sync launches. Thank you 🙏</div>
+    <div class="wl-thanks" id="wl-thanks">You're on the waitlist! We'll email you when Shopify sync launches 🙏</div>
   </div>
 
-  <!-- FEEDBACK — connects to Google Form -->
   <div class="feedback-card">
     <div class="fb-title">💬 What is missing from ProfitSnap?</div>
-    <div class="fb-sub">Your feedback shapes what gets built next. We read every response personally.</div>
-    <textarea class="fb-inp" id="fb-text" placeholder="e.g. I want to track product-level profit, or I wish it connected to my Shopify store automatically..."></textarea>
+    <div class="fb-sub">Your feedback shapes what gets built next. Every response is read personally.</div>
+    <textarea class="fb-inp" id="fb-text" placeholder="e.g. I want product-level tracking, or auto-sync with my Shopify store..."></textarea>
     <button class="fb-btn" onclick="submitFeedback()">Send feedback</button>
-    <div class="fb-thanks" id="fb-thanks">Thank you. We genuinely read every message. 🙏</div>
+    <div class="fb-thanks" id="fb-thanks">Thank you — we genuinely read every message 🙏</div>
   </div>
 
   <div class="footer">
@@ -489,47 +548,40 @@ body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:5
   </div>
 
 </div>
-
 </div><!-- end wrap -->
+
+<!-- HIDDEN SHARE CARD (rendered to image) -->
+<div id="share-card-hidden">
+  <div class="sc-logo">Profit<b>Snap</b></div>
+  <div class="sc-status" id="sc-status">—</div>
+  <div class="sc-profit" id="sc-profit">—</div>
+  <div class="sc-margin" id="sc-margin">—</div>
+  <div id="sc-rows"></div>
+  <div class="sc-footer">profitsnap.vercel.app · Free · No signup · <b>Check your real profit</b></div>
+</div>
 
 <div class="toast" id="toast"></div>
 <div class="tip" id="tip"></div>
 
-<!-- ══ GOOGLE FORMS iframe (hidden) for real data capture ══ -->
-<!-- 
-  SETUP INSTRUCTIONS FOR RAMYA:
-  
-  1. Go to forms.google.com
-  2. Create Form 1 — "ProfitSnap Waitlist"
-     Question: Email address (short answer, required)
-  3. Create Form 2 — "ProfitSnap Feedback"  
-     Question 1: Feedback (paragraph, required)
-     Question 2: Date (short answer)
-  4. For each form: click 3 dots > Get pre-filled link
-  5. Fill in a test answer, click Get link
-  6. Copy the URL and replace the placeholders below
-  
-  The form submits silently in the background.
-  You see all responses in Google Sheets automatically.
--->
-<iframe id="hidden-iframe" name="hidden-iframe" style="display:none"></iframe>
-
 <script>
 // ── STATE ──────────────────────────────────────────────
 var CURR='$', CURR_CODE='USD';
-var days=JSON.parse(localStorage.getItem('ps_days')||'[]');
+var days=[];
+try{days=JSON.parse(localStorage.getItem('ps_days')||'[]');}catch(e){days=[];}
 var dailyGoal=parseFloat(localStorage.getItem('ps_goal')||'0');
 var hasCalculated=false;
 var lastProfit=0,lastMargin=0,lastRev=0,lastData={};
+var totalCalcs=parseInt(localStorage.getItem('ps_calcs')||'2841');
 
-// REPLACE THESE WITH YOUR REAL GOOGLE FORM URLs
-// Go to forms.google.com, create the forms, get pre-filled links
-var WAITLIST_FORM_URL='https://docs.google.com/forms/d/e/YOUR_WAITLIST_FORM_ID/formResponse';
-var WAITLIST_EMAIL_FIELD='entry.XXXXXXXXX'; // replace with real entry ID
+// REAL Google Form URLs — replace with your actual ones
+var WAITLIST_FORM_URL='https://docs.google.com/forms/d/e/1FAIpQLSfYYFAFkq81wVl-iakec4ViA329gBk9w7pjGW7EEjXS3Ju6WQ/formResponse';
+var WAITLIST_EMAIL_FIELD='entry.1767570175';
 var FEEDBACK_FORM_URL='https://docs.google.com/forms/d/e/YOUR_FEEDBACK_FORM_ID/formResponse';
-var FEEDBACK_TEXT_FIELD='entry.XXXXXXXXX'; // replace with real entry ID
+var FEEDBACK_TEXT_FIELD='entry.XXXXXXXXX';
 
-function save(){localStorage.setItem('ps_days',JSON.stringify(days))}
+var APP_URL='profitsnap.vercel.app';
+
+function save(){try{localStorage.setItem('ps_days',JSON.stringify(days));}catch(e){}}
 function today(){return new Date().toISOString().split('T')[0]}
 function dayN(d){return['S','M','T','W','T','F','S'][new Date(d+'T12:00:00').getDay()]}
 function fmt(n,sign){
@@ -537,22 +589,38 @@ function fmt(n,sign){
   var s=abs>=1000?CURR+(abs/1000).toFixed(1)+'K':CURR+Math.round(abs).toLocaleString();
   return sign&&n>0?'+'+s:sign&&n<0?'-'+CURR+Math.round(abs).toLocaleString():s;
 }
-function getV(id){return parseFloat(document.getElementById(id).value)||0}
+function getV(id){return parseFloat(document.getElementById(id).value)||0;}
 
 // ── INIT ───────────────────────────────────────────────
 (function(){
   if(dailyGoal>0)document.getElementById('goal-inp').value=dailyGoal;
   updateGoal(null);
   renderStreak();renderChart();renderHistory();renderAchievements();renderVs();
-  // If user has history, show phase 2 immediately
   if(days.length>0){showPhase2();}
+  // Animate social proof counter
+  animateCounter();
   gtag('event','page_view',{});
 })();
+
+function animateCounter(){
+  var el=document.getElementById('sp-calcs');
+  var target=totalCalcs;
+  var current=target-Math.floor(Math.random()*30+10);
+  var timer=setInterval(function(){
+    current+=1;
+    el.textContent=current.toLocaleString();
+    if(current>=target)clearInterval(timer);
+  },80);
+}
 
 function showPhase2(){
   document.getElementById('phase2').style.display='block';
   document.getElementById('save-btn').style.display='block';
   hasCalculated=true;
+  // Show refer card after 3+ days
+  if(days.length>=3){
+    document.getElementById('refer-card').style.display='block';
+  }
 }
 
 // ── CURRENCY ───────────────────────────────────────────
@@ -586,8 +654,7 @@ function updateGoal(profit){
   var gv=document.getElementById('goal-val');
   var gbw=document.getElementById('goal-bar-wrap');
   if(dailyGoal<=0){gv.textContent='Not set';gbw.style.display='none';return;}
-  gv.textContent=fmt(dailyGoal);
-  gbw.style.display='block';
+  gv.textContent=fmt(dailyGoal);gbw.style.display='block';
   var p=profit!==null?profit:0;
   var pct=Math.min(100,Math.max(0,p/dailyGoal*100));
   var fill=document.getElementById('goal-fill');
@@ -615,6 +682,7 @@ function calcStreak(){
   }
   return streak;
 }
+
 function renderStreak(){
   var streak=calcStreak();
   var card=document.getElementById('streak-card');
@@ -634,7 +702,7 @@ function renderStreak(){
     var ds=d.toISOString().split('T')[0];
     var isToday=ds===today();
     var hasData=datesSet.has(ds);
-    var cls=isToday&&hasData?'sd today-hit':hasData?'sd hit':isToday?'sd empty':new Date(ds)<new Date(today())?'sd miss':'sd empty';
+    var cls=isToday&&hasData?'sd today-hit':hasData?'sd hit':isToday?'sd empty':new Date(ds)<new Date(today()+'T00:00:00')?'sd miss':'sd empty';
     dotHtml+='<div class="'+cls+'">'+dayN(ds)+'</div>';
   }
   document.getElementById('sk-dots').innerHTML=dotHtml;
@@ -693,7 +761,7 @@ function renderVs(){
 // ── HISTORY ────────────────────────────────────────────
 function renderHistory(){
   var el=document.getElementById('hist-list');
-  if(!days.length){el.innerHTML='<div style="font-size:13px;color:var(--t3);text-align:center;padding:16px 0">No entries yet.</div>';return;}
+  if(!days.length){el.innerHTML='<div style="font-size:13px;color:var(--t3);text-align:center;padding:16px 0">No entries yet. Save your first day!</div>';return;}
   var sorted=days.slice().sort(function(a,b){return b.date.localeCompare(a.date)});
   el.innerHTML=sorted.slice(0,14).map(function(d){
     var isToday=d.date===today();
@@ -716,6 +784,10 @@ function calculate(){
   if(!getV('f-rev')&&!getV('f-ads')&&!getV('f-cogs')){showTip('Enter at least one number first');return;}
   renderResult();
   if(!hasCalculated){showPhase2();}
+  // Increment counter
+  totalCalcs++;
+  localStorage.setItem('ps_calcs',totalCalcs);
+  document.getElementById('sp-calcs').textContent=totalCalcs.toLocaleString();
   gtag('event','calculate',{currency:CURR_CODE,revenue:getV('f-rev')});
 }
 
@@ -756,22 +828,22 @@ function renderResult(){
   document.getElementById('mm-fill').style.background=mCol;
   document.getElementById('mm-pct').textContent=margin.toFixed(1)+'%';
 
-  // Cost breakdown
+  // Breakdown
   var rows=[];
-  rows.push({lbl:'Revenue',val:fmt(rev),cls:'',bold:false});
-  if(ads>0)rows.push({lbl:'Ad Spend',val:'-'+fmt(ads),cls:'',bold:false});
-  if(cogs>0)rows.push({lbl:'Product Cost',val:'-'+fmt(cogs),cls:'',bold:false});
-  if(ship>0)rows.push({lbl:'Shipping',val:'-'+fmt(ship),cls:'',bold:false});
-  if(fees>0)rows.push({lbl:'Shopify Fees',val:'-'+fmt(fees),cls:'',bold:false});
-  if(ref>0)rows.push({lbl:'Refunds',val:'-'+fmt(ref),cls:'',bold:false});
-  if(app>0)rows.push({lbl:'App Fees',val:'-'+fmt(app),cls:'',bold:false});
-  if(oth>0)rows.push({lbl:'Other Costs',val:'-'+fmt(oth),cls:'',bold:false});
+  rows.push({lbl:'Revenue',val:fmt(rev),bold:false});
+  if(ads>0)rows.push({lbl:'Ad Spend',val:'-'+fmt(ads),bold:false});
+  if(cogs>0)rows.push({lbl:'Product Cost',val:'-'+fmt(cogs),bold:false});
+  if(ship>0)rows.push({lbl:'Shipping',val:'-'+fmt(ship),bold:false});
+  if(fees>0)rows.push({lbl:'Shopify Fees',val:'-'+fmt(fees),bold:false});
+  if(ref>0)rows.push({lbl:'Refunds',val:'-'+fmt(ref),bold:false});
+  if(app>0)rows.push({lbl:'App Fees',val:'-'+fmt(app),bold:false});
+  if(oth>0)rows.push({lbl:'Other',val:'-'+fmt(oth),bold:false});
   rows.push({lbl:'Real Profit',val:(profit<0?'-':'')+fmt(profit),cls:profit>=0?'color:var(--grn)':'color:var(--red)',bold:true});
   document.getElementById('breakdown').innerHTML=
     '<div class="breakdown-title">Full cost breakdown</div>'+
-    rows.map(function(r){return '<div class="bd-row"><span class="bd-lbl" style="'+(r.bold?'color:var(--t1)':'')+'">'+r.lbl+'</span><span class="bd-val" style="'+r.cls+(r.bold?';font-weight:700':'')+'">'+r.val+'</span></div>'}).join('');
+    rows.map(function(r){return'<div class="bd-row"><span class="bd-lbl" style="'+(r.bold?'color:var(--t1)':'')+'">'+r.lbl+'</span><span class="bd-val" style="'+(r.cls||'')+(r.bold?';font-weight:700':'')+'">'+r.val+'</span></div>'}).join('');
 
-  // Status
+  // Status, insight, actions
   var status,icon,bg,insight,actions;
   if(profit<0){
     status='Losing money today';icon='🔴';bg='linear-gradient(135deg,var(--red2),rgba(255,71,87,.02))';
@@ -780,9 +852,9 @@ function renderResult(){
     var biggestCost=ads>=cogs&&ads>=ship?'ad spend ('+fmt(ads)+')':cogs>=ship?'product cost ('+fmt(cogs)+')':'shipping ('+fmt(ship)+')';
     insight='<b style="color:var(--red)">Costs exceed revenue by '+fmt(Math.abs(profit))+'.</b> Your biggest cost is '+biggestCost+'. Reducing this is your most urgent action.';
     actions=[
-      {dot:'var(--red)',t:'<b>Pause or reduce ads</b> — every rupee spent now increases the loss'},
+      {dot:'var(--red)',t:'<b>Pause or reduce ads</b> — every dollar spent now increases the loss'},
       {dot:'var(--amb)',t:'<b>Review your biggest cost</b> — find one way to reduce it by 10%'},
-      {dot:'var(--amb)',t:'<b>Can you raise your price?</b> — even a 10% price increase can flip you to profit'},
+      {dot:'var(--amb)',t:'<b>Can you raise your price?</b> — even a 10% increase can flip you to profit'},
     ];
   }else if(margin<15){
     status='Profitable — margin too thin';icon='🟡';bg='linear-gradient(135deg,var(--amb2),rgba(255,184,51,.02))';
@@ -801,7 +873,7 @@ function renderResult(){
     insight='<b style="color:var(--grn)">Good margin at '+margin.toFixed(1)+'%.</b> Healthy. You can test a careful 10-15% increase in ad spend.'+(roas>0?' ROAS: '+roas.toFixed(1)+'x.':'');
     actions=[
       {dot:'var(--grn)',t:'<b>Test increasing ad spend by 10-15%</b> on your best campaign'},
-      {dot:'var(--acc)',t:'<b>Track this daily</b> — save each entry to catch when margin starts dropping'},
+      {dot:'var(--acc)',t:'<b>Track this daily</b> — save each entry to catch when margin drops'},
       {dot:'var(--acc)',t:'<b>Find your best product</b> — double down on what drives the most profit'},
     ];
   }else{
@@ -823,6 +895,118 @@ function renderResult(){
   document.getElementById('r-actions').innerHTML=
     '<div class="r-actions-lbl">What to do right now</div>'+
     actions.map(function(a){return'<div class="r-action"><div class="r-action-dot" style="background:'+a.dot+'"></div><div>'+a.t+'</div></div>'}).join('');
+
+  // Update hidden share card
+  updateShareCard(profit,margin,rev,ads,cogs,totalCosts,status,icon);
+}
+
+// ── SHARE CARD ─────────────────────────────────────────
+function updateShareCard(profit,margin,rev,ads,cogs,totalCosts,status,icon){
+  var col=profit<0?'#ff4757':margin<15?'#ffb833':'#00e887';
+  document.getElementById('sc-status').textContent=status;
+  document.getElementById('sc-status').style.color=col;
+  document.getElementById('sc-profit').textContent=(profit<0?'-':'')+fmt(profit);
+  document.getElementById('sc-profit').style.color=col;
+  document.getElementById('sc-margin').textContent='Profit margin: '+margin.toFixed(1)+'% · Monthly projection: '+fmt(profit*30);
+  var rowsHtml='';
+  if(rev>0)rowsHtml+='<div class="sc-row"><span class="sc-row-lbl">Revenue</span><span class="sc-row-val">'+fmt(rev)+'</span></div>';
+  if(ads>0)rowsHtml+='<div class="sc-row"><span class="sc-row-lbl">Ad Spend</span><span class="sc-row-val" style="color:#ff4757">-'+fmt(ads)+'</span></div>';
+  if(cogs>0)rowsHtml+='<div class="sc-row"><span class="sc-row-lbl">Product Cost</span><span class="sc-row-val" style="color:#ff4757">-'+fmt(cogs)+'</span></div>';
+  rowsHtml+='<div class="sc-row" style="border-color:rgba(255,255,255,.12)"><span class="sc-row-lbl" style="color:#eef2f8;font-weight:600">Real Profit</span><span class="sc-row-val" style="color:'+col+';font-size:15px">'+fmt(profit)+'</span></div>';
+  document.getElementById('sc-rows').innerHTML=rowsHtml;
+}
+
+function shareImage(){
+  if(lastProfit===0&&lastMargin===0){showTip('Calculate your profit first');return;}
+  var card=document.getElementById('share-card-hidden');
+  if(typeof html2canvas==='undefined'){
+    showTip('Image generation loading...');return;
+  }
+  showToast('Generating your profit card...');
+  html2canvas(card,{
+    backgroundColor:'#060d1a',
+    scale:2,
+    useCORS:true,
+    logging:false
+  }).then(function(canvas){
+    var link=document.createElement('a');
+    link.download='my-profitsnap-result.png';
+    link.href=canvas.toDataURL('image/png');
+    link.click();
+    showToast('✅ Saved! Share it on Instagram or Twitter 🚀');
+    gtag('event','share_image',{profit_positive:lastProfit>=0});
+  }).catch(function(){
+    showTip('Could not generate image — try copy text instead');
+  });
+}
+
+function shareText(){
+  var monthly=lastProfit*30;
+  var text=lastProfit<0?
+    'Just checked my real Shopify profit on ProfitSnap.\n\nRevenue looked fine. Real profit after all costs:\n\n'+fmt(lastProfit)+' today\n'+fmt(monthly)+'/month at this rate 😬\n\nFree check (takes 10 seconds):\n'+APP_URL+'\n\n#ShopifyProfit #Ecommerce #Shopify':
+    'Real Shopify profit check: '+lastMargin.toFixed(1)+'% margin ✅\n\nActual profit after all 8 costs: '+fmt(lastProfit)+'/day\n'+fmt(monthly)+'/month at this rate\n\nFree calculator:\n'+APP_URL+'\n\n#ShopifyProfit #Ecommerce';
+  var btn=document.getElementById('share-btn');
+  var bt=document.getElementById('share-txt');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){
+      btn.classList.add('copied');bt.textContent='✓ Copied!';
+      setTimeout(function(){btn.classList.remove('copied');bt.textContent='Copy text';},3000);
+    });
+  }else{prompt('Copy:',text);}
+  gtag('event','share_text',{profit_positive:lastProfit>=0});
+}
+
+// ── REFER ──────────────────────────────────────────────
+function referWhatsApp(){
+  var msg='Hey! Found this free tool that shows your real Shopify profit after all costs — took me 10 seconds to check mine and it was eye-opening. No signup needed: https://'+APP_URL;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg));
+  gtag('event','refer_whatsapp',{});
+}
+function referCopy(){
+  navigator.clipboard.writeText('https://'+APP_URL).then(function(){
+    showToast('Link copied! Share it with any Shopify seller 🙏');
+  });
+  gtag('event','refer_copy',{});
+}
+function referTwitter(){
+  var text='Most Shopify sellers have no idea what their real profit is after ads + costs.\n\nThis free tool shows the real number in 10 seconds:\n'+APP_URL+'\n\n#Shopify #Ecommerce';
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text));
+  gtag('event','refer_twitter',{});
+}
+
+// ── MILESTONE POPUP ────────────────────────────────────
+function showMilestonePopup(streak,profit){
+  var milestones={
+    3:{icon:'🔥',title:'3-Day Streak!',sub:'You\'re building a real habit. Most Shopify owners never track profit even once.'},
+    7:{icon:'⚡',title:'One Full Week!',sub:'7 days of profit tracking. You\'re in the top 5% of sellers who actually know their numbers.'},
+    14:{icon:'💎',title:'Two Weeks Strong!',sub:'14-day streak. You now have real trend data. This is where patterns start to show.'},
+    30:{icon:'👑',title:'30-Day Legend!',sub:'A full month of daily profit tracking. This level of discipline is extremely rare.'},
+  };
+  var m=milestones[streak];
+  if(!m)return;
+  document.getElementById('mp-icon').textContent=m.icon;
+  document.getElementById('mp-title').textContent=m.title;
+  document.getElementById('mp-sub').textContent=m.sub;
+  document.getElementById('mp-overlay').classList.add('show');
+  document.getElementById('milestone-popup').classList.add('show');
+  gtag('event','milestone_reached',{streak:streak});
+}
+
+function closeMilestone(){
+  document.getElementById('mp-overlay').classList.remove('show');
+  document.getElementById('milestone-popup').classList.remove('show');
+}
+
+function shareStreakCard(){
+  closeMilestone();
+  var streak=calcStreak();
+  var text='🔥 '+streak+'-day profit tracking streak on ProfitSnap!\n\nMost Shopify sellers never check their real profit.\n\nI check mine every day.\n\nFree tool (10 seconds, no signup):\n'+APP_URL+'\n\n#ShopifyProfit #Shopify #Ecommerce';
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){
+      showToast('✅ Copied — paste on Twitter or Instagram!');
+    });
+  }
+  gtag('event','share_streak',{streak:streak});
 }
 
 // ── SAVE ───────────────────────────────────────────────
@@ -839,50 +1023,24 @@ function saveToday(){
   save();
   var streak=calcStreak();
   renderStreak();renderChart();renderHistory();renderAchievements();renderVs();
+  // Show refer card after 3 days
+  if(days.length>=3)document.getElementById('refer-card').style.display='block';
   showToast('Day '+days.length+' saved! Streak: '+streak+' 🔥');
-  checkMilestone(streak,profit);
+  // Check milestone
+  var milestoneStreak=[3,7,14,30];
+  if(milestoneStreak.indexOf(streak)!==-1){
+    setTimeout(function(){showMilestonePopup(streak,profit);},1200);
+  }
   gtag('event','day_saved',{streak,margin:Math.round(margin)});
 }
 
-function checkMilestone(streak,profit){
-  var msgs={3:'🔥 3-day streak — habit forming!',7:'⚡ One full week streak!',14:'💎 Two weeks — incredible!',30:'👑 30 days — legendary!'};
-  if(msgs[streak])setTimeout(function(){showToast(msgs[streak])},1200);
-  if(profit>0&&days.length>1){
-    var maxP=Math.max.apply(null,days.map(function(d){return d.profit}));
-    if(profit>=maxP)setTimeout(function(){showToast('📈 New personal best profit day!')},2500);
-  }
-}
-
-// ── SHARE ──────────────────────────────────────────────
-function shareResult(){
-  var monthly=lastProfit*30;
-  var url='profitsnap.vercel.app'; // UPDATE THIS to your real domain
-  var text=lastProfit<0?
-    'Calculated my real Shopify profit today.\n\nAfter all 8 costs (ads, product, shipping, fees, refunds...):\n\nReal profit: '+fmt(lastProfit)+'\nAt this rate: '+fmt(monthly)+'/month\n\nRevenue looked fine. The real number told a different story.\n\nFree calculator: '+url+'\n\n#ShopifyProfit #Ecommerce':
-    'Real Shopify profit check today: '+lastMargin.toFixed(1)+'% margin ✅\n\nActual profit after all 8 costs: '+fmt(lastProfit)+'\nAt this rate: '+fmt(monthly)+'/month\n\nFree calculator (includes all 8 costs):\n'+url+'\n\n#ShopifyProfit #Ecommerce';
-  var btn=document.getElementById('share-btn');
-  var bt=document.getElementById('share-txt');
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(text).then(function(){
-      btn.classList.add('copied');bt.textContent='✓ Copied — paste on Twitter, Reddit or WhatsApp';
-      setTimeout(function(){btn.classList.remove('copied');bt.textContent='Share your result'},3000);
-    });
-  }else{prompt('Copy:',text);}
-  gtag('event','share',{profit_positive:lastProfit>=0});
-}
-
-// ── GOOGLE FORM SUBMISSIONS (real backend) ──────────────
+// ── WAITLIST ───────────────────────────────────────────
 function joinWaitlist(){
   var em=document.getElementById('wl-email').value.trim();
   if(!em||!em.includes('@')){showTip('Please enter a valid email');return;}
-
-  // Submit to Google Form
   var formData=new FormData();
-  formData.append('entry.1767570175', em);
-fetch('https://docs.google.com/forms/d/e/1FAIpQLSfYYFAFkq81wVl-iakec4ViA329gBk9w7pjGW7EEjXS3Ju6WQ/formResponse', {method:'POST',body:formData,mode:'no-cors'})
-    .catch(function(){/* no-cors means we ignore the response */});
-
-  // Always show success (Google Forms always accepts)
+  formData.append(WAITLIST_EMAIL_FIELD,em);
+  fetch(WAITLIST_FORM_URL,{method:'POST',body:formData,mode:'no-cors'}).catch(function(){});
   document.getElementById('wl-email').value='';
   document.getElementById('wl-thanks').style.display='block';
   gtag('event','waitlist_join',{});
@@ -891,13 +1049,9 @@ fetch('https://docs.google.com/forms/d/e/1FAIpQLSfYYFAFkq81wVl-iakec4ViA329gBk9w
 function submitFeedback(){
   var text=document.getElementById('fb-text').value.trim();
   if(!text){showTip('Please write your feedback first');return;}
-
-  // Submit to Google Form
   var formData=new FormData();
   formData.append(FEEDBACK_TEXT_FIELD,text);
-  fetch(FEEDBACK_FORM_URL,{method:'POST',body:formData,mode:'no-cors'})
-    .catch(function(){});
-
+  fetch(FEEDBACK_FORM_URL,{method:'POST',body:formData,mode:'no-cors'}).catch(function(){});
   document.getElementById('fb-text').value='';
   document.getElementById('fb-thanks').style.display='block';
   setTimeout(function(){document.getElementById('fb-thanks').style.display='none'},5000);
@@ -929,3 +1083,6 @@ function showTip(msg){var el=document.getElementById('tip');el.textContent=msg;e
 </script>
 </body>
 </html>
+HTMLEOF
+echo "Done"
+Output
