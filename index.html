@@ -248,7 +248,7 @@ body::after{
     <div class="field">
       <label class="field-label">Currency</label>
       <div class="inp-wrap full">
-        <select id="ob-curr">
+        <select id="ob-curr" style="padding-left:12px;cursor:pointer">
           <option value="$">$ USD</option>
           <option value="£">£ GBP</option>
           <option value="€">€ EUR</option>
@@ -269,7 +269,7 @@ body::after{
   </div>
 
   <!-- ===================== DASHBOARD ===================== -->
-  <div id="dashboard" class="hidden">
+  <div id="dashboard" style="display:none">
 
     <div class="topbar">
       <div class="logo"><div class="logo-dot"></div><span id="brand-name">ProfitSnap</span></div>
@@ -323,7 +323,7 @@ body::after{
     <div class="card">
       <div class="section-title">📈 Score — Last 7 Days</div>
       <canvas id="chart-canvas"></canvas>
-      <div class="chart-empty hidden" id="chart-empty">Log a few days to see your score trend.</div>
+      <div style="display:none" id="chart-empty">Log a few days to see your score trend.</div>
     </div>
 
     <!-- CEO BRIEFING -->
@@ -353,7 +353,7 @@ body::after{
           <div class="forecast-sub" id="fc-needed-sub">&nbsp;</div>
         </div>
       </div>
-      <div id="goal-section" class="hidden">
+      <div id="goal-section" style="display:none">
         <div class="goal-text"><span>Goal Progress</span><span id="goal-pct">0%</span></div>
         <div class="goal-bar"><div class="goal-fill" id="goal-fill" style="width:0%"></div></div>
         <div class="goal-text"><span id="goal-current">$0</span><span id="goal-target">$0</span></div>
@@ -412,13 +412,21 @@ document.getElementById('ob-curr').addEventListener('change', function(){
 });
 
 function finishOnboarding(){
-  var name = document.getElementById('ob-name').value.trim();
-  var curr = document.getElementById('ob-curr').value;
-  var goal = parseFloat(document.getElementById('ob-goal').value) || 0;
-  state.name = name || 'My Store';
-  state.currency = curr;
-  state.goal = goal;
+  var nameEl = document.getElementById('ob-name');
+  var currEl = document.getElementById('ob-curr');
+  var goalEl = document.getElementById('ob-goal');
+
+  state.name = (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : 'My Store';
+  state.currency = (currEl && currEl.value) ? currEl.value : '$';
+  state.goal = goalEl ? (parseFloat(goalEl.value) || 0) : 0;
+
   save();
+  showDashboard();
+}
+
+function showDashboard(){
+  document.getElementById('onboard').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
   initDashboard();
 }
 
@@ -426,8 +434,6 @@ function finishOnboarding(){
 // INIT
 // ============================================================
 function initDashboard(){
-  document.getElementById('onboard').classList.add('hidden');
-  document.getElementById('dashboard').classList.remove('hidden');
   document.getElementById('brand-name').textContent = state.name;
   document.querySelectorAll('.sym-currency').forEach(function(el){ el.textContent = state.currency; });
 
@@ -679,9 +685,9 @@ function renderChart(){
   var dates = sortedDates();
 
   if (dates.length < 2){
-    canvas.style.display='none'; emptyMsg.classList.remove('hidden'); return;
+    canvas.style.display='none'; emptyMsg.style.display='block'; return;
   }
-  canvas.style.display='block'; emptyMsg.classList.add('hidden');
+  canvas.style.display='block'; emptyMsg.style.display='none';
 
   // Compute a rolling score for each of the last up-to-7 days
   // (using data available up to that day)
@@ -713,7 +719,7 @@ function renderChart(){
   });
 
   if (points.length < 2){
-    canvas.style.display='none'; emptyMsg.classList.remove('hidden'); return;
+    canvas.style.display='none'; emptyMsg.style.display='block'; return;
   }
 
   var dpr = window.devicePixelRatio||1;
@@ -919,7 +925,7 @@ function renderForecast(){
   if (dates.length === 0){
     document.getElementById('fc-month').textContent = '—';
     document.getElementById('fc-needed').textContent = '—';
-    document.getElementById('goal-section').classList.add('hidden');
+    document.getElementById('goal-section').style.display='none';
     return;
   }
 
@@ -932,7 +938,7 @@ function renderForecast(){
   document.getElementById('fc-month-sub').textContent = 'Based on last '+last7.length+' day'+(last7.length>1?'s':'')+' avg';
 
   if (state.goal > 0){
-    document.getElementById('goal-section').classList.remove('hidden');
+    document.getElementById('goal-section').style.display='block';
 
     // current month total
     var now = new Date();
@@ -956,7 +962,7 @@ function renderForecast(){
     document.getElementById('goal-current').textContent = fmtMoney(monthTotal);
     document.getElementById('goal-target').textContent = fmtMoney(state.goal);
   } else {
-    document.getElementById('goal-section').classList.add('hidden');
+    document.getElementById('goal-section').style.display='none';
     document.getElementById('fc-needed').textContent = '—';
     document.getElementById('fc-needed-sub').textContent = 'Set a goal to see this';
   }
@@ -1051,8 +1057,12 @@ function resetApp(){
 load();
 window.addEventListener('resize', renderChart);
 
-if (state.name){ initDashboard(); }
-else { document.getElementById('onboard').classList.remove('hidden'); }
+if (state.name){
+  showDashboard();
+} else {
+  document.getElementById('onboard').style.display = 'block';
+  document.getElementById('dashboard').style.display = 'none';
+}
 </script>
 
 </body>
