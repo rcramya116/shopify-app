@@ -412,22 +412,30 @@ document.getElementById('ob-curr').addEventListener('change', function(){
 });
 
 function finishOnboarding(){
-  var nameEl = document.getElementById('ob-name');
-  var currEl = document.getElementById('ob-curr');
-  var goalEl = document.getElementById('ob-goal');
+  try {
+    var nameEl = document.getElementById('ob-name');
+    var currEl = document.getElementById('ob-curr');
+    var goalEl = document.getElementById('ob-goal');
 
-  state.name = (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : 'My Store';
-  state.currency = (currEl && currEl.value) ? currEl.value : '$';
-  state.goal = goalEl ? (parseFloat(goalEl.value) || 0) : 0;
+    state.name = (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : 'My Store';
+    state.currency = (currEl && currEl.value) ? currEl.value : '$';
+    state.goal = goalEl ? (parseFloat(goalEl.value) || 0) : 0;
 
-  save();
-  showDashboard();
+    save();
+    showDashboard();
+  } catch(e) {
+    alert('Error starting app: ' + e.message);
+  }
 }
 
 function showDashboard(){
-  document.getElementById('onboard').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  initDashboard();
+  try {
+    document.getElementById('onboard').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    initDashboard();
+  } catch(e) {
+    alert('Error loading dashboard: ' + e.message);
+  }
 }
 
 // ============================================================
@@ -774,7 +782,7 @@ function renderBriefing(){
 
   // Yesterday/today profit + margin
   var dayLabel = lastDate === todayStr() ? 'Today' : 'Last entry';
-  lines.push({icon: last.profit>=0?'💰':'🔴', text: dayLabel+'\\'s profit: <b>'+fmtMoney(last.profit)+'</b> · Margin: <b>'+last.margin.toFixed(1)+'%</b>'});
+  lines.push({icon: last.profit>=0?'💰':'🔴', text: dayLabel+' profit: <b>'+fmtMoney(last.profit)+'</b> · Margin: <b>'+last.margin.toFixed(1)+'%</b>'});
 
   // Compared to average
   if (dates.length >= 3){
@@ -784,7 +792,7 @@ function renderBriefing(){
     if (Math.abs(diffPct) >= 1){
       var dir = diffPct > 0 ? 'above' : 'below';
       var icon = diffPct > 0 ? '📈' : '📉';
-      lines.push({icon: icon, text: 'That\\'s <b>'+Math.abs(diffPct).toFixed(0)+' points '+dir+'</b> your recent average ('+avgAll.toFixed(1)+'%).'});
+      lines.push({icon: icon, text: 'That is <b>'+Math.abs(diffPct).toFixed(0)+' points '+dir+'</b> your recent average ('+avgAll.toFixed(1)+'%).'});
     }
   }
 
@@ -1057,9 +1065,16 @@ function resetApp(){
 load();
 window.addEventListener('resize', renderChart);
 
-if (state.name){
-  showDashboard();
-} else {
+try {
+  if (state.name && typeof state.name === 'string' && state.name.length > 0){
+    showDashboard();
+  } else {
+    state.name = '';
+    document.getElementById('onboard').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+} catch(e) {
+  localStorage.removeItem(STORAGE_KEY);
   document.getElementById('onboard').style.display = 'block';
   document.getElementById('dashboard').style.display = 'none';
 }
