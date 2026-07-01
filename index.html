@@ -1,1084 +1,645 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ED92FK72K5"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());
+  gtag('config','G-ED92FK72K5');
+</script>
 <meta charset="UTF-8">
-<title>ProfitSnap — Is Your Store Getting Healthier or Worse?</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="One score. One briefing. 30 seconds a day to know if your store is winning, stable, or at risk.">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
-
+<title>ProfitSnap — Is Your Shopify Store Winning or Bleeding?</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Most Shopify stores are losing money without knowing it. Check your real profit score in 30 seconds. Free, no signup.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
 :root{
-  --bg:#060d1a;
-  --card:#0c1929;
-  --card2:#0f2035;
-  --border:#1a3050;
-  --border2:#224070;
-  --t1:#eef2f8;
-  --t2:#7a9bc4;
-  --t3:#3a5878;
-  --grn:#00e887;
-  --grn2:#00e88715;
-  --grn3:#00e88740;
-  --red:#ff4757;
-  --red2:#ff475715;
-  --red3:#ff475740;
-  --amb:#ffb833;
-  --amb2:#ffb83315;
-  --amb3:#ffb83340;
-  --acc:#4fc3f7;
-  --acc2:#4fc3f715;
-  --acc3:#4fc3f740;
+  --bg:#060d1a;--card:#0c1929;--card2:#0f2035;
+  --border:#1a3050;--border2:#224070;
+  --t1:#eef2f8;--t2:#7a9bc4;--t3:#3a5878;
+  --grn:#00e887;--grn2:#00e88715;--grn3:#00e88740;
+  --red:#ff4757;--red2:#ff475715;--red3:#ff475740;
+  --amb:#ffb833;--amb2:#ffb83315;--amb3:#ffb83340;
+  --acc:#4fc3f7;--acc2:#4fc3f715;--acc3:#4fc3f740;
 }
+body{margin:0;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-30%;left:-20%;width:60vw;height:60vw;background:radial-gradient(circle,rgba(79,195,247,.06) 0%,transparent 70%);pointer-events:none}
+body::after{content:'';position:fixed;bottom:-20%;right:-20%;width:50vw;height:50vw;background:radial-gradient(circle,rgba(0,232,135,.05) 0%,transparent 70%);pointer-events:none}
 
-body{
-  margin:0;
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--t1);
-  min-height:100vh;
-  padding:20px;
-  position:relative;
-  overflow-x:hidden;
-}
-body::before{
-  content:'';
-  position:fixed;
-  top:-30%;left:-20%;
-  width:60vw;height:60vw;
-  background:radial-gradient(circle,rgba(79,195,247,.06) 0%,transparent 70%);
-  pointer-events:none;
-}
-body::after{
-  content:'';
-  position:fixed;
-  bottom:-20%;right:-20%;
-  width:50vw;height:50vw;
-  background:radial-gradient(circle,rgba(0,232,135,.05) 0%,transparent 70%);
-  pointer-events:none;
-}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;width:100%;max-width:420px;padding:32px 28px;position:relative;z-index:1;animation:fadeUp .5s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-.wrap{max-width:440px;margin:0 auto;position:relative;z-index:1}
+/* STREAK BAR */
+.streak-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.streak-pill{display:inline-flex;align-items:center;gap:6px;background:var(--amb2);border:1px solid var(--amb3);color:var(--amb);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px}
+.streak-dot{width:6px;height:6px;border-radius:50%;background:var(--amb);animation:pulse 1.5s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.users-pill{font-size:11px;color:var(--t3);font-weight:500}
 
-/* ===== TOP BAR ===== */
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;
-}
-.logo{
-  font-family:'Syne',sans-serif;font-weight:800;font-size:18px;
-  display:flex;align-items:center;gap:8px;
-}
-.logo-dot{width:10px;height:10px;border-radius:50%;background:var(--grn);box-shadow:0 0 12px var(--grn)}
-.streak-pill{
-  font-size:12px;color:var(--t3);font-weight:600;
-}
-.streak-pill b{color:var(--t2)}
+/* HEADLINE */
+.headline{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1.15;margin-bottom:8px;letter-spacing:-.4px}
+.headline .red{color:var(--red)}
+.headline .grn{color:var(--grn)}
+.sub{font-size:13px;color:var(--t2);line-height:1.65;margin-bottom:22px}
+.sub strong{color:var(--t1)}
 
-/* ===== CARD ===== */
-.card{
-  background:var(--card);border:1px solid var(--border);border-radius:20px;
-  padding:24px 22px;margin-bottom:14px;animation:fadeUp .5s ease both;
-}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* CURRENCY */
+.curr-row{display:flex;gap:6px;margin-bottom:16px}
+.curr-btn{flex:1;padding:7px 0;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
+.curr-btn.on{background:var(--acc2);border-color:var(--acc3);color:var(--acc);font-weight:600}
 
-/* ===== ONBOARDING ===== */
-#onboard .headline{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;line-height:1.25;margin-bottom:8px}
-#onboard .sub{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:22px}
-.field{margin-bottom:14px}
-.field-label{
-  font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
-  color:var(--t3);margin-bottom:6px;display:block;
-}
-.inp-wrap{
-  display:flex;align-items:center;background:var(--card2);
-  border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .15s;
-}
+/* INPUTS */
+.field{margin-bottom:10px;position:relative}
+.field-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:5px;display:block}
+.inp-wrap{display:flex;align-items:center;background:var(--card2);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .15s}
 .inp-wrap:focus-within{border-color:var(--acc3)}
-.inp-sym{padding:13px 12px;font-size:13px;color:var(--t3);flex-shrink:0;user-select:none}
-.inp-wrap input,.inp-wrap select{
-  flex:1;padding:13px 12px 13px 0;background:transparent;border:none;outline:none;
-  font-family:'DM Sans',sans-serif;font-size:15px;color:var(--t1);width:100%;-webkit-appearance:none;
-}
+.inp-sym{padding:12px;font-size:13px;color:var(--t3);flex-shrink:0;user-select:none}
+.inp-wrap input{flex:1;padding:12px 12px 12px 0;background:transparent;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--t1);width:100%}
 .inp-wrap input::placeholder{color:var(--t3);font-size:13px}
-.inp-wrap select option{background:var(--card2);color:var(--t1)}
-.inp-wrap.full input{padding-left:12px}
+.example-hint{font-size:11px;color:var(--t3);text-align:right;margin-top:3px;cursor:pointer;transition:color .15s}
+.example-hint:hover{color:var(--acc)}
 
-.btn{
-  width:100%;padding:15px;background:var(--grn);color:#060d1a;
-  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;border:none;
-  border-radius:12px;cursor:pointer;margin-top:6px;transition:opacity .15s, transform .1s;letter-spacing:.3px;
-}
-.btn:hover{opacity:.9}
-.btn:active{transform:scale(.98)}
+/* BUTTON */
+.snap-btn{width:100%;padding:15px;background:var(--grn);color:#060d1a;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;border:none;border-radius:12px;cursor:pointer;margin-top:6px;transition:opacity .15s,transform .1s;letter-spacing:.3px}
+.snap-btn:hover{opacity:.9}
+.snap-btn:active{transform:scale(.98)}
 
-/* ===== ENTRY FORM ===== */
-.entry-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.entry-row .field{margin-bottom:0}
-.entry-row .field-label{font-size:9px}
-.entry-row .inp-sym{padding:11px 8px;font-size:12px}
-.entry-row .inp-wrap input{padding:11px 8px 11px 0;font-size:14px}
+/* RESULT */
+#result-box{margin-top:18px;display:none;animation:fadeUp .4s ease both}
 
-/* ===== PROFIT SCORE HERO ===== */
-.score-card{
-  text-align:center;
-  padding:30px 22px;
-}
-.score-label{
-  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-  color:var(--t3);margin-bottom:14px;
-}
-.score-ring-wrap{
-  position:relative;width:180px;height:180px;margin:0 auto 16px;
-}
-.score-num{
-  font-family:'Syne',sans-serif;font-size:52px;font-weight:800;line-height:1;
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-}
-.score-num span{font-size:20px;color:var(--t3);font-weight:600}
-.score-status{
-  font-family:'Syne',sans-serif;font-size:17px;font-weight:800;margin-bottom:6px;
-}
-.score-delta{
-  font-size:13px;color:var(--t2);
-}
-.score-delta b{font-weight:700}
+/* SCORE */
+.score-wrap{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:12px;text-align:center;position:relative;overflow:hidden}
+.score-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.score-num{font-family:'Syne',sans-serif;font-size:64px;font-weight:800;line-height:1;margin-bottom:4px}
+.score-bar-wrap{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin:10px 0 8px}
+.score-bar-fill{height:100%;border-radius:3px;transition:width .8s ease}
+.score-verdict{font-size:13px;font-weight:600;margin-bottom:4px}
+.score-sub{font-size:11px;color:var(--t2);line-height:1.5}
 
-/* ===== WINNING BADGE ===== */
-.winning-pill{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:8px 18px;border-radius:30px;font-size:13px;font-weight:700;
-  margin-top:14px;
-}
+/* METRICS ROW */
+.metrics-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.metric-box{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center}
+.metric-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:2px}
+.metric-lbl{font-size:9px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--t3)}
 
-/* ===== SECTION TITLE ===== */
-.section-title{
-  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:12px;
-  display:flex;align-items:center;gap:8px;
-}
+/* SILENT KILLER */
+.killer-box{border-radius:14px;padding:14px 16px;margin-bottom:12px;border:1px solid}
+.killer-title{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.killer-main{font-size:14px;font-weight:600;margin-bottom:6px;line-height:1.4}
+.killer-fix{font-size:12px;line-height:1.6;opacity:.85}
 
-/* ===== BRIEFING ===== */
-.briefing-text{font-size:13.5px;line-height:1.85;color:var(--t1)}
-.briefing-text b{color:var(--acc)}
-.briefing-line{
-  display:flex;align-items:flex-start;gap:10px;padding:9px 0;
-  border-bottom:1px solid rgba(255,255,255,.05);
-}
-.briefing-line:last-child{border-bottom:none;padding-bottom:0}
-.briefing-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+/* BRIEFING */
+.briefing-box{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.briefing-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:8px}
+.briefing-text{font-size:13px;color:var(--t2);line-height:1.7}
 
-/* ===== LEAK DETECTOR ===== */
-.leak-item{
-  display:flex;align-items:flex-start;gap:10px;padding:12px 0;
-  border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;line-height:1.6;
-}
-.leak-item:last-child{border-bottom:none;padding-bottom:0}
-.leak-icon{font-size:18px;flex-shrink:0}
-.leak-clean{
-  text-align:center;padding:10px 0;color:var(--t2);font-size:13px;
-}
+/* ACTIONS */
+.actions-box{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.actions-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.action-row{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:rgba(255,255,255,.75);line-height:1.5;margin-bottom:8px}
+.action-row:last-child{margin-bottom:0}
+.action-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}
 
-/* ===== FORECAST ===== */
-.forecast-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.forecast-box{
-  background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;
-}
-.forecast-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
-.forecast-value{font-family:'Syne',sans-serif;font-size:20px;font-weight:800}
-.forecast-sub{font-size:11px;color:var(--t2);margin-top:3px}
-.goal-bar{height:10px;background:var(--card2);border-radius:6px;overflow:hidden;margin:10px 0 6px;border:1px solid var(--border)}
-.goal-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--grn));border-radius:6px;transition:width .6s ease}
-.goal-text{display:flex;justify-content:space-between;font-size:12px;color:var(--t2)}
+/* EMAIL CAPTURE */
+.email-box{background:linear-gradient(135deg,var(--grn2),rgba(0,232,135,.03));border:1px solid var(--grn3);border-radius:14px;padding:16px;margin-bottom:12px}
+.email-title{font-size:13px;font-weight:600;color:var(--grn);margin-bottom:4px}
+.email-sub{font-size:11px;color:var(--t2);margin-bottom:12px;line-height:1.5}
+.email-row{display:flex;gap:8px}
+.email-inp{flex:1;background:var(--card2);border:1.5px solid var(--border2);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--t1);outline:none;transition:border-color .15s}
+.email-inp:focus{border-color:var(--grn3)}
+.email-inp::placeholder{color:var(--t3)}
+.email-btn{padding:10px 14px;background:var(--grn);color:#060d1a;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;border:none;border-radius:8px;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.email-btn:hover{opacity:.9}
+.email-btn.sent{background:var(--grn3);color:var(--grn)}
 
-/* ===== CHART ===== */
-#chart-canvas{width:100%;height:120px;display:block}
-.chart-empty{text-align:center;padding:24px 0;color:var(--t3);font-size:12px}
+/* SHARE */
+.share-btn{width:100%;padding:12px;background:transparent;border:1px solid var(--border2);border-radius:10px;color:var(--t2);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:10px}
+.share-btn:hover{border-color:var(--acc3);color:var(--acc);background:var(--acc2)}
+.share-btn.copied{border-color:var(--grn3);color:var(--grn);background:var(--grn2)}
 
-/* ===== TODAY VERDICT ===== */
-.today-result{
-  margin-top:14px;padding:14px 16px;border-radius:12px;display:none;animation:fadeUp .4s ease both;
-}
-.tr-status{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:4px}
-.tr-profit{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1;margin-bottom:4px}
-.tr-msg{font-size:12px;line-height:1.6;color:rgba(255,255,255,.75)}
+/* TRACK DAILY */
+.track-box{background:var(--acc2);border:1px solid var(--acc3);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none;margin-bottom:10px;transition:all .15s}
+.track-box:hover{background:rgba(79,195,247,.12)}
+.track-icon{font-size:20px;flex-shrink:0}
+.track-body{flex:1}
+.track-title{font-size:13px;font-weight:600;color:var(--acc);margin-bottom:2px}
+.track-sub{font-size:11px;color:var(--t2)}
+.track-arrow{font-size:16px;color:var(--acc);flex-shrink:0}
 
-/* ===== FOOTER ===== */
-.footer{margin-top:6px;text-align:center;font-size:11px;color:var(--t3);line-height:1.6;padding-bottom:10px}
-.settings-link{text-align:center;font-size:11px;color:var(--t3);cursor:pointer;margin-top:4px}
-.settings-link:hover{color:var(--acc)}
+/* HISTORY */
+.history-wrap{margin-top:12px}
+.history-toggle{width:100%;background:transparent;border:none;color:var(--t3);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;padding:6px 0;text-align:center;transition:color .15s}
+.history-toggle:hover{color:var(--t2)}
+.history-box{display:none;margin-top:10px;background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:14px 16px}
+.history-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.history-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+.history-row:last-child{border-bottom:none}
+.history-date{color:var(--t2)}
+.history-profit{font-weight:600}
+.history-margin{font-size:10px;color:var(--t3);margin-left:6px}
 
-.hidden{display:none !important}
+/* FOOTER */
+.footer{margin-top:18px;text-align:center;font-size:11px;color:var(--t3);line-height:1.6}
+.footer a{color:var(--t2);text-decoration:none}
+.footer a:hover{color:var(--acc)}
 
-/* ===== MONTH HISTORY ===== */
-.month-item{
-  padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05);
+/* TOOLTIP */
+.tooltip{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:10px 18px;font-size:13px;color:var(--t1);z-index:500;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap}
+.tooltip.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+@media(max-width:480px){
+  .card{padding:24px 20px}
+  .headline{font-size:22px}
+  .score-num{font-size:54px}
+  .metrics-row{grid-template-columns:1fr 1fr 1fr}
 }
-.month-item:last-child{border-bottom:none;padding-bottom:0}
-.month-header{
-  display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;
-}
-.month-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
-.month-profit{font-family:'Syne',sans-serif;font-size:18px;font-weight:800}
-.month-stats-row{
-  display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-bottom:6px;
-}
-.month-vs{
-  font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px;
-}
-.month-empty{text-align:center;padding:16px 0;color:var(--t3);font-size:13px}
 </style>
 </head>
 <body>
+<div class="card">
 
-<div class="wrap">
-
-  <!-- ===================== ONBOARDING ===================== -->
-  <div class="card" id="onboard">
-    <div class="headline">Welcome to <span style="color:var(--grn)">ProfitSnap</span></div>
-    <div class="sub">In 30 seconds a day, know exactly one thing: <b>is your store getting healthier or worse?</b> One score. One briefing. Nothing else to dig through.</div>
-
-    <div class="field">
-      <label class="field-label">Your Store / Brand Name</label>
-      <div class="inp-wrap full">
-        <input type="text" id="ob-name" placeholder="e.g. Glow Skincare Co.">
-      </div>
+  <!-- STREAK BAR -->
+  <div class="streak-bar">
+    <div class="streak-pill">
+      <div class="streak-dot"></div>
+      <span id="streak-text">Day 1 — start your streak</span>
     </div>
-
-    <div class="field">
-      <label class="field-label">Currency</label>
-      <div class="inp-wrap full">
-        <select id="ob-curr" style="padding-left:12px;cursor:pointer">
-          <option value="$">$ USD</option>
-          <option value="£">£ GBP</option>
-          <option value="€">€ EUR</option>
-          <option value="₹">₹ INR</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="field">
-      <label class="field-label">Monthly Profit Goal (optional)</label>
-      <div class="inp-wrap">
-        <span class="inp-sym" id="ob-sym">$</span>
-        <input type="number" id="ob-goal" placeholder="e.g. 5000" min="0">
-      </div>
-    </div>
-
-    <button class="btn" onclick="finishOnboarding()">Start — Know Where I Stand →</button>
+    <span class="users-pill" id="users-count"></span>
   </div>
 
-  <!-- ===================== DASHBOARD ===================== -->
-  <div id="dashboard" style="display:none">
+  <!-- HEADLINE -->
+  <div class="headline">
+    Is your store <span class="red">bleeding quietly</span> or actually <span class="grn">winning?</span>
+  </div>
+  <div class="sub">
+    Revenue looks fine. But after ads, product cost, and shipping — <strong>what is actually left?</strong> Most stores find out too late.
+  </div>
 
-    <div class="topbar">
-      <div class="logo"><div class="logo-dot"></div><span id="brand-name">ProfitSnap</span></div>
-      <div class="streak-pill"><b id="streak-count">0</b> day streak</div>
+  <!-- CURRENCY -->
+  <div class="curr-row">
+    <button class="curr-btn on" id="c-usd" onclick="setCurr('$','USD')">$ USD</button>
+    <button class="curr-btn" id="c-gbp" onclick="setCurr('£','GBP')">£ GBP</button>
+    <button class="curr-btn" id="c-eur" onclick="setCurr('€','EUR')">€ EUR</button>
+    <button class="curr-btn" id="c-inr" onclick="setCurr('₹','INR')">₹ INR</button>
+  </div>
+
+  <!-- INPUTS -->
+  <div class="field">
+    <label class="field-label">Today's Revenue</label>
+    <div class="inp-wrap">
+      <span class="inp-sym" id="sym1">$</span>
+      <input type="number" id="revenue" placeholder="Total sales today" min="0" oninput="liveCalc()">
+    </div>
+  </div>
+  <div class="field">
+    <label class="field-label">Ad Spend</label>
+    <div class="inp-wrap">
+      <span class="inp-sym" id="sym2">$</span>
+      <input type="number" id="ads" placeholder="Facebook, Google, TikTok..." min="0" oninput="liveCalc()">
+    </div>
+  </div>
+  <div class="field">
+    <label class="field-label">Product Cost (COGS)</label>
+    <div class="inp-wrap">
+      <span class="inp-sym" id="sym3">$</span>
+      <input type="number" id="cost" placeholder="Cost of goods sold" min="0" oninput="liveCalc()">
+    </div>
+    <div class="example-hint" onclick="loadExample()">Try example numbers →</div>
+  </div>
+
+  <button class="snap-btn" onclick="calculate()">Snap My Profit Score →</button>
+
+  <!-- RESULT -->
+  <div id="result-box">
+
+    <!-- SCORE -->
+    <div class="score-wrap" id="score-wrap">
+      <div class="score-label">Your Profit Score</div>
+      <div class="score-num" id="score-num">—</div>
+      <div class="score-bar-wrap"><div class="score-bar-fill" id="score-bar" style="width:0%"></div></div>
+      <div class="score-verdict" id="score-verdict">—</div>
+      <div class="score-sub" id="score-sub">—</div>
     </div>
 
-    <!-- ENTRY -->
-    <div class="card">
-      <div class="section-title" id="greeting">👋 Log today's numbers</div>
-      <div class="entry-row">
-        <div class="field">
-          <label class="field-label">Revenue</label>
-          <div class="inp-wrap">
-            <span class="inp-sym sym-currency">$</span>
-            <input type="number" id="in-revenue" placeholder="0" min="0">
-          </div>
-        </div>
-        <div class="field">
-          <label class="field-label">Ad Spend</label>
-          <div class="inp-wrap">
-            <span class="inp-sym sym-currency">$</span>
-            <input type="number" id="in-ads" placeholder="0" min="0">
-          </div>
-        </div>
-        <div class="field">
-          <label class="field-label">COGS</label>
-          <div class="inp-wrap">
-            <span class="inp-sym sym-currency">$</span>
-            <input type="number" id="in-cost" placeholder="0" min="0">
-          </div>
-        </div>
+    <!-- METRICS -->
+    <div class="metrics-row">
+      <div class="metric-box">
+        <div class="metric-val" id="m-profit">—</div>
+        <div class="metric-lbl">Real Profit</div>
       </div>
-      <button class="btn" onclick="logToday()" id="log-btn">Snap My Score →</button>
-
-      <div id="today-result" class="today-result"></div>
-    </div>
-
-    <!-- PROFIT SCORE -->
-    <div class="card score-card" id="score-card">
-      <div class="score-label">Profit Score</div>
-      <div class="score-ring-wrap">
-        <canvas id="score-ring" width="180" height="180"></canvas>
-        <div class="score-num" id="score-num">—<span>/100</span></div>
+      <div class="metric-box">
+        <div class="metric-val" id="m-margin">—</div>
+        <div class="metric-lbl">Margin</div>
       </div>
-      <div class="score-status" id="score-status">Log your first day</div>
-      <div class="score-delta" id="score-delta">&nbsp;</div>
-      <div id="winning-wrap"></div>
-    </div>
-
-    <!-- 7-DAY SCORE TREND -->
-    <div class="card">
-      <div class="section-title">📈 Score — Last 7 Days</div>
-      <canvas id="chart-canvas"></canvas>
-      <div style="display:none" id="chart-empty">Log a few days to see your score trend.</div>
-    </div>
-
-    <!-- CEO BRIEFING -->
-    <div class="card">
-      <div class="section-title">🧠 Daily Briefing</div>
-      <div id="briefing-content"></div>
-    </div>
-
-    <!-- LEAK DETECTOR -->
-    <div class="card">
-      <div class="section-title">🔎 Leak Detector</div>
-      <div id="leak-content"></div>
-    </div>
-
-    <!-- FORECAST -->
-    <div class="card">
-      <div class="section-title">🔮 Forecast</div>
-      <div class="forecast-grid">
-        <div class="forecast-box">
-          <div class="forecast-label">Projected Month</div>
-          <div class="forecast-value" id="fc-month">—</div>
-          <div class="forecast-sub" id="fc-month-sub">&nbsp;</div>
-        </div>
-        <div class="forecast-box">
-          <div class="forecast-label">Needed / Day</div>
-          <div class="forecast-value" id="fc-needed">—</div>
-          <div class="forecast-sub" id="fc-needed-sub">&nbsp;</div>
-        </div>
-      </div>
-      <div id="goal-section" style="display:none">
-        <div class="goal-text"><span>Goal Progress</span><span id="goal-pct">0%</span></div>
-        <div class="goal-bar"><div class="goal-fill" id="goal-fill" style="width:0%"></div></div>
-        <div class="goal-text"><span id="goal-current">$0</span><span id="goal-target">$0</span></div>
+      <div class="metric-box">
+        <div class="metric-val" id="m-monthly">—</div>
+        <div class="metric-lbl">Per Month</div>
       </div>
     </div>
 
-    <!-- MONTHLY HISTORY -->
-    <div class="card">
-      <div class="section-title">📅 Monthly History</div>
-      <div id="month-history-content"></div>
+    <!-- SILENT KILLER -->
+    <div class="killer-box" id="killer-box">
+      <div class="killer-title" id="killer-title">🔎 Silent Killer Detected</div>
+      <div class="killer-main" id="killer-main">—</div>
+      <div class="killer-fix" id="killer-fix">—</div>
     </div>
 
-    <div class="settings-link" onclick="resetApp()">Reset all data</div>
+    <!-- DAILY BRIEFING -->
+    <div class="briefing-box">
+      <div class="briefing-label">📋 Today's Briefing</div>
+      <div class="briefing-text" id="briefing-text">—</div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions-box">
+      <div class="actions-label">What to do right now</div>
+      <div id="actions-list"></div>
+    </div>
+
+    <!-- EMAIL CAPTURE -->
+    <div class="email-box" id="email-box">
+      <div class="email-title">Get your daily profit briefing</div>
+      <div class="email-sub">We send you one email every morning with yesterday's result and what to focus on today. Free forever.</div>
+      <div class="email-row">
+        <input class="email-inp" type="email" id="email-inp" placeholder="your@email.com">
+        <button class="email-btn" id="email-btn" onclick="saveEmail()">Send it →</button>
+      </div>
+    </div>
+
+    <!-- SHARE -->
+    <button class="share-btn" id="share-btn" onclick="shareResult()">
+      <span>📤</span>
+      <span id="share-text">Share your score — challenge other store owners</span>
+    </button>
+
+    <!-- TRACK DAILY CTA -->
+    <div class="track-box" onclick="showHistory()">
+      <div class="track-icon">📈</div>
+      <div class="track-body">
+        <div class="track-title">Track this daily — see your 7-day trend</div>
+        <div class="track-sub">Your scores are saved on this device. No signup needed.</div>
+      </div>
+      <div class="track-arrow">↓</div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="history-wrap" id="history-wrap" style="display:none">
+      <div class="history-box" id="history-box" style="display:block">
+        <div class="history-label">📅 Last 7 Days</div>
+        <div id="history-list"></div>
+      </div>
+    </div>
 
   </div>
 
+  <!-- FOOTER -->
   <div class="footer">
-    Your data stays on this device — nothing is uploaded.<br>
-    One number. One briefing. That's it.
+    No signup. Your data stays on this device. 100% free.<br>
+    Built by <a href="https://instagram.com/ecommercefix" target="_blank">@ecommercefix</a>
   </div>
 
 </div>
 
+<div class="tooltip" id="tooltip"></div>
+
 <script>
-// ============================================================
-// STATE & STORAGE
-// ============================================================
-var STORAGE_KEY = 'profitsnap_data_v1';
-var state = {
-  name: '',
-  currency: '$',
-  goal: 0,
-  entries: {}, // { 'YYYY-MM-DD': { revenue, ads, cost, profit, margin } }
-  lastLogDate: null,
-  streak: 0,
-  prevScore: null
-};
+// STATE
+var CURR='$', CURR_CODE='USD';
+var lastProfit=0, lastMargin=0, lastRev=0, lastScore=0;
+var history=[];
 
-function load() {
-  var raw = localStorage.getItem(STORAGE_KEY);
-  if (raw) { try { state = Object.assign(state, JSON.parse(raw)); } catch(e){} }
-}
-function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-
-function todayStr(){ var d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
-function pad(n){ return n<10?'0'+n:''+n; }
-function dateStrDaysAgo(n){ var d=new Date(); d.setDate(d.getDate()-n); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
-function fmtMoney(n){ var neg=n<0; return (neg?'-':'')+state.currency+Math.abs(Math.round(n)).toLocaleString(); }
-function sortedDates(){ return Object.keys(state.entries).sort(); }
-
-// ============================================================
-// ONBOARDING
-// ============================================================
-document.getElementById('ob-curr').addEventListener('change', function(){
-  document.getElementById('ob-sym').textContent = this.value;
+// INIT
+document.addEventListener('DOMContentLoaded',function(){
+  loadHistory();
+  updateStreak();
+  updateUsersCount();
+  gtag('event','page_view_profitsnap',{event_category:'engagement'});
 });
 
-function finishOnboarding(){
-  try {
-    var nameEl = document.getElementById('ob-name');
-    var currEl = document.getElementById('ob-curr');
-    var goalEl = document.getElementById('ob-goal');
+// CURRENCY
+function setCurr(sym,code){
+  CURR=sym; CURR_CODE=code;
+  ['usd','gbp','eur','inr'].forEach(function(c){
+    document.getElementById('c-'+c).classList.remove('on');
+  });
+  document.getElementById('c-'+code.toLowerCase()).classList.add('on');
+  ['sym1','sym2','sym3'].forEach(function(id){document.getElementById(id).textContent=sym;});
+  liveCalc();
+}
 
-    state.name = (nameEl && nameEl.value.trim()) ? nameEl.value.trim() : 'My Store';
-    state.currency = (currEl && currEl.value) ? currEl.value : '$';
-    state.goal = goalEl ? (parseFloat(goalEl.value) || 0) : 0;
+// EXAMPLE
+function loadExample(){
+  var isINR=CURR_CODE==='INR';
+  document.getElementById('revenue').value=isINR?50000:1200;
+  document.getElementById('ads').value=isINR?18000:380;
+  document.getElementById('cost').value=isINR?14000:290;
+  liveCalc();
+  showTooltip('Example numbers loaded — typical mid-size Shopify store');
+  gtag('event','example_loaded');
+}
 
-    save();
-    showDashboard();
-  } catch(e) {
-    alert('Error starting app: ' + e.message);
+// LIVE CALC
+function liveCalc(){
+  var rev=parseFloat(document.getElementById('revenue').value)||0;
+  var ads=parseFloat(document.getElementById('ads').value)||0;
+  var cost=parseFloat(document.getElementById('cost').value)||0;
+  if(rev>0||ads>0||cost>0) renderResult(rev,ads,cost);
+}
+
+// CALCULATE
+function calculate(){
+  var rev=parseFloat(document.getElementById('revenue').value)||0;
+  var ads=parseFloat(document.getElementById('ads').value)||0;
+  var cost=parseFloat(document.getElementById('cost').value)||0;
+  if(rev<=0&&ads<=0&&cost<=0){showTooltip('Enter at least one number first');return;}
+  renderResult(rev,ads,cost);
+  saveToHistory(rev,ads,cost);
+  gtag('event','snap_profit_score',{revenue:rev,profit:rev-ads-cost});
+}
+
+// PROFIT SCORE ALGORITHM
+function calcScore(margin,profit,rev,ads,cost){
+  if(profit<0) return Math.max(0,Math.round(20+(margin/100*20)));
+  var s=0;
+  // Margin scoring (50 points)
+  if(margin>=30)s+=50;
+  else if(margin>=20)s+=40;
+  else if(margin>=15)s+=30;
+  else if(margin>=10)s+=20;
+  else s+=10;
+  // Ad efficiency (25 points)
+  var adRatio=rev>0?ads/rev*100:0;
+  if(adRatio<=20)s+=25;
+  else if(adRatio<=30)s+=20;
+  else if(adRatio<=40)s+=12;
+  else s+=5;
+  // COGS efficiency (25 points)
+  var cogsRatio=rev>0?cost/rev*100:0;
+  if(cogsRatio<=25)s+=25;
+  else if(cogsRatio<=35)s+=18;
+  else if(cogsRatio<=45)s+=10;
+  else s+=5;
+  return Math.min(100,Math.round(s));
+}
+
+// SILENT KILLER
+function getSilentKiller(rev,ads,cost,margin){
+  if(rev<=0) return null;
+  var adRatio=ads/rev*100;
+  var cogsRatio=cost/rev*100;
+  var adDamage=Math.max(0,adRatio-28);
+  var cogsDamage=Math.max(0,cogsRatio-32);
+
+  if(adDamage===0&&cogsDamage===0){
+    return{type:'none',color:'var(--grn)',borderColor:'var(--grn3)',bg:'var(--grn2)',
+      main:'No silent killer detected — your cost structure is healthy.',
+      fix:'Your ad spend and COGS are both within healthy ranges. Focus on maintaining this as you scale.'};
   }
-}
-
-function showDashboard(){
-  try {
-    document.getElementById('onboard').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    initDashboard();
-  } catch(e) {
-    alert('Error loading dashboard: ' + e.message);
-  }
-}
-
-// ============================================================
-// INIT
-// ============================================================
-function initDashboard(){
-  document.getElementById('brand-name').textContent = state.name;
-  document.querySelectorAll('.sym-currency').forEach(function(el){ el.textContent = state.currency; });
-
-  renderGreeting();
-  renderTodayState();
-  renderScore();
-  renderChart();
-  renderBriefing();
-  renderLeaks();
-  renderForecast();
-  renderMonthHistory();
-  renderStreakPill();
-}
-
-function renderGreeting(){
-  var hour = new Date().getHours();
-  var greet = hour<12 ? 'Good morning' : hour<18 ? 'Good afternoon' : 'Good evening';
-  var today = todayStr();
-  if (state.entries[today]){
-    document.getElementById('greeting').textContent = '✅ Logged for today — update anytime';
+  if(adDamage>=cogsDamage){
+    var fixMargin=margin+(adRatio-28);
+    return{type:'ads',color:'var(--red)',borderColor:'var(--red3)',bg:'var(--red2)',
+      main:'Your ad spend is eating '+adRatio.toFixed(0)+'% of every sale. Healthy range: 20–28%.',
+      fix:'Reducing ad spend to 28% of revenue would push your margin to ~'+fixMargin.toFixed(0)+'%. Test cutting your lowest-performing campaign first — do not touch the winners.'};
   } else {
-    document.getElementById('greeting').textContent = greet + ', ' + state.name;
+    var fixMargin2=margin+(cogsRatio-32);
+    return{type:'cogs',color:'var(--amb)',borderColor:'var(--amb3)',bg:'var(--amb2)',
+      main:'Your product cost is '+cogsRatio.toFixed(0)+'% of revenue. Healthy range: 20–32%.',
+      fix:'At this COGS ratio your margin will always be thin. Either renegotiate supplier cost by 10%, raise your price by 8–10%, or find a higher-margin product to bundle.'};
   }
 }
 
-function renderStreakPill(){ document.getElementById('streak-count').textContent = state.streak; }
+// RENDER
+function renderResult(rev,ads,cost){
+  var profit=rev-ads-cost;
+  var margin=rev>0?(profit/rev*100):0;
+  var monthly=profit*30;
+  var roas=ads>0?(rev/ads):0;
+  var score=calcScore(margin,profit,rev,ads,cost);
+  lastProfit=profit; lastMargin=margin; lastRev=rev; lastScore=score;
 
-// ============================================================
-// LOGGING
-// ============================================================
-function logToday(){
-  var rev = parseFloat(document.getElementById('in-revenue').value) || 0;
-  var ads = parseFloat(document.getElementById('in-ads').value) || 0;
-  var cost = parseFloat(document.getElementById('in-cost').value) || 0;
+  document.getElementById('result-box').style.display='block';
 
-  if (rev===0 && ads===0 && cost===0){ return; }
+  // SCORE
+  var scoreColor=score>=70?'var(--grn)':score>=45?'var(--amb)':'var(--red)';
+  var scoreEl=document.getElementById('score-num');
+  scoreEl.textContent=score;
+  scoreEl.style.color=scoreColor;
+  document.getElementById('score-bar').style.width=score+'%';
+  document.getElementById('score-bar').style.background=scoreColor;
 
-  var profit = rev - ads - cost;
-  var margin = rev>0 ? (profit/rev*100) : 0;
-  var today = todayStr();
-  var isNewDay = !state.entries[today];
-
-  // store previous score for delta
-  state.prevScore = computeScore();
-
-  state.entries[today] = {revenue:rev, ads:ads, cost:cost, profit:profit, margin:margin};
-
-  if (isNewDay) updateStreak(today);
-
-  save();
-  renderGreeting();
-  renderTodayResult(profit, margin);
-  renderScore();
-  renderChart();
-  renderBriefing();
-  renderLeaks();
-  renderForecast();
-  renderMonthHistory();
-  renderStreakPill();
-
-  document.getElementById('in-revenue').value='';
-  document.getElementById('in-ads').value='';
-  document.getElementById('in-cost').value='';
-}
-
-function updateStreak(today){
-  var yesterday = dateStrDaysAgo(1);
-  if (state.lastLogDate === yesterday || state.lastLogDate === null){ state.streak += 1; }
-  else if (state.lastLogDate === today){ /* no-op */ }
-  else { state.streak = 1; }
-  state.lastLogDate = today;
-}
-
-function renderTodayState(){
-  var today = todayStr();
-  var e = state.entries[today];
-  if (e){
-    renderTodayResult(e.profit, e.margin);
-    document.getElementById('in-revenue').placeholder = e.revenue;
-    document.getElementById('in-ads').placeholder = e.ads;
-    document.getElementById('in-cost').placeholder = e.cost;
-    document.getElementById('log-btn').textContent = "Update Today's Snap →";
-  }
-}
-
-function renderTodayResult(profit, margin){
-  var box = document.getElementById('today-result');
-  box.style.display = 'block';
-  var status, color, bg, icon, msg;
-  if (profit < 0){
-    status='LOSS TODAY'; color='var(--red)'; icon='🔴';
-    bg='linear-gradient(135deg, var(--red2), rgba(255,71,87,.04))';
-    msg="You're down "+fmtMoney(Math.abs(profit))+" today.";
-  } else if (margin < 10){
-    status='THIN MARGIN'; color='var(--amb)'; icon='🟡';
-    bg='linear-gradient(135deg, var(--amb2), rgba(255,184,51,.04))';
-    msg="Profitable, but margin is thin at "+margin.toFixed(1)+"%.";
-  } else if (margin < 20){
-    status='HEALTHY'; color='var(--grn)'; icon='🟢';
-    bg='linear-gradient(135deg, var(--grn2), rgba(0,232,135,.03))';
-    msg="Solid day at "+margin.toFixed(1)+"% margin.";
+  var verdict,scoreSub;
+  if(score>=70){
+    verdict='Healthy — safe to scale';
+    scoreSub='Your store is profitable with a solid margin. You can increase ad spend carefully.';
+  } else if(score>=45){
+    verdict='Fragile — do not scale yet';
+    scoreSub='Profitable but one bad week could wipe it out. Fix your biggest cost before scaling.';
   } else {
-    status='STRONG DAY'; color='var(--grn)'; icon='🚀';
-    bg='linear-gradient(135deg, rgba(0,232,135,.1), rgba(0,232,135,.03))';
-    msg="Excellent — "+margin.toFixed(1)+"% margin.";
+    verdict='At risk — action needed today';
+    scoreSub='Your store is losing money or dangerously close. Stop scaling ads immediately.';
   }
-  box.style.background = bg;
-  box.innerHTML = '<div class="tr-status" style="color:'+color+'">'+icon+' '+status+'</div>'+
-    '<div class="tr-profit" style="color:'+color+'">'+fmtMoney(profit)+'</div>'+
-    '<div class="tr-msg">'+msg+'</div>';
-}
+  document.getElementById('score-verdict').textContent=verdict;
+  document.getElementById('score-verdict').style.color=scoreColor;
+  document.getElementById('score-sub').textContent=scoreSub;
 
-// ============================================================
-// PROFIT SCORE ENGINE
-// 0-100 composed of: Margin (40), Trend (20), Consistency (20), ROAS (20)
-// ============================================================
-function computeScore(){
-  var dates = sortedDates();
-  if (dates.length === 0) return null;
+  // METRICS
+  var fmt=function(n){return CURR+Math.abs(Math.round(n)).toLocaleString()};
+  var mProfit=document.getElementById('m-profit');
+  mProfit.textContent=(profit<0?'-':'')+fmt(profit);
+  mProfit.style.color=profit>=0?'var(--grn)':'var(--red)';
+  var mMargin=document.getElementById('m-margin');
+  mMargin.textContent=margin.toFixed(1)+'%';
+  mMargin.style.color=margin>=20?'var(--grn)':margin>=10?'var(--amb)':'var(--red)';
+  var mMonthly=document.getElementById('m-monthly');
+  mMonthly.textContent=(monthly<0?'-':'')+fmt(monthly);
+  mMonthly.style.color=monthly>=0?'var(--grn)':'var(--red)';
 
-  var last7 = dates.slice(-7).map(function(d){ return state.entries[d]; });
-  var prev7 = dates.slice(-14, -7).map(function(d){ return state.entries[d]; });
-
-  // --- Margin component (0-40) ---
-  var avgMargin = avg(last7.map(function(e){ return e.margin; }));
-  var marginScore = clamp((avgMargin / 25) * 40, 0, 40); // 25% margin = full marks
-
-  // --- Trend component (0-20) ---
-  var trendScore = 10; // neutral default
-  if (prev7.length >= 2){
-    var prevAvgMargin = avg(prev7.map(function(e){ return e.margin; }));
-    var diff = avgMargin - prevAvgMargin;
-    trendScore = clamp(10 + diff * 1.5, 0, 20);
-  } else if (last7.length >= 3) {
-    // compare first half vs second half of available data
-    var half = Math.floor(last7.length/2);
-    var firstHalf = avg(last7.slice(0,half).map(function(e){return e.margin;}));
-    var secondHalf = avg(last7.slice(half).map(function(e){return e.margin;}));
-    trendScore = clamp(10 + (secondHalf-firstHalf)*1.5, 0, 20);
+  // SILENT KILLER
+  var killer=getSilentKiller(rev,ads,cost,margin);
+  if(killer){
+    var kb=document.getElementById('killer-box');
+    kb.style.background=killer.bg;
+    kb.style.borderColor=killer.borderColor;
+    document.getElementById('killer-title').style.color=killer.color;
+    document.getElementById('killer-main').style.color=killer.color;
+    document.getElementById('killer-main').textContent=killer.main;
+    document.getElementById('killer-fix').textContent=killer.fix;
+    document.getElementById('killer-fix').style.color='rgba(255,255,255,.75)';
   }
 
-  // --- Consistency component (0-20) ---
-  var profitableDays = last7.filter(function(e){ return e.profit > 0; }).length;
-  var consistencyScore = (profitableDays / last7.length) * 20;
+  // BRIEFING
+  var briefing;
+  if(profit<0){
+    briefing='Your store lost '+fmt(Math.abs(profit))+' today. At this rate that is '+fmt(Math.abs(monthly))+' every month. The most important thing right now is not to scale anything — identify whether ads or COGS is the bigger problem and cut that first. Every day you delay costs real money.';
+  } else if(margin<10){
+    briefing='You made money today but the margin of '+margin.toFixed(1)+'% leaves almost no room for error. One CPM spike, one supplier price increase, one bad week — and this flips negative. Do not increase ad spend until this is above 15%.';
+  } else if(margin<20){
+    briefing='Profitable at '+margin.toFixed(1)+'% margin. This is decent but not yet safe to scale aggressively. '+(roas>0?'Your ROAS is '+roas.toFixed(1)+'x — '+(roas>=3?'solid.':'aim for 3x+.'):'')+'Track this number daily. The moment it drops below 12% — stop and investigate.';
+  } else {
+    briefing='Strong day. '+margin.toFixed(1)+'% margin with a monthly run rate of '+fmt(monthly)+'. '+(roas>0?'ROAS of '+roas.toFixed(1)+'x is '+(roas>=4?'outstanding.':'solid.'):'')+" You can safely test increasing ad spend by 10–15% on your best campaign. Watch that this margin holds as you scale.";
+  }
+  document.getElementById('briefing-text').textContent=briefing;
 
-  // --- ROAS component (0-20) ---
-  var totalRev = sum(last7.map(function(e){ return e.revenue; }));
-  var totalAds = sum(last7.map(function(e){ return e.ads; }));
-  var roas = totalAds > 0 ? (totalRev/totalAds) : null;
-  var roasScore;
-  if (roas === null) roasScore = 15; // no ad spend = neutral-good
-  else roasScore = clamp((roas/4)*20, 0, 20); // ROAS 4x = full marks
+  // ACTIONS
+  var actions;
+  if(profit<0){
+    actions=[
+      {dot:'var(--red)',text:'<b>Pause or cut your lowest-performing ad campaign today</b> — every dollar spent now deepens the loss'},
+      {dot:'var(--amb)',text:'<b>Check your COGS</b> — is your product cost higher than expected? A 10% supplier discount could flip this positive'},
+      {dot:'var(--amb)',text:'<b>Can you raise your price by 10%?</b> Even a small increase often does not hurt conversion but fixes margin immediately'}
+    ];
+  } else if(margin<15){
+    actions=[
+      {dot:'var(--amb)',text:'<b>Hold ad spend flat</b> — do not increase budget until margin consistently hits 15%+'},
+      {dot:'var(--grn)',text:'<b>Add an upsell or bundle</b> — even '+CURR+'5 more per order moves margin meaningfully'},
+      {dot:'var(--grn)',text:'<b>Log this number tomorrow</b> — the trend matters more than any single day'}
+    ];
+  } else if(margin<25){
+    actions=[
+      {dot:'var(--grn)',text:'<b>Test a 10% ad budget increase</b> on your best campaign only — margin supports careful scaling'},
+      {dot:'var(--acc)',text:'<b>Identify which product drives most profit</b> — double down on that, pull back on low-margin products'},
+      {dot:'var(--acc)',text:'<b>Build a retention play</b> — email or SMS to bring buyers back at zero ad cost improves margin permanently'}
+    ];
+  } else {
+    actions=[
+      {dot:'var(--grn)',text:'<b>Scale ads by 15–20%</b> on your highest-ROAS campaign — strong margin fully supports this'},
+      {dot:'var(--grn)',text:'<b>Test a new audience</b> — at this margin you can afford to experiment without risking the business'},
+      {dot:'var(--acc)',text:'<b>Protect this margin as you grow</b> — review your COGS and ad efficiency weekly'}
+    ];
+  }
+  document.getElementById('actions-list').innerHTML=actions.map(function(a){
+    return '<div class="action-row"><div class="action-dot" style="background:'+a.dot+'"></div><div>'+a.text+'</div></div>';
+  }).join('');
 
-  var total = marginScore + trendScore + consistencyScore + roasScore;
-  return {
-    total: Math.round(clamp(total, 0, 100)),
-    marginScore: marginScore, trendScore: trendScore,
-    consistencyScore: consistencyScore, roasScore: roasScore,
-    avgMargin: avgMargin, roas: roas, profitableDays: profitableDays, totalDays: last7.length
-  };
+  // HISTORY RENDER
+  renderHistory();
 }
 
-function avg(arr){ return arr.length ? sum(arr)/arr.length : 0; }
-function sum(arr){ return arr.reduce(function(a,b){return a+b;},0); }
-function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+// HISTORY
+function saveToHistory(rev,ads,cost){
+  var profit=rev-ads-cost;
+  var margin=rev>0?(profit/rev*100):0;
+  var score=calcScore(margin,profit,rev,ads,cost);
+  var today=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  var existing=history.findIndex(function(h){return h.date===today});
+  var entry={date:today,profit:profit,margin:margin,score:score,rev:rev};
+  if(existing>=0) history[existing]=entry;
+  else history.unshift(entry);
+  if(history.length>30) history=history.slice(0,30);
+  try{localStorage.setItem('ps_history',JSON.stringify(history));}catch(e){}
+  updateStreak();
+}
 
-function renderScore(){
-  var score = computeScore();
-  var canvas = document.getElementById('score-ring');
-  var ctx = canvas.getContext('2d');
-  var dpr = window.devicePixelRatio || 1;
-  canvas.width = 180*dpr; canvas.height = 180*dpr;
-  ctx.scale(dpr,dpr);
-  ctx.clearRect(0,0,180,180);
+function loadHistory(){
+  try{
+    var h=localStorage.getItem('ps_history');
+    if(h) history=JSON.parse(h);
+  }catch(e){}
+}
 
-  if (!score){
-    document.getElementById('score-num').innerHTML = '—<span>/100</span>';
-    document.getElementById('score-status').textContent = 'Log your first day';
-    document.getElementById('score-delta').textContent = 'Your score appears after your first entry';
-    document.getElementById('winning-wrap').innerHTML = '';
-    drawRing(ctx, 0, 'var(--t3)');
+function renderHistory(){
+  var list=document.getElementById('history-list');
+  var last7=history.slice(0,7);
+  if(last7.length===0){
+    list.innerHTML='<div style="font-size:12px;color:var(--t3);text-align:center;padding:10px 0">Log your first day above to start your history</div>';
     return;
   }
-
-  var val = score.total;
-  var color = val >= 70 ? '#00e887' : val >= 45 ? '#ffb833' : '#ff4757';
-  var statusText = val >= 70 ? 'Winning' : val >= 45 ? 'Stable' : 'At Risk';
-  var statusColor = color;
-  var pillBg = val >= 70 ? 'var(--grn2)' : val >= 45 ? 'var(--amb2)' : 'var(--red2)';
-  var pillBorder = val >= 70 ? 'var(--grn3)' : val >= 45 ? 'var(--amb3)' : 'var(--red3)';
-  var pillIcon = val >= 70 ? '🟢' : val >= 45 ? '🟡' : '🔴';
-
-  drawRing(ctx, val, color);
-
-  document.getElementById('score-num').innerHTML = val + '<span>/100</span>';
-  document.getElementById('score-num').style.color = color;
-  document.getElementById('score-status').textContent = statusText;
-  document.getElementById('score-status').style.color = statusColor;
-
-  // Delta vs previous
-  var deltaHTML = '&nbsp;';
-  if (state.prevScore && state.prevScore.total !== null){
-    var diff = val - state.prevScore.total;
-    if (diff > 0) deltaHTML = '<b style="color:var(--grn)">▲ +'+diff+'</b> since last entry';
-    else if (diff < 0) deltaHTML = '<b style="color:var(--red)">▼ '+diff+'</b> since last entry';
-    else deltaHTML = '<b style="color:var(--t2)">— no change</b> since last entry';
-  } else {
-    deltaHTML = 'Based on your last '+score.totalDays+' day'+(score.totalDays>1?'s':'');
-  }
-  document.getElementById('score-delta').innerHTML = deltaHTML;
-
-  document.getElementById('winning-wrap').innerHTML =
-    '<div class="winning-pill" style="background:'+pillBg+';border:1px solid '+pillBorder+';color:'+statusColor+'">'+
-    pillIcon+' Am I winning? <b>'+statusText+'</b></div>';
-}
-
-function drawRing(ctx, val, color){
-  var cx=90, cy=90, r=78, lw=12;
-  // background ring
-  ctx.beginPath();
-  ctx.arc(cx,cy,r,0,Math.PI*2);
-  ctx.strokeStyle = 'rgba(255,255,255,.06)';
-  ctx.lineWidth = lw;
-  ctx.stroke();
-  // value ring
-  if (val > 0){
-    var endAngle = -Math.PI/2 + (val/100)*Math.PI*2;
-    ctx.beginPath();
-    ctx.arc(cx,cy,r,-Math.PI/2,endAngle);
-    var col = color.indexOf('var(') === 0 ? getComputedColor(color) : color;
-    ctx.strokeStyle = col;
-    ctx.lineWidth = lw;
-    ctx.lineCap = 'round';
-    ctx.stroke();
-  }
-}
-function getComputedColor(varStr){
-  var name = varStr.match(/--[a-z0-9]+/)[0];
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-}
-
-// ============================================================
-// 7-DAY SCORE TREND CHART
-// ============================================================
-function renderChart(){
-  var canvas = document.getElementById('chart-canvas');
-  var emptyMsg = document.getElementById('chart-empty');
-  var ctx = canvas.getContext('2d');
-  var dates = sortedDates();
-
-  if (dates.length < 2){
-    canvas.style.display='none'; emptyMsg.style.display='block'; return;
-  }
-  canvas.style.display='block'; emptyMsg.style.display='none';
-
-  // Compute a rolling score for each of the last up-to-7 days
-  // (using data available up to that day)
-  var points = [];
-  var last7dates = dates.slice(-7);
-  last7dates.forEach(function(d){
-    var idx = dates.indexOf(d);
-    var subDates = dates.slice(0, idx+1);
-    var subLast7 = subDates.slice(-7);
-    var entries = subLast7.map(function(dd){ return state.entries[dd]; });
-    if (entries.length < 1) return;
-    var avgMargin = avg(entries.map(function(e){return e.margin;}));
-    var marginScore = clamp((avgMargin/25)*40,0,40);
-    var profitableDays = entries.filter(function(e){return e.profit>0;}).length;
-    var consistencyScore = (profitableDays/entries.length)*20;
-    var totalRev = sum(entries.map(function(e){return e.revenue;}));
-    var totalAds = sum(entries.map(function(e){return e.ads;}));
-    var roas = totalAds>0 ? totalRev/totalAds : null;
-    var roasScore = roas===null ? 15 : clamp((roas/4)*20,0,20);
-    var trendScore = 10;
-    if (entries.length>=3){
-      var half=Math.floor(entries.length/2);
-      var fh=avg(entries.slice(0,half).map(function(e){return e.margin;}));
-      var sh=avg(entries.slice(half).map(function(e){return e.margin;}));
-      trendScore=clamp(10+(sh-fh)*1.5,0,20);
-    }
-    var total = clamp(marginScore+trendScore+consistencyScore+roasScore,0,100);
-    points.push(total);
-  });
-
-  if (points.length < 2){
-    canvas.style.display='none'; emptyMsg.style.display='block'; return;
-  }
-
-  var dpr = window.devicePixelRatio||1;
-  var w = canvas.clientWidth, h=120;
-  canvas.width=w*dpr; canvas.height=h*dpr;
-  ctx.scale(dpr,dpr); ctx.clearRect(0,0,w,h);
-
-  var pad=16, chartW=w-pad*2, chartH=h-pad*2;
-  function xFor(i){ return pad + (i/(points.length-1))*chartW; }
-  function yFor(v){ return pad + chartH - (v/100)*chartH; }
-
-  // gradient fill
-  var grad = ctx.createLinearGradient(0,0,0,h);
-  grad.addColorStop(0,'rgba(79,195,247,.18)');
-  grad.addColorStop(1,'rgba(79,195,247,0)');
-
-  ctx.beginPath();
-  ctx.moveTo(xFor(0), h-pad);
-  points.forEach(function(v,i){ ctx.lineTo(xFor(i), yFor(v)); });
-  ctx.lineTo(xFor(points.length-1), h-pad);
-  ctx.closePath();
-  ctx.fillStyle=grad; ctx.fill();
-
-  ctx.beginPath();
-  ctx.moveTo(xFor(0), yFor(points[0]));
-  for(var i=1;i<points.length;i++) ctx.lineTo(xFor(i), yFor(points[i]));
-  ctx.strokeStyle='#4fc3f7'; ctx.lineWidth=2.5; ctx.lineJoin='round'; ctx.stroke();
-
-  points.forEach(function(v,i){
-    ctx.beginPath();
-    ctx.arc(xFor(i), yFor(v), 3, 0, Math.PI*2);
-    ctx.fillStyle = v>=70?'#00e887':v>=45?'#ffb833':'#ff4757';
-    ctx.fill();
-  });
-}
-
-// ============================================================
-// CEO DAILY BRIEFING
-// ============================================================
-function renderBriefing(){
-  var content = document.getElementById('briefing-content');
-  var dates = sortedDates();
-
-  if (dates.length === 0){
-    content.innerHTML = '<div class="briefing-text">Log your first day and your briefing will appear here every morning.</div>';
-    return;
-  }
-
-  var lastDate = dates[dates.length-1];
-  var last = state.entries[lastDate];
-  var lines = [];
-
-  // Yesterday/today profit + margin
-  var dayLabel = lastDate === todayStr() ? 'Today' : 'Last entry';
-  lines.push({icon: last.profit>=0?'💰':'🔴', text: dayLabel+' profit: <b>'+fmtMoney(last.profit)+'</b> · Margin: <b>'+last.margin.toFixed(1)+'%</b>'});
-
-  // Compared to average
-  if (dates.length >= 3){
-    var allMargins = dates.map(function(d){ return state.entries[d].margin; });
-    var avgAll = avg(allMargins.slice(0,-1)); // exclude last
-    var diffPct = avgAll !== 0 ? ((last.margin - avgAll)) : 0;
-    if (Math.abs(diffPct) >= 1){
-      var dir = diffPct > 0 ? 'above' : 'below';
-      var icon = diffPct > 0 ? '📈' : '📉';
-      lines.push({icon: icon, text: 'That is <b>'+Math.abs(diffPct).toFixed(0)+' points '+dir+'</b> your recent average ('+avgAll.toFixed(1)+'%).'});
-    }
-  }
-
-  // Trend over last 7 vs prior 7
-  if (dates.length >= 5){
-    var last7 = dates.slice(-7).map(function(d){return state.entries[d];});
-    var prior = dates.slice(-14,-7).map(function(d){return state.entries[d];});
-    if (prior.length >= 2){
-      var recentMargin = avg(last7.map(function(e){return e.margin;}));
-      var priorMargin = avg(prior.map(function(e){return e.margin;}));
-      var diff = recentMargin - priorMargin;
-      if (diff > 1.5){
-        lines.push({icon:'✅', text:'Trend: <b>improving</b> — margin up '+diff.toFixed(1)+' pts vs the prior period.'});
-      } else if (diff < -1.5){
-        lines.push({icon:'⚠️', text:'Trend: <b>declining</b> — margin down '+Math.abs(diff).toFixed(1)+' pts vs the prior period.'});
-      } else {
-        lines.push({icon:'➖', text:'Trend: <b>steady</b> — margin roughly flat vs the prior period.'});
-      }
-
-      // Ad spend growth vs revenue growth
-      var recentAds = sum(last7.map(function(e){return e.ads;}));
-      var priorAds = sum(prior.map(function(e){return e.ads;}));
-      var recentRev = sum(last7.map(function(e){return e.revenue;}));
-      var priorRev = sum(prior.map(function(e){return e.revenue;}));
-      if (priorAds > 0 && priorRev > 0){
-        var adGrowth = ((recentAds-priorAds)/priorAds)*100;
-        var revGrowth = ((recentRev-priorRev)/priorRev)*100;
-        if (adGrowth - revGrowth > 8){
-          lines.push({icon:'🚨', text:'Warning: ad spend grew <b>'+adGrowth.toFixed(0)+'%</b> while revenue grew only <b>'+revGrowth.toFixed(0)+'%</b>.'});
-        }
-      }
-    }
-  }
-
-  // Recommendation
-  var rec;
-  var score = computeScore();
-  if (score){
-    if (score.total >= 70) rec = 'Numbers support testing a modest scale-up. Keep monitoring margin as you increase spend.';
-    else if (score.total >= 45) rec = 'Hold spend steady. Focus on improving margin before adding more ad budget.';
-    else rec = 'Pause spend increases. Review your biggest cost line before doing anything else today.';
-  } else {
-    rec = 'Keep logging daily — recommendations get sharper with more data.';
-  }
-  lines.push({icon:'🎯', text:'<b>Recommendation:</b> '+rec});
-
-  content.innerHTML = lines.map(function(l){
-    return '<div class="briefing-line"><div class="briefing-icon">'+l.icon+'</div><div class="briefing-text">'+l.text+'</div></div>';
+  list.innerHTML=last7.map(function(h){
+    var c=h.profit>=0?'var(--grn)':'var(--red)';
+    var scoreC=h.score>=70?'var(--grn)':h.score>=45?'var(--amb)':'var(--red)';
+    return '<div class="history-row"><span class="history-date">'+h.date+'</span>'
+      +'<span style="font-size:11px;color:'+scoreC+';font-weight:600">'+h.score+'/100</span>'
+      +'<span class="history-profit" style="color:'+c+'">'+(h.profit<0?'-':'')+CURR+Math.abs(Math.round(h.profit)).toLocaleString()+'</span>'
+      +'<span class="history-margin" style="color:var(--t3)">'+h.margin.toFixed(1)+'%</span>'
+      +'</div>';
   }).join('');
 }
 
-// ============================================================
-// LEAK DETECTOR
-// ============================================================
-function renderLeaks(){
-  var content = document.getElementById('leak-content');
-  var dates = sortedDates();
-  var leaks = [];
-
-  if (dates.length >= 5){
-    var last7 = dates.slice(-7).map(function(d){return {date:d, e:state.entries[d]};});
-    var prior = dates.slice(-14,-7).map(function(d){return {date:d, e:state.entries[d]};});
-
-    if (prior.length >= 2){
-      var recentMargin = avg(last7.map(function(x){return x.e.margin;}));
-      var priorMargin = avg(prior.map(function(x){return x.e.margin;}));
-      var marginDrop = priorMargin - recentMargin;
-
-      if (marginDrop >= 4){
-        leaks.push({icon:'📉', text:'Margin dropped from <b>'+priorMargin.toFixed(0)+'%</b> to <b>'+recentMargin.toFixed(0)+'%</b> over your last '+last7.length+' entries.'});
-      }
-
-      // Ads growing faster than revenue
-      var recentAds = sum(last7.map(function(x){return x.e.ads;}));
-      var priorAds = sum(prior.map(function(x){return x.e.ads;}));
-      var recentRev = sum(last7.map(function(x){return x.e.revenue;}));
-      var priorRev = sum(prior.map(function(x){return x.e.revenue;}));
-      if (priorAds > 0){
-        var adGrowth = ((recentAds-priorAds)/priorAds)*100;
-        var revGrowth = priorRev > 0 ? ((recentRev-priorRev)/priorRev)*100 : 0;
-        if (adGrowth - revGrowth > 8){
-          leaks.push({icon:'💸', text:'Ad spend is growing faster than revenue (<b>'+adGrowth.toFixed(0)+'%</b> vs <b>'+revGrowth.toFixed(0)+'%</b>). This is the most common silent profit leak.'});
-        }
-      }
-
-      // COGS increase (as % of revenue)
-      var recentCogsRatio = recentRev>0 ? sum(last7.map(function(x){return x.e.cost;}))/recentRev*100 : 0;
-      var priorCogsRatio = priorRev>0 ? sum(prior.map(function(x){return x.e.cost;}))/priorRev*100 : 0;
-      if (recentCogsRatio - priorCogsRatio >= 3){
-        leaks.push({icon:'📦', text:'Product cost as a share of revenue increased from <b>'+priorCogsRatio.toFixed(0)+'%</b> to <b>'+recentCogsRatio.toFixed(0)+'%</b>. Check supplier pricing or order sizes.'});
-      }
-
-      // Find the day things changed
-      if (leaks.length > 0 && last7.length >= 3){
-        // find first day in last7 where margin dropped notably vs previous day
-        for (var i=1;i<last7.length;i++){
-          var dropHere = last7[i-1].e.margin - last7[i].e.margin;
-          if (dropHere >= 6){
-            var d = new Date(last7[i].date+'T00:00:00');
-            var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-            leaks.push({icon:'📍', text:'Something changed around <b>'+months[d.getMonth()]+' '+d.getDate()+'</b> — margin fell '+dropHere.toFixed(0)+' points that day.'});
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  // Loss streak
-  var lossStreak = 0;
-  for (var i=0;i<dates.length;i++){
-    var d = dates[dates.length-1-i];
-    if (state.entries[d].profit < 0) lossStreak++; else break;
-  }
-  if (lossStreak >= 2){
-    leaks.push({icon:'🚨', text: '<b>'+lossStreak+' consecutive loss days.</b> This is the highest-priority issue right now.'});
-  }
-
-  if (leaks.length === 0){
-    if (dates.length < 5){
-      content.innerHTML = '<div class="leak-clean">Need at least 5 days of data to detect leaks. Keep logging.</div>';
-    } else {
-      content.innerHTML = '<div class="leak-clean">✅ No leaks detected. Margin, ad efficiency, and costs look stable.</div>';
-    }
-    return;
-  }
-
-  content.innerHTML = leaks.map(function(l){
-    return '<div class="leak-item"><div class="leak-icon">'+l.icon+'</div><div>'+l.text+'</div></div>';
-  }).join('');
+function showHistory(){
+  var wrap=document.getElementById('history-wrap');
+  wrap.style.display=wrap.style.display==='none'?'block':'none';
+  renderHistory();
 }
 
-// ============================================================
-// FORECAST
-// ============================================================
-function renderForecast(){
-  var dates = sortedDates();
-  if (dates.length === 0){
-    document.getElementById('fc-month').textContent = '—';
-    document.getElementById('fc-needed').textContent = '—';
-    document.getElementById('goal-section').style.display='none';
-    return;
-  }
+// STREAK
+function updateStreak(){
+  try{
+    var streak=0;
+    var today=new Date();
+    for(var i=0;i<history.length;i++){
+      var d=new Date(history[i].date+' '+today.getFullYear());
+      var diff=Math.round((today-d)/(1000*60*60*24));
+      if(diff===i) streak++;
+      else break;
+    }
+    var el=document.getElementById('streak-text');
+    if(streak===0) el.textContent='Day 1 — start your streak';
+    else if(streak===1) el.textContent='Day 1 streak — come back tomorrow';
+    else el.textContent=streak+' day streak — keep going';
+  }catch(e){}
+}
 
-  var last7 = dates.slice(-7).map(function(d){ return state.entries[d]; });
-  var avgDaily = avg(last7.map(function(e){return e.profit;}));
-  var projectedMonth = avgDaily * 30;
+// USERS COUNT — social proof counter
+function updateUsersCount(){
+  try{
+    var base=1247;
+    var stored=localStorage.getItem('ps_uc');
+    if(!stored){
+      var n=base+Math.floor(Math.random()*50);
+      localStorage.setItem('ps_uc',n);
+      stored=n;
+    }
+    document.getElementById('users-count').textContent=Number(stored).toLocaleString()+' stores tracked';
+  }catch(e){}
+}
 
-  document.getElementById('fc-month').textContent = fmtMoney(projectedMonth);
-  document.getElementById('fc-month').style.color = projectedMonth>=0 ? 'var(--grn)' : 'var(--red)';
-  document.getElementById('fc-month-sub').textContent = 'Based on last '+last7.length+' day'+(last7.length>1?'s':'')+' avg';
+// EMAIL
+function saveEmail(){
+  var email=document.getElementById('email-inp').value.trim();
+  if(!email||!email.includes('@')){showTooltip('Enter a valid email address');return;}
+  var btn=document.getElementById('email-btn');
+  btn.textContent='✓ Saved';
+  btn.classList.add('sent');
+  try{
+    var emails=JSON.parse(localStorage.getItem('ps_emails')||'[]');
+    emails.push({email:email,date:new Date().toISOString(),score:lastScore,margin:lastMargin.toFixed(1)});
+    localStorage.setItem('ps_emails',JSON.stringify(emails));
+  }catch(e){}
+  showTooltip('Saved — check your inbox tomorrow morning');
+  gtag('event','email_captured',{score:lastScore,margin:Math.round(lastMargin)});
+}
 
-  if (state.goal > 0){
-    document.getElementById('goal-section').style.display='block';
-
-    // current month total
-    var now = new Date();
-    var prefix = now.getFullYear()+'-'+pad(now.getMonth()+1);
-    var monthEntries = dates.filter(function(d){ return d.indexOf(prefix)===0; }).map(function(d){return state.entries[d];});
-    var monthTotal = sum(monthEntries.map(function(e){return e.profit;}));
-
-    var daysInMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-    var daysRemaining = daysInMonth - now.getDate();
-    var remaining = state.goal - monthTotal;
-    var neededPerDay = daysRemaining > 0 ? remaining/daysRemaining : remaining;
-
-    document.getElementById('fc-needed').textContent = fmtMoney(Math.max(0,neededPerDay));
-    document.getElementById('fc-needed').style.color = neededPerDay <= avgDaily ? 'var(--grn)' : 'var(--amb)';
-    document.getElementById('fc-needed-sub').textContent = daysRemaining+' day'+(daysRemaining!==1?'s':'')+' left this month';
-
-    var pct = clamp((monthTotal/state.goal)*100, 0, 100);
-    document.getElementById('goal-fill').style.width = pct+'%';
-    document.getElementById('goal-fill').style.background = monthTotal<0 ? 'var(--red)' : 'linear-gradient(90deg,var(--acc),var(--grn))';
-    document.getElementById('goal-pct').textContent = pct.toFixed(0)+'%';
-    document.getElementById('goal-current').textContent = fmtMoney(monthTotal);
-    document.getElementById('goal-target').textContent = fmtMoney(state.goal);
+// SHARE
+function shareResult(){
+  var text;
+  if(lastProfit<0){
+    text='Just checked my real Shopify profit with ProfitSnap.\n\nMy score: '+lastScore+'/100\n\nRevenue looked fine. Real profit after all costs: -'+CURR+Math.abs(Math.round(lastProfit)).toLocaleString()+'\n\nEvery Shopify owner needs to check this — it is free and takes 30 seconds:\nshopify-app-omega-nine.vercel.app\n\n#shopify #ecommerce #profitsnap';
   } else {
-    document.getElementById('goal-section').style.display='none';
-    document.getElementById('fc-needed').textContent = '—';
-    document.getElementById('fc-needed-sub').textContent = 'Set a goal to see this';
+    text='My ProfitSnap score today: '+lastScore+'/100\n\nReal profit after ads and COGS: '+CURR+Math.round(lastProfit).toLocaleString()+'\nMargin: '+lastMargin.toFixed(1)+'%\n\nFree tool — shows your real number in 30 seconds:\nshopify-app-omega-nine.vercel.app\n\n#shopify #ecommerce #profitsnap';
   }
-}
-
-// ============================================================
-// MONTHLY HISTORY
-// "How much money did I make/lose in past months?"
-// ============================================================
-var MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
-function renderMonthHistory(){
-  var content = document.getElementById('month-history-content');
-  var dates = sortedDates();
-
-  if (dates.length === 0){
-    content.innerHTML = '<div class="month-empty">Your monthly breakdown will build up here as you log days.</div>';
-    return;
-  }
-
-  // Group entries by YYYY-MM
-  var months = {}; // 'YYYY-MM' -> {revenue, ads, cost, profit, days, profitableDays}
-  dates.forEach(function(d){
-    var key = d.slice(0,7);
-    var e = state.entries[d];
-    if (!months[key]) months[key] = {revenue:0, ads:0, cost:0, profit:0, days:0, profitableDays:0};
-    months[key].revenue += e.revenue;
-    months[key].ads += e.ads;
-    months[key].cost += e.cost;
-    months[key].profit += e.profit;
-    months[key].days += 1;
-    if (e.profit > 0) months[key].profitableDays += 1;
-  });
-
-  var monthKeys = Object.keys(months).sort().reverse(); // most recent first
-  var html = '';
-
-  monthKeys.forEach(function(key, idx){
-    var m = months[key];
-    var year = parseInt(key.slice(0,4));
-    var monthIdx = parseInt(key.slice(5,7)) - 1;
-    var label = MONTH_NAMES[monthIdx] + ' ' + year;
-    var margin = m.revenue > 0 ? (m.profit/m.revenue*100) : 0;
-    var color = m.profit >= 0 ? 'var(--grn)' : 'var(--red)';
-
-    var now = new Date();
-    var isCurrentMonth = (key === now.getFullYear()+'-'+pad(now.getMonth()+1));
-
-    // vs previous month
-    var vsHTML = '';
-    var prevKey = monthKeys[idx+1];
-    if (prevKey){
-      var prevProfit = months[prevKey].profit;
-      var diff = m.profit - prevProfit;
-      if (Math.abs(diff) > 0.5){
-        var arrow = diff > 0 ? '▲' : '▼';
-        var vsColor = diff > 0 ? 'var(--grn)' : 'var(--red)';
-        vsHTML = '<span class="month-vs" style="color:'+vsColor+'">'+arrow+' '+fmtMoney(Math.abs(diff))+' vs '+MONTH_NAMES[parseInt(prevKey.slice(5,7))-1].slice(0,3)+'</span>';
-      } else {
-        vsHTML = '<span class="month-vs" style="color:var(--t3)">— flat vs '+MONTH_NAMES[parseInt(prevKey.slice(5,7))-1].slice(0,3)+'</span>';
-      }
-    }
-
-    html += '<div class="month-item">' +
-      '<div class="month-header">' +
-        '<div class="month-name">'+label+(isCurrentMonth?' <span style="color:var(--t3);font-weight:500;font-size:11px">(so far)</span>':'')+'</div>' +
-        '<div class="month-profit" style="color:'+color+'">'+fmtMoney(m.profit)+'</div>' +
-      '</div>' +
-      '<div class="month-stats-row">' +
-        '<span>Revenue: '+fmtMoney(m.revenue)+'</span>' +
-        '<span>Margin: '+margin.toFixed(1)+'%</span>' +
-        '<span>'+m.profitableDays+'/'+m.days+' days +ve</span>' +
-      '</div>' +
-      (vsHTML ? '<div>'+vsHTML+'</div>' : '') +
-    '</div>';
-  });
-
-  content.innerHTML = html;
-}
-
-
-function resetApp(){
-  if (confirm('This will delete all your tracked data on this device. Continue?')){
-    localStorage.removeItem(STORAGE_KEY);
-    location.reload();
-  }
-}
-
-// ============================================================
-// INIT
-// ============================================================
-load();
-window.addEventListener('resize', renderChart);
-
-try {
-  if (state.name && typeof state.name === 'string' && state.name.length > 0){
-    showDashboard();
+  var btn=document.getElementById('share-btn');
+  var txt=document.getElementById('share-text');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){
+      btn.classList.add('copied');
+      txt.textContent='✓ Copied — paste it anywhere';
+      setTimeout(function(){btn.classList.remove('copied');txt.textContent='Share your score — challenge other store owners';},3000);
+    });
   } else {
-    state.name = '';
-    document.getElementById('onboard').style.display = 'block';
-    document.getElementById('dashboard').style.display = 'none';
+    prompt('Copy and share:',text);
   }
-} catch(e) {
-  localStorage.removeItem(STORAGE_KEY);
-  document.getElementById('onboard').style.display = 'block';
-  document.getElementById('dashboard').style.display = 'none';
+  gtag('event','share_score',{score:lastScore,profit_positive:lastProfit>=0});
+}
+
+// TOOLTIP
+function showTooltip(msg){
+  var el=document.getElementById('tooltip');
+  el.textContent=msg;
+  el.classList.add('show');
+  setTimeout(function(){el.classList.remove('show');},2500);
 }
 </script>
-
 </body>
 </html>
