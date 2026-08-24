@@ -930,9 +930,8 @@ function renderResult(){
 ];
 var biggestCostObj=allCosts.reduce(function(a,b){return b.v>a.v?b:a},{n:'',v:0});
 var biggestCost=biggestCostObj.n+' ('+fmt(biggestCostObj.v)+')';
-insight='<b style="color:var(--red)">Costs exceed revenue by '+fmt(Math.abs(profit))+'.</b><br><br>💡 <b>Your biggest expense is '+biggestCost+'.</b> This is where to focus first.';
-How to do it on GitHub
-    actions=[{dot:'var(--red)',t:'<b>Pause or cut ads immediately</b> — every dollar spent now deepens the loss'},{dot:'var(--amb)',t:'<b>Find your biggest cost</b> — reduce it by 10% as first move'},{dot:'var(--amb)',t:'<b>Can you raise your price 10%?</b> — small price increase can flip you to profit'},];
+insight='<b style="color:var(--red)">Costs exceed revenue by '+fmt(Math.abs(profit))+'.</b><br><br>💡 <b>Your biggest expense is '+biggestCost+'.</b> This is where to focus first. Reducing this cost by 10% could improve your margin.';
+actions=[{dot:'var(--red)',t:'<b>Pause or cut ads immediately</b> - every dollar spent now deepens the loss'},{dot:'var(--amb)',t:'<b>Find your biggest cost</b> - focus on reducing '+biggestCost}];
   }else if(margin<15){
     status='Profitable — margin too thin';icon='🟡';bg='linear-gradient(135deg,var(--amb2),rgba(255,184,51,.02))';
     document.getElementById('r-profit').style.color='var(--amb)';
